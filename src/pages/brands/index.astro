@@ -16,10 +16,6 @@ const brands = getBrands().sort((a, b) => a.name.localeCompare(b.name, 'ru'));
     <div class="container">
       <nav class="crumbs"><a href={url('/')}>Главная</a><span>/</span><span>Бренды</span></nav>
       <h1>Бренды в каталоге</h1>
-      <p class="lead">
-        Каждая страница бренда — SEO-подборка моделей из каталога 2026. Удобно искать
-        «купить [бренд] медицинское оборудование» и переходить к конкретным позициям.
-      </p>
       <div class="grid">
         {brands.map((b) => (
           <a class="card brand" href={url(`brands/${b.slug}/`)}>
@@ -34,7 +30,6 @@ const brands = getBrands().sort((a, b) => a.name.localeCompare(b.name, 'ru'));
 
 <style>
   .crumbs { display:flex; gap:.5rem; color:var(--color-muted); margin-bottom:1rem; }
-  .lead { color:var(--color-muted); max-width:44rem; }
   .grid {
     display:grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap:.85rem; margin-top:1.5rem;
   }
