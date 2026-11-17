@@ -1,0 +1,440 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProductCard from '../components/ProductCard.astro';
+import CategoryTile from '../components/CategoryTile.astro';
+import BrandStrip from '../components/BrandStrip.astro';
+import QrShare from '../components/QrShare.astro';
+import SearchOverlay from '../components/SearchOverlay.astro';
+import { site } from '../lib/site';
+import {
+  getDirections,
+  getCategories,
+  getProducts,
+  getBrands,
+} from '../lib/catalog';
+import { url } from '../lib/paths';
+
+const directions = getDirections();
+const categories = getCategories();
+const products = getProducts();
+const brands = getBrands();
+
+const chips = categories.map((c) => ({
+  label: c.chip || c.name,
+  href: url(`catalog/${c.slug}/`),
+}));
+
+const featuredNames = [
+  'Canon Aquilion ONE/PRISM Edition',
+  'Canon Vantage Orian',
+  'Samsung Z20-RUS',
+  'Samsung RS85-RUS',
+  'Fujifilm Цифровой маммограф AMULET Innovality',
+  'Canon Alphenix',
+  'MinFound QuantumEye 789',
+  'МТЛ Рентгенохирургическая цифровая мобильная система (С-дуга) СиКоРД-2МТ',
+];
+const featured = featuredNames
+  .map((name) => products.find((p) => p.name === name))
+  .filter((p): p is (typeof products)[number] => Boolean(p));
+
+const directionTiles = directions.map((d) => ({
+  ...d,
+  count: products.filter((p) => p.direction === d.slug).length,
+  href: `${url('catalog/')}?direction=${d.slug}`,
+}));
+
+const benefits = [
+  {
+    title: 'Поставка',
+    text: 'Оборудование для ЛПУ с полным комплектом документов и логистикой по России.',
+  },
+  {
+    title: 'Монтаж и ввод',
+    text: 'Установка, пусконаладка и обучение персонала на площадке заказчика.',
+  },
+  {
+    title: 'Сервис',
+    text: 'Гарантийное и постгарантийное сопровождение диагностических систем.',
+  },
+  {
+    title: 'Тендеры 44-ФЗ',
+    text: 'Помогаем с техническим заданием и комплектацией для госзакупок.',
+  },
+];
+
+const heroImage = url('img/hero-aquilion.jpg');
+---
+
+<BaseLayout
+  title="ЗелМедСервис — купить медицинское оборудование для ЛПУ"
+  description="Поставка медицинского оборудования: КТ, МРТ, УЗИ, рентген, маммография, эндоскопия. Каталог 2026, сервис и монтаж. Москва, Зеленоград."
+  ogImage={heroImage}
+>
+  <SearchOverlay />
+
+  <section class="hero">
+    <div class="hero__bg" aria-hidden="true"></div>
+    <div class="container hero__grid">
+      <div class="hero__content">
+        <p class="hero__brand"><span class="zel">ЗЕЛ</span><span class="med">МЕДСЕРВИС</span></p>
+        <h1>Купить медицинское оборудование экспертного класса для ЛПУ</h1>
+        <p class="hero__lead">
+          Каталог 2026: {products.length} моделей КТ, МРТ, УЗИ, рентгена и эндоскопии.
+          Быстрый поиск на выставке — переход в карточку по QR.
+        </p>
+
+        <form class="hero__search" action={url('catalog/')} method="get">
+          <label class="visually-hidden" for="hero-q">Найти оборудование</label>
+          <input id="hero-q" name="q" type="search" placeholder="Найти КТ, УЗИ, бренд…" />
+          <button class="btn btn--accent" type="submit">Найти</button>
+        </form>
+
+        <div class="hero__chips" aria-label="Категории каталога">
+          {chips.slice(0, 8).map((c) => (
+            <a class="chip" href={c.href}>{c.label}</a>
+          ))}
+        </div>
+
+        <div class="hero__cta">
+          <a class="btn btn--primary" href={url('catalog/')}>Открыть каталог</a>
+          <a class="btn btn--ghost" href={url('catalog-2026.pdf')} target="_blank" rel="noopener">PDF-каталог 2026</a>
+        </div>
+      </div>
+
+      <div class="hero__visual">
+        <figure>
+          <img src={heroImage} alt="Canon Aquilion ONE PRISM Edition" width="900" height="700" fetchpriority="high" />
+          <figcaption>Canon Aquilion ONE / PRISM Edition</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="section directions" id="directions">
+    <div class="container">
+      <div class="section__head">
+        <div>
+          <span class="section__eyebrow">Каталог</span>
+          <h2 class="section__title">Направления оборудования</h2>
+        </div>
+        <a class="section__link" href={url('catalog/')}>Весь каталог →</a>
+      </div>
+      <div class="directions__row">
+        {directionTiles.map((d) => (
+          <CategoryTile
+            name={d.name}
+            shortName={d.shortName}
+            description={d.description}
+            count={d.count}
+            href={d.href}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section flagships" id="flagships">
+    <div class="container">
+      <div class="section__head">
+        <div>
+          <span class="section__eyebrow">Подборка</span>
+          <h2 class="section__title">Флагманские модели</h2>
+        </div>
+        <a class="section__link" href={url('catalog/')}>Смотреть все {products.length} →</a>
+      </div>
+      <div class="flagships__grid">
+        {featured.map((p) => (
+          <ProductCard
+            name={p.name}
+            brand={p.brand}
+            description={p.description}
+            categorySlug={p.categorySlug}
+            slug={p.slug}
+            image={p.image || (p.name.includes('Aquilion ONE') ? heroImage : null)}
+            specs={p.specs}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <BrandStrip />
+
+  <section class="section benefits" id="company">
+    <div class="container">
+      <div class="section__head">
+        <div>
+          <span class="section__eyebrow">Почему мы</span>
+          <h2 class="section__title">От поставки до сервиса</h2>
+        </div>
+        <a class="section__link" href={url('company/')}>О компании →</a>
+      </div>
+      <div class="benefits__grid">
+        {benefits.map((b) => (
+          <article class="benefit card">
+            <h3>{b.title}</h3>
+            <p>{b.text}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section expo" id="expo">
+    <div class="container expo__grid">
+      <div>
+        <span class="section__eyebrow">Выставка</span>
+        <h2 class="section__title">Поделитесь сайтом с коллегами</h2>
+        <p>
+          QR открывает главную ЗелМедСервис. В карточке товара — кнопка
+          <strong> «Брошюра для стенда»</strong>: печатный A4 с фото, характеристиками и QR на страницу модели.
+        </p>
+        <div class="expo__actions">
+          <a class="btn btn--primary" href={url('catalog-2026.pdf')} target="_blank" rel="noopener">
+            Скачать каталог 2026 (PDF)
+          </a>
+          <a class="btn btn--ghost" href={`${url('contacts/')}#request`}>Оставить заявку</a>
+        </div>
+      </div>
+      <div class="expo__qr card">
+        <QrShare path="/" label="QR главной страницы" size={200} />
+      </div>
+    </div>
+  </section>
+
+  <section class="section contacts-teaser">
+    <div class="container teaser card">
+      <div>
+        <h2>Нужно коммерческое предложение?</h2>
+        <p>Подберём комплектацию под задачу ЛПУ и ответим по срокам поставки.</p>
+      </div>
+      <a class="btn btn--accent" href={`${url('contacts/')}#request`}>Запросить КП</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .zel { color: var(--color-green); }
+  .med { color: var(--color-ink); }
+
+  .hero {
+    position: relative;
+    overflow: hidden;
+    padding: 3.5rem 0 4rem;
+  }
+
+  .hero__bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 70% 60% at 85% 20%, rgba(124, 193, 31, 0.18), transparent 55%),
+      radial-gradient(ellipse 60% 50% at 10% 80%, rgba(31, 95, 191, 0.16), transparent 50%),
+      linear-gradient(180deg, #e8f0fa 0%, var(--color-bg) 70%);
+    pointer-events: none;
+  }
+
+  .hero__grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 2.5rem;
+    align-items: center;
+  }
+
+  .hero__brand {
+    margin: 0 0 0.75rem;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 800;
+    font-style: italic;
+    letter-spacing: -0.03em;
+  }
+
+  .hero h1 {
+    font-size: clamp(1.25rem, 2.2vw, 1.7rem);
+    font-weight: 650;
+    color: var(--color-ink-soft);
+    margin-bottom: 0.85rem;
+  }
+
+  .hero__lead {
+    color: var(--color-muted);
+    font-size: 1.05rem;
+    max-width: 36rem;
+  }
+
+  .hero__search {
+    display: flex;
+    gap: 0.5rem;
+    margin: 1.4rem 0 1rem;
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    padding: 0.35rem 0.35rem 0.35rem 1rem;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .hero__search input {
+    flex: 1;
+    border: 0;
+    outline: none;
+    min-height: 44px;
+    background: transparent;
+  }
+
+  .hero__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .hero__cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .hero__visual figure {
+    margin: 0;
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+
+  .hero__visual img {
+    width: 100%;
+    aspect-ratio: 5 / 4;
+    object-fit: contain;
+    background: linear-gradient(180deg, #f3f7fc, #fff);
+    padding: 1.25rem;
+  }
+
+  .hero__visual figcaption {
+    padding: 0.85rem 1.1rem 1.1rem;
+    font-weight: 700;
+    color: var(--color-ink-soft);
+  }
+
+  .directions__row {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .flagships__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .benefits__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .benefit {
+    padding: 1.25rem;
+  }
+
+  .benefit h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1.1rem;
+  }
+
+  .benefit p {
+    margin: 0;
+    color: var(--color-muted);
+  }
+
+  .expo {
+    padding-top: 0;
+  }
+
+  .expo__grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 1.5rem;
+    align-items: center;
+    background:
+      linear-gradient(135deg, rgba(31, 95, 191, 0.08), rgba(124, 193, 31, 0.12)),
+      #fff;
+    border: 1px solid var(--color-border);
+    border-radius: 24px;
+    padding: 2rem;
+  }
+
+  .expo__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1.25rem;
+  }
+
+  .expo__qr {
+    padding: 1.25rem;
+    justify-self: end;
+  }
+
+  .teaser {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem 1.75rem;
+    flex-wrap: wrap;
+  }
+
+  .teaser h2 {
+    margin: 0 0 0.35rem;
+  }
+
+  .teaser p {
+    margin: 0;
+    color: var(--color-muted);
+  }
+
+  @media (max-width: 1100px) {
+    .flagships__grid,
+    .directions__row,
+    .benefits__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 900px) {
+    .hero__grid,
+    .expo__grid {
+      grid-template-columns: 1fr;
+    }
+    .expo__qr {
+      justify-self: stretch;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .directions__row {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      padding-bottom: 0.5rem;
+      gap: 0.75rem;
+    }
+    .directions__row > :global(*) {
+      scroll-snap-align: start;
+      flex: 0 0 78%;
+    }
+    .flagships__grid,
+    .benefits__grid {
+      grid-template-columns: 1fr;
+    }
+    .hero__search {
+      flex-direction: column;
+      border-radius: 18px;
+      padding: 0.75rem;
+    }
+  }
+</style>

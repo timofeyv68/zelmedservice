@@ -1,0 +1,49 @@
+---
+import { url } from '../../lib/paths';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SearchOverlay from '../../components/SearchOverlay.astro';
+import { getBrands } from '../../lib/catalog';
+
+const brands = getBrands().sort((a, b) => a.name.localeCompare(b.name, 'ru'));
+---
+
+<BaseLayout
+  title="Бренды медицинского оборудования — каталог ЗелМедСервис"
+  description="Подборки оборудования по брендам: Canon, Samsung, Fujifilm, MinFound, Neusoft, МТЛ и другие. SEO-страницы для поиска поставщика."
+>
+  <SearchOverlay />
+  <section class="section">
+    <div class="container">
+      <nav class="crumbs"><a href={url('/')}>Главная</a><span>/</span><span>Бренды</span></nav>
+      <h1>Бренды в каталоге</h1>
+      <p class="lead">
+        Каждая страница бренда — SEO-подборка моделей из каталога 2026. Удобно искать
+        «купить [бренд] медицинское оборудование» и переходить к конкретным позициям.
+      </p>
+      <div class="grid">
+        {brands.map((b) => (
+          <a class="card brand" href={url(`brands/${b.slug}/`)}>
+            <strong>{b.name}</strong>
+            <span>{b.count} моделей</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .crumbs { display:flex; gap:.5rem; color:var(--color-muted); margin-bottom:1rem; }
+  .lead { color:var(--color-muted); max-width:44rem; }
+  .grid {
+    display:grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap:.85rem; margin-top:1.5rem;
+  }
+  .brand {
+    padding: 1.2rem; display:flex; justify-content:space-between; align-items:center; gap:1rem;
+    font-weight: 800;
+  }
+  .brand span { color: var(--color-muted); font-weight: 650; font-size: .9rem; }
+  .brand:hover { border-color: var(--color-accent); color: var(--color-accent); }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
+</style>

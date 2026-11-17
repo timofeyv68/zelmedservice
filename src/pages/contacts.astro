@@ -1,0 +1,95 @@
+---
+import { url } from '../lib/paths';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SearchOverlay from '../components/SearchOverlay.astro';
+import { site } from '../lib/site';
+---
+
+<BaseLayout
+  title="Контакты ЗелМедСервис — телефон, email, адрес в Зеленограде"
+  description="Свяжитесь с менеджерами ЗелМедСервис: +7 (495) 968-88-29, sale@zelmedservice.ru. Офис: технопарк ЭЛМА, Зеленоград."
+>
+  <SearchOverlay />
+  <section class="section">
+    <div class="container contacts">
+      <nav class="crumbs"><a href={url('/')}>Главная</a><span>/</span><span>Контакты</span></nav>
+      <h1>Контакты</h1>
+      <p class="lead">
+        Уважаемые коллеги, партнёры и друзья — вы можете связаться с менеджерами ООО «ЗелМедСервис»
+        с 9:00 до 18:00 (МСК) по телефону или email.
+      </p>
+
+      <div class="grid">
+        <div class="card info">
+          <h2>Офис</h2>
+          <ul>
+            <li><strong>Телефон:</strong> <a href={site.phoneHref}>{site.phone}</a> (9:00–18:00 МСК)</li>
+            <li><strong>E-mail:</strong> <a href={`mailto:${site.email}`}>{site.email}</a></li>
+            <li><strong>Адрес:</strong> 124489, Россия, г. Зеленоград, проезд 4922, дом 4 стр. 5, Технопарк «ЭЛМА»</li>
+          </ul>
+          <h2>Реквизиты</h2>
+          <ul>
+            <li>ООО «Зелмедсервис»</li>
+            <li>ИНН 7735583633</li>
+            <li>КПП 773501001</li>
+            <li>ОГРН 1127746171695</li>
+          </ul>
+          <a class="btn btn--primary" href={url('catalog-2026.pdf')} target="_blank" rel="noopener">Скачать каталог 2026</a>
+        </div>
+
+        <form class="card request" id="request" data-request-form data-email={site.email}>
+          <h2>Запросить КП</h2>
+          <label>Имя<input name="name" required placeholder="Как к вам обращаться" /></label>
+          <label>Организация<input name="org" placeholder="ЛПУ / клиника" /></label>
+          <label>Телефон или email<input name="contact" required placeholder="+7 … или email" /></label>
+          <label>Что интересует<textarea name="message" rows="4" placeholder="Модель, направление, сроки…"></textarea></label>
+          <button class="btn btn--accent" type="submit">Отправить запрос</button>
+          <p class="note">Откроется почтовый клиент. Позже подключим сервис форм.</p>
+        </form>
+      </div>
+
+      <div class="map card">
+        <iframe
+          title="Офис ЗелМедСервис на карте"
+          src="https://yandex.ru/map-widget/v1/?text=Зеленоград%20проезд%204922%204%20стр%205%20ЭЛМА&z=16"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+        ></iframe>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .crumbs { display:flex; gap:.5rem; color:var(--color-muted); margin-bottom:1rem; }
+  h1 { margin-bottom:.5rem; }
+  .lead { color:var(--color-muted); max-width:40rem; }
+  .grid { display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; margin:1.5rem 0; }
+  .info, .request { padding:1.25rem; display:grid; gap:.75rem; }
+  .info ul { display:grid; gap:.45rem; }
+  .request label { display:grid; gap:.3rem; font-weight:700; font-size:.9rem; }
+  .request input, .request textarea {
+    border:1px solid var(--color-border); border-radius:12px; padding:.7rem .85rem;
+  }
+  .note { margin:0; color:var(--color-muted); font-size:.8rem; }
+  .map { overflow:hidden; }
+  .map iframe { width:100%; height:360px; border:0; display:block; }
+  @media (max-width: 800px) { .grid { grid-template-columns:1fr; } }
+</style>
+
+<script>
+  document.querySelector<HTMLFormElement>('[data-request-form]')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const form = e.currentTarget as HTMLFormElement;
+    const email = form.dataset.email || 'sale@zelmedservice.ru';
+    const data = new FormData(form);
+    const body = [
+      `Имя: ${data.get('name') || ''}`,
+      `Организация: ${data.get('org') || ''}`,
+      `Контакт: ${data.get('contact') || ''}`,
+      '',
+      String(data.get('message') || ''),
+    ].join('\n');
+    window.location.href = `mailto:${email}?subject=${encodeURIComponent('Запрос КП — zelmedservice.ru')}&body=${encodeURIComponent(body)}`;
+  });
+</script>

@@ -1,0 +1,63 @@
+---
+import { url } from '../lib/paths';
+import { getBrands } from '../lib/catalog';
+
+const brands = getBrands();
+---
+
+<section class="brands section" id="brands">
+  <div class="container">
+    <div class="section__head">
+      <div>
+        <span class="section__eyebrow">Партнёры</span>
+        <h2 class="section__title">Бренды в каталоге</h2>
+      </div>
+      <a class="section__link" href={url('brands/')}>Все бренды →</a>
+    </div>
+    <div class="brands__row">
+      {brands.map((b) => (
+        <a class="brand" href={url(`brands/${b.slug}/`)}>{b.name}</a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .brands__row {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+
+  .brand {
+    display: grid;
+    place-items: center;
+    min-height: 72px;
+    padding: 0.75rem;
+    border-radius: var(--radius-sm);
+    background: #fff;
+    border: 1px solid var(--color-border);
+    font-weight: 800;
+    color: var(--color-ink-soft);
+    text-align: center;
+    transition: 0.15s ease;
+  }
+
+  .brand:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    box-shadow: var(--shadow-sm);
+  }
+
+  @media (max-width: 1000px) {
+    .brands__row {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 560px) {
+    .brands__row {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>

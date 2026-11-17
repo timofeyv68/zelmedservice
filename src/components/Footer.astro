@@ -1,0 +1,112 @@
+---
+import { site } from '../lib/site';
+import { getDirections } from '../lib/catalog';
+import { url } from '../lib/paths';
+
+const directions = getDirections();
+const pdf = url(site.catalogPdf);
+---
+
+<footer class="footer no-print">
+  <div class="container footer__grid">
+    <div>
+      <a class="footer__logo" href={url('/')}>
+        <img src={url('img/brand/logo-mark.png')} alt="" width="36" height="36" />
+        <strong><span class="zel">ЗЕЛ</span><span class="med">МЕДСЕРВИС</span></strong>
+      </a>
+      <p class="footer__tag">Поставка диагностического оборудования для ЛПУ</p>
+      <p class="footer__copy">{site.years} · {site.legalName}</p>
+    </div>
+
+    <div>
+      <h3>Разделы</h3>
+      <ul>
+        <li><a href={url('catalog/')}>Каталог</a></li>
+        <li><a href={url('company/')}>О компании</a></li>
+        <li><a href={url('brands/')}>Бренды</a></li>
+        <li><a href={url('news/')}>Новости</a></li>
+        <li><a href={url('contacts/')}>Контакты</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h3>Направления</h3>
+      <ul>
+        {directions.map((d) => (
+          <li><a href={`${url('catalog/')}?direction=${d.slug}`}>{d.name}</a></li>
+        ))}
+      </ul>
+    </div>
+
+    <div>
+      <h3>Контакты</h3>
+      <ul>
+        <li><a href={site.phoneHref}>{site.phone}</a></li>
+        <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+        <li>{site.address}</li>
+        <li><a href={pdf} target="_blank" rel="noopener">PDF-каталог 2026</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--color-ink);
+    color: #d5e4f5;
+    padding: 3.5rem 0 5rem;
+  }
+
+  .footer__grid {
+    display: grid;
+    grid-template-columns: 1.4fr repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  .footer__logo {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin-bottom: 0.65rem;
+  }
+
+  .footer__logo strong {
+    font-size: 1.05rem;
+    font-style: italic;
+  }
+
+  .zel { color: var(--color-green); }
+  .med { color: #fff; }
+
+  .footer__tag,
+  .footer__copy {
+    color: #9eb4cc;
+    font-size: 0.9rem;
+  }
+
+  .footer h3 {
+    color: #fff;
+    font-size: 0.95rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .footer li + li {
+    margin-top: 0.45rem;
+  }
+
+  .footer a:hover {
+    color: var(--color-green);
+  }
+
+  @media (max-width: 900px) {
+    .footer__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .footer__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

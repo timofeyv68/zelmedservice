@@ -1,0 +1,90 @@
+[
+  {
+    "slug": "kompyuternyy-tomograf-canon-aquilion-one-prism-edition",
+    "categorySlug": "kompyuternye-tomografy",
+    "name": "Компьютерный томограф Canon Aquilion One/PRISM Edition",
+    "brand": "Canon",
+    "brandSlug": "canon",
+    "description": "Новейшие алгоритмы реконструкции. 640 срезов, апертура гентри 78 см",
+    "specs": ["640 срезов", "Апертура 78 см", "PRISM Edition"],
+    "image": "/img/hero-aquilion.jpg",
+    "price": "По запросу"
+  },
+  {
+    "slug": "tomograf-magnitno-rezonansnyy-canon-vantage-orian",
+    "categorySlug": "mrt",
+    "name": "Томограф магнитно-резонансный Canon Vantage Orian",
+    "brand": "Canon",
+    "brandSlug": "canon",
+    "description": "Расширенные возможности 2D- и 3D-сканирования",
+    "specs": ["МРТ", "2D/3D", "Canon"],
+    "image": "/img/products/canon-orian.jpg",
+    "price": "По запросу"
+  },
+  {
+    "slug": "ultrazvukovaya-sistema-samsung-z20-rus",
+    "categorySlug": "ultrazvukovye-sistemy",
+    "name": "Ультразвуковая система Samsung Z20-RUS",
+    "brand": "Samsung",
+    "brandSlug": "samsung",
+    "description": "Будущее ультразвуковой диагностики",
+    "specs": ["Экспертный класс", "ИИ-ассистенты", "HD-монитор"],
+    "image": "/img/products/samsung-z20.jpg",
+    "price": "По запросу"
+  },
+  {
+    "slug": "ultrazvukovaya-sistema-samsung-rs85-rus",
+    "categorySlug": "ultrazvukovye-sistemy",
+    "name": "Ультразвуковая система Samsung RS85-RUS",
+    "brand": "Samsung",
+    "brandSlug": "samsung",
+    "description": "Новая ступень эволюции ультразвука",
+    "specs": ["Премиум", "AI", "Мультипрофильный"],
+    "image": "/img/products/samsung-rs85.jpg",
+    "price": "По запросу"
+  },
+  {
+    "slug": "tsifrovoy-mammograf-fujifilm-amulet-innovality-skrining-",
+    "categorySlug": "tsifrovye-mammografy",
+    "name": "Цифровой маммограф FUJIFILM AMULET Innovality",
+    "brand": "Fujifilm",
+    "brandSlug": "fujifilm",
+    "description": "Инновации во имя жизни — скрининговая маммография",
+    "specs": ["Томосинтез", "Скрининг", "Низкая доза"],
+    "image": "/img/products/fujifilm-amulet.jpg",
+    "price": "По запросу"
+  },
+  {
+    "slug": "angiograf-canon-alphenix",
+    "categorySlug": "angiografy",
+    "name": "Ангиограф Canon Alphenix",
+    "brand": "Canon",
+    "brandSlug": "canon",
+    "description": "Интервенционная система нового поколения",
+    "specs": ["Ангиография", "Высокая чёткость", "Canon"],
+    "image": "/img/products/canon-alphenix.jpg",
+    "price": "По запросу"
+  },
+  {
+    "slug": "kompyuternyy-tomograf-minfound-quantumeye-789",
+    "categorySlug": "kompyuternye-tomografy",
+    "name": "Компьютерный томограф MinFound QuantumEye 789",
+    "brand": "MinFound",
+    "brandSlug": "minfound",
+    "description": "Абсолютная точность и высокая скорость диагностики",
+    "specs": ["256–512 срезов", "Апертура 80 см"],
+    "image": "/img/products/minfound-quantumeye.jpg",
+    "price": "По запросу"
+  },
+  {
+    "slug": "rentgenokhirurgicheskaya-tsifrovaya-mobilnaya-sistema-s-duga-mtl-sikord-2mt",
+    "categorySlug": "rentgenokhirurgicheskaya-s-duga-",
+    "name": "С-дуга МТЛ СиКоРД-2МТ",
+    "brand": "МТЛ",
+    "brandSlug": "mtl",
+    "description": "Точность в движении. Контроль в реальном времени",
+    "specs": ["Мобильная С-дуга", "Цифровая", "МТЛ"],
+    "image": "/img/products/mtl-sikord.jpg",
+    "price": "По запросу"
+  }
+]

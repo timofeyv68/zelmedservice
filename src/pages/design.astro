@@ -1,0 +1,532 @@
+---
+import DesignLayout from '../layouts/DesignLayout.astro';
+import QrShare from '../components/QrShare.astro';
+import SearchOverlay from '../components/SearchOverlay.astro';
+import { site } from '../lib/site';
+import { asset, url } from '../lib/paths';
+import directions from '../data/directions.json';
+import categories from '../data/categories.json';
+import featured from '../data/featured.json';
+import brands from '../data/brands.json';
+
+const mods = [
+  { label: 'КТ', href: '#flagships' },
+  { label: 'МРТ', href: '#flagships' },
+  { label: 'ПЭТ/КТ', href: '#flagships' },
+  { label: 'УЗИ', href: '#flagships' },
+  { label: 'Маммография', href: '#flagships' },
+  { label: 'Рентген', href: '#flagships' },
+  { label: 'Эндоскопия', href: '#flagships' },
+  { label: 'Стоматология', href: '#flagships' },
+];
+
+const nav = [
+  { href: '#directions', label: 'Направления' },
+  { href: '#flagships', label: 'Оборудование' },
+  { href: '#company', label: 'Компания' },
+  { href: '#contacts', label: 'Контакты' },
+];
+
+const rows = directions.map((d, i) => {
+  const cats = categories.filter((c) => c.directionSlug === d.slug);
+  const positions = cats.reduce((sum, c) => sum + (c.count || 0), 0);
+  return {
+    ...d,
+    index: String(i + 1).padStart(2, '0'),
+    catLabel: cats.map((c) => c.chip || c.name).join(' · '),
+    sections: cats.length,
+    positions,
+  };
+});
+
+const hero = featured[0];
+const heroSpecs = hero?.specs?.join(' · ') ?? '';
+
+const benefits = [
+  {
+    n: '01',
+    title: 'Поставка',
+    text: 'Оборудование для ЛПУ с полным комплектом документов и логистикой по России.',
+  },
+  {
+    n: '02',
+    title: 'Монтаж и ввод',
+    text: 'Установка, пусконаладка и обучение персонала на площадке заказчика.',
+  },
+  {
+    n: '03',
+    title: 'Сервис',
+    text: 'Гарантийное и постгарантийное сопровождение диагностических систем.',
+  },
+  {
+    n: '04',
+    title: 'Тендеры 44-ФЗ',
+    text: 'Помогаем с техническим заданием и комплектацией для госзакупок.',
+  },
+];
+
+const pad = (n: number) => String(n).padStart(2, '0');
+---
+
+<DesignLayout
+  title={`Макет · ${site.name} — оборудование экспертного класса для ЛПУ`}
+  description="Каталог медицинского оборудования: КТ, МРТ, УЗИ, рентген, эндоскопия. Предложение по дизайну главной."
+>
+  <div class="d-review">
+    <div class="d-wrap d-review__in">
+      <p>Копия главной для просмотра дизайна. Рабочий сайт не изменён.</p>
+      <a href={url('/')}>Открыть текущую главную</a>
+    </div>
+  </div>
+
+  <header class="d-header">
+    <div class="d-wrap d-header__bar">
+      <div class="d-brand">
+        <a class="d-logo" href={url('/design/')} aria-label={site.name}>
+          <span class="d-mark" aria-hidden="true">ЗМ</span>
+          <strong>ЗелМедСервис</strong>
+        </a>
+        <a class="d-header__phone" href={site.phoneHref}>{site.phone}</a>
+      </div>
+
+      <nav class="d-nav" aria-label="Основное меню">
+        <div class="d-mega-wrap">
+          <button class="d-catalog" type="button" data-d-mega-toggle aria-expanded="false">
+            Каталог
+            <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
+              <path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" />
+            </svg>
+          </button>
+          <div class="d-mega" data-d-mega hidden>
+            <div class="d-mega__grid">
+              {directions.map((dir) => {
+                const cats = categories.filter((c) => c.directionSlug === dir.slug);
+                return (
+                  <div>
+                    <a class="d-mega__title" href="#directions">{dir.name}</a>
+                    <ul>
+                      {cats.map((c) => (
+                        <li><a href="#flagships">{c.name}</a></li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              })}
+            </div>
+            <p class="d-mega__note">Полный каталог с фильтрами появится в следующей итерации.</p>
+          </div>
+        </div>
+        {nav.map((item) => (
+          <a class="d-nav__link" href={item.href}>{item.label}</a>
+        ))}
+      </nav>
+
+      <div class="d-header__tools">
+        <button class="d-iconbtn" type="button" data-open-search aria-label="Поиск">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8" />
+            <path d="M16.5 16.5L21 21" stroke="currentColor" stroke-width="1.8" />
+          </svg>
+        </button>
+        <a class="d-btn d-header__kp" href="#request">Запросить КП</a>
+        <button class="d-burger" type="button" data-d-burger aria-label="Открыть меню" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="d-drawer" data-d-drawer hidden>
+    <div class="d-drawer__panel">
+      <div class="d-drawer__head">
+        <span>Меню</span>
+        <button type="button" data-d-drawer-close aria-label="Закрыть">×</button>
+      </div>
+      <a href="#directions">Направления</a>
+      <a href="#flagships">Оборудование</a>
+      <a href="#company">Компания</a>
+      <a href="#expo">На выставке</a>
+      <a href="#contacts">Контакты</a>
+      <div class="d-drawer__meta">
+        <a href={site.phoneHref}>{site.phone}</a>
+        <a href={`mailto:${site.email}`}>{site.email}</a>
+      </div>
+      <div class="d-drawer__actions">
+        <a class="d-btn" href="#request">Запросить КП</a>
+        <a class="d-btn d-btn--line" href={url(site.catalogPdf)} target="_blank" rel="noopener">Скачать PDF-каталог</a>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <section class="d-open">
+      <div class="d-wrap d-open__grid">
+        <div>
+          <p class="d-kicker">Каталог 2026 · Зеленоград</p>
+          <h1>Оборудование экспертного класса для ЛПУ</h1>
+          <p class="d-lead">
+            Каталог диагностической техники для клиник и больниц. Быстрый поиск модели на стенде
+            выставки — и переход в карточку по QR.
+          </p>
+
+          <form class="d-search" action="#" method="get" data-hero-search>
+            <label for="hero-q">Найти в каталоге</label>
+            <div class="d-search__row">
+              <input id="hero-q" name="q" type="search" placeholder="КТ, УЗИ, бренд…" />
+              <button type="submit">Найти</button>
+            </div>
+          </form>
+
+          <nav class="d-mods" aria-label="Быстрые направления">
+            {mods.map((item) => (
+              <a href={item.href}>{item.label}</a>
+            ))}
+          </nav>
+
+          <div class="d-cta">
+            <a class="d-btn" href="#flagships">Смотреть оборудование</a>
+            <a class="d-btn d-btn--line" href={url(site.catalogPdf)} target="_blank" rel="noopener">PDF-каталог 2026</a>
+          </div>
+        </div>
+
+        {hero && (
+          <figure class="d-fig">
+            <img
+              src={asset(hero.image)}
+              alt={hero.name}
+              width="900"
+              height="700"
+              fetchpriority="high"
+            />
+            <figcaption>
+              <span class="d-fig__n">01</span>
+              <span>
+                <strong>Canon Aquilion ONE / PRISM Edition</strong>
+                <small>{heroSpecs}</small>
+              </span>
+            </figcaption>
+          </figure>
+        )}
+      </div>
+
+      <div class="d-wrap">
+        <div class="d-meter" aria-label="Краткие сведения">
+          <div>
+            <strong>{pad(featured.length)}</strong>
+            <span>моделей в подборке</span>
+          </div>
+          <div>
+            <strong>{pad(directions.length)}</strong>
+            <span>направления каталога</span>
+          </div>
+          <div>
+            <strong>{site.years}</strong>
+            <span>поставка и сервис</span>
+          </div>
+          <div>
+            <strong>ЭЛМА</strong>
+            <span>Зеленоград, технопарк</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="d-block" id="directions">
+      <div class="d-wrap">
+        <header class="d-sec">
+          <p class="d-kicker">01 / Каталог</p>
+          <div class="d-sec__row">
+            <h2>Направления оборудования</h2>
+            <a class="d-textlink" href="#flagships">К флагманам</a>
+          </div>
+        </header>
+
+        <div class="d-toc">
+          <div class="d-toc__head">
+            <span>№</span>
+            <span>Направление</span>
+            <span>Состав</span>
+            <span>Позиции</span>
+          </div>
+          {rows.map((row) => (
+            <a class="d-toc__row" href="#flagships">
+              <span class="d-toc__n">{row.index}</span>
+              <span class="d-toc__title">
+                <strong>{row.name}</strong>
+                <small>{row.description}</small>
+              </span>
+              <span class="d-toc__cats">{row.catLabel}</span>
+              <span class="d-toc__count">
+                {row.positions}
+                <small> · {row.sections} разд.</small>
+              </span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="d-block" id="flagships">
+      <div class="d-wrap">
+        <header class="d-sec">
+          <p class="d-kicker">02 / Подборка</p>
+          <h2>Флагманские модели</h2>
+          <p class="d-sec__note">Полный каталог с фильтрами и брошюрой для стенда — в следующей итерации.</p>
+        </header>
+        <p class="d-qrnote" data-qr-note hidden>
+          В карточке товара здесь будет QR и кнопка «Брошюра для стенда».
+        </p>
+        <div class="d-units">
+          {featured.map((product, i) => (
+            <article class="d-unit">
+              <a class="d-unit__img" href="#request">
+                <img src={asset(product.image)} alt={product.name} width="640" height="400" loading="lazy" />
+              </a>
+              <div class="d-unit__body">
+                <div class="d-unit__top">
+                  <span class="d-unit__ix">{pad(i + 1)}</span>
+                  <span class="d-unit__brand">{product.brand}</span>
+                  <button class="d-unit__qr" type="button" data-qr-hint aria-label="QR и брошюра">QR</button>
+                </div>
+                <h3><a href="#request">{product.name}</a></h3>
+                <p class="d-unit__desc">{product.description}</p>
+                {product.specs?.length > 0 && (
+                  <p class="d-unit__specs">{product.specs.slice(0, 3).join(' · ')}</p>
+                )}
+                <div class="d-unit__foot">
+                  <span>По запросу</span>
+                  <a href="#request">Запросить КП</a>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="d-block" id="brands">
+      <div class="d-wrap">
+        <header class="d-sec">
+          <p class="d-kicker">03 / Поставщики</p>
+          <h2>Бренды в каталоге</h2>
+        </header>
+        <div class="d-brands">
+          {brands.map((brand) => (
+            <a href="#flagships">
+              <span>{brand.name}</span>
+              <small>{brand.count}</small>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="d-block" id="company">
+      <div class="d-wrap">
+        <header class="d-sec">
+          <p class="d-kicker">04 / Сопровождение</p>
+          <h2>От поставки до сервиса</h2>
+        </header>
+        <ol class="d-work">
+          {benefits.map((item) => (
+            <li>
+              <span class="d-work__n">{item.n}</span>
+              <h3>{item.title}</h3>
+              <p>{item.text}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <section class="d-block d-expo" id="expo">
+      <div class="d-wrap d-expo__grid">
+        <div class="d-expo__copy">
+          <p class="d-kicker">05 / Выставка</p>
+          <h2>Поделитесь сайтом с коллегами</h2>
+          <p>
+            Наведите камеру телефона на QR — откроется главная ЗелМедСервис.
+            В карточках каталога появится кнопка <strong>«Брошюра для стенда»</strong>:
+            печатный лист A4 с фото, характеристиками и QR на страницу товара.
+          </p>
+          <div class="d-cta">
+            <a class="d-btn" href={url(site.catalogPdf)} target="_blank" rel="noopener">Скачать каталог 2026 (PDF)</a>
+            <a class="d-btn d-btn--line" href="#request">Оставить заявку со стенда</a>
+          </div>
+        </div>
+        <div class="d-expo__plate">
+          <QrShare path="/" label="QR главной страницы" size={200} />
+        </div>
+      </div>
+    </section>
+
+    <section class="d-block" id="contacts">
+      <div class="d-wrap d-contacts__grid">
+        <div>
+          <p class="d-kicker">06 / Заявка</p>
+          <h2>Запросить коммерческое предложение</h2>
+          <a class="d-phone" href={site.phoneHref}>{site.phone}</a>
+          <p class="d-sec__note">
+            Напишите модель или направление — подготовим КП и ответим по срокам поставки.
+          </p>
+          <ul class="d-contacts__list">
+            <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+            <li>{site.address}</li>
+          </ul>
+        </div>
+
+        <form class="d-form" id="request" data-request-form data-email={site.email}>
+          <label>
+            Имя
+            <input name="name" type="text" required placeholder="Как к вам обращаться" />
+          </label>
+          <label>
+            Организация
+            <input name="org" type="text" placeholder="ЛПУ / клиника" />
+          </label>
+          <label>
+            Телефон или email
+            <input name="contact" type="text" required placeholder="+7 … или email" />
+          </label>
+          <label>
+            Что интересует
+            <textarea name="message" rows="4" placeholder="Модель, направление, сроки…"></textarea>
+          </label>
+          <button class="d-btn" type="submit">Отправить запрос</button>
+          <p class="d-form__note">Форма откроет почтовый клиент. Позже подключим сервис форм.</p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="d-footer">
+    <div class="d-wrap d-footer__grid">
+      <div class="d-footer__brand">
+        <strong>ЗелМедСервис</strong>
+        <span>Поставка диагностического оборудования для ЛПУ</span>
+        <p class="d-footer__copy">{site.years} · {site.legalName}</p>
+      </div>
+      <div>
+        <h2>Направления</h2>
+        <ul>
+          {directions.map((d) => (
+            <li><a href="#directions">{d.name}</a></li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <h2>Контакты</h2>
+        <ul>
+          <li><a href={site.phoneHref}>{site.phone}</a></li>
+          <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+          <li>{site.address}</li>
+        </ul>
+      </div>
+      <div>
+        <h2>Материалы</h2>
+        <ul>
+          <li><a href={url(site.catalogPdf)} target="_blank" rel="noopener">PDF-каталог 2026</a></li>
+          <li><a href="#expo">QR для выставки</a></li>
+          <li><a href="#request">Запросить КП</a></li>
+          <li><a href={url('/')}>Текущая версия сайта</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <nav class="d-dock" aria-label="Быстрые действия">
+    <a href="#directions">Каталог</a>
+    <button type="button" data-open-search>Поиск</button>
+    <a href="#request">Запросить КП</a>
+  </nav>
+
+  <SearchOverlay />
+</DesignLayout>
+
+<script>
+  const megaToggle = document.querySelector<HTMLButtonElement>('[data-d-mega-toggle]');
+  const mega = document.querySelector<HTMLElement>('[data-d-mega]');
+  const burger = document.querySelector<HTMLButtonElement>('[data-d-burger]');
+  const drawer = document.querySelector<HTMLElement>('[data-d-drawer]');
+  const drawerClose = document.querySelector('[data-d-drawer-close]');
+
+  const closeMega = () => {
+    if (!mega || !megaToggle) return;
+    mega.hidden = true;
+    megaToggle.setAttribute('aria-expanded', 'false');
+  };
+
+  megaToggle?.addEventListener('click', () => {
+    const open = megaToggle.getAttribute('aria-expanded') === 'true';
+    megaToggle.setAttribute('aria-expanded', String(!open));
+    if (mega) mega.hidden = open;
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!mega || !megaToggle) return;
+    const target = event.target;
+    if (!(target instanceof Node)) return;
+    if (!mega.contains(target) && !megaToggle.contains(target)) closeMega();
+  });
+
+  mega?.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMega));
+
+  const openDrawer = () => {
+    drawer?.removeAttribute('hidden');
+    burger?.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  };
+  const closeDrawer = () => {
+    drawer?.setAttribute('hidden', '');
+    burger?.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  };
+
+  burger?.addEventListener('click', openDrawer);
+  drawerClose?.addEventListener('click', closeDrawer);
+  drawer?.addEventListener('click', (event) => {
+    if (event.target === drawer) closeDrawer();
+  });
+  drawer?.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeDrawer));
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return;
+    closeDrawer();
+    closeMega();
+  });
+
+  document.querySelector('[data-hero-search]')?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const form = event.currentTarget as HTMLFormElement;
+    const query = String(new FormData(form).get('q') || '');
+    document.querySelector<HTMLButtonElement>('[data-open-search]')?.click();
+    const input = document.querySelector<HTMLInputElement>('[data-search-input]');
+    if (!input) return;
+    input.value = query;
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+  });
+
+  document.querySelectorAll('[data-qr-hint]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const note = document.querySelector<HTMLElement>('[data-qr-note]');
+      if (!note) return;
+      note.hidden = false;
+      note.scrollIntoView({ block: 'nearest' });
+    });
+  });
+
+  document.querySelector<HTMLFormElement>('[data-request-form]')?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const form = event.currentTarget as HTMLFormElement;
+    const email = form.dataset.email || 'sale@zelmedservice.ru';
+    const data = new FormData(form);
+    const body = [
+      `Имя: ${data.get('name') || ''}`,
+      `Организация: ${data.get('org') || ''}`,
+      `Контакт: ${data.get('contact') || ''}`,
+      '',
+      String(data.get('message') || ''),
+    ].join('\n');
+    window.location.href = `mailto:${email}?subject=${encodeURIComponent('Запрос КП — zelmedservice.ru')}&body=${encodeURIComponent(body)}`;
+  });
+</script>

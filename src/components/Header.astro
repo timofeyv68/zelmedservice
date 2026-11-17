@@ -1,0 +1,449 @@
+---
+import { site } from '../lib/site';
+import { getDirections, getCategories } from '../lib/catalog';
+import { url } from '../lib/paths';
+
+const directions = getDirections();
+const categories = getCategories();
+const pdf = url(site.catalogPdf);
+
+const nav = [
+  { href: url('catalog/'), label: 'Каталог', mega: true },
+  { href: url('company/'), label: 'О компании' },
+  { href: url('brands/'), label: 'Бренды' },
+  { href: url('news/'), label: 'Новости' },
+  { href: url('contacts/'), label: 'Контакты' },
+];
+---
+
+<header class="header no-print" data-header>
+  <div class="header__top">
+    <div class="container header__top-inner">
+      <p class="header__place">{site.address}</p>
+      <div class="header__top-actions">
+        <a href={site.phoneHref}>{site.phone}</a>
+        <a href={`mailto:${site.email}`}>{site.email}</a>
+        <a class="header__pdf" href={pdf} target="_blank" rel="noopener">Скачать каталог 2026</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="header__main">
+    <div class="container header__main-inner">
+      <a class="logo" href={url('/')} aria-label={site.name}>
+        <img class="logo__mark" src={url('img/brand/logo-mark.png')} alt="" width="40" height="40" />
+        <span class="logo__text" aria-hidden="false">
+          <span class="logo__zel">ЗЕЛ</span><span class="logo__med">МЕДСЕРВИС</span>
+        </span>
+      </a>
+
+      <nav class="header__nav" aria-label="Основное меню">
+        <div class="nav-item nav-item--mega">
+          <a class="nav-catalog" href={url('catalog/')} data-mega-toggle aria-expanded="false">
+            Каталог
+            <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </a>
+          <div class="mega" data-mega hidden>
+            <div class="mega__grid">
+              {directions.map((dir) => {
+                const cats = categories.filter((c) => c.directionSlug === dir.slug);
+                return (
+                  <div class="mega__col">
+                    <a class="mega__title" href={`${url('catalog/')}?direction=${dir.slug}`}>{dir.name}</a>
+                    <ul>
+                      {cats.map((c) => (
+                        <li>
+                          <a href={url(`catalog/${c.slug}/`)}>{c.name}</a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              })}
+            </div>
+            <a class="mega__all" href={url('catalog/')}>Весь каталог →</a>
+          </div>
+        </div>
+        {nav.filter((n) => !n.mega).map((item) => (
+          <a class="nav-link" href={item.href}>{item.label}</a>
+        ))}
+      </nav>
+
+      <div class="header__cta">
+        <button class="header__search-btn" type="button" data-open-search aria-label="Поиск">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/>
+            <path d="M16.5 16.5L21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <a class="btn btn--accent header__phone-btn" href={site.phoneHref}>{site.phone}</a>
+        <a class="btn btn--primary header__kp" href={`${url('contacts/')}#request`}>Запросить КП</a>
+        <button class="burger" type="button" data-burger aria-label="Открыть меню" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="drawer" data-drawer hidden>
+    <div class="drawer__panel">
+      <div class="drawer__head">
+        <strong>Меню</strong>
+        <button type="button" data-drawer-close aria-label="Закрыть">×</button>
+      </div>
+      <a href={url('catalog/')}>Каталог</a>
+      <a href={url('company/')}>О компании</a>
+      <a href={url('brands/')}>Бренды</a>
+      <a href={url('news/')}>Новости</a>
+      <a href={url('contacts/')}>Контакты</a>
+      <a class="btn btn--primary" href={`${url('contacts/')}#request`}>Запросить КП</a>
+      <a class="btn btn--ghost" href={pdf} target="_blank" rel="noopener">Скачать PDF-каталог</a>
+    </div>
+  </div>
+</header>
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(245, 248, 251, 0.94);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .header.is-compact .header__top {
+    display: none;
+  }
+
+  .header__top {
+    background: var(--color-ink);
+    color: #d7e6f7;
+    font-size: 0.82rem;
+  }
+
+  .header__top-inner {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.45rem 0;
+    align-items: center;
+  }
+
+  .header__place {
+    margin: 0;
+    opacity: 0.85;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .header__top-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .header__top-actions a {
+    color: #fff;
+    font-weight: 600;
+  }
+
+  .header__pdf {
+    color: var(--color-green) !important;
+  }
+
+  .header__main-inner {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 1rem;
+    min-height: var(--header-h);
+  }
+
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    min-width: 0;
+    flex-shrink: 0;
+    z-index: 2;
+  }
+
+  .logo__mark {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+
+  .logo__text {
+    font-weight: 800;
+    font-style: italic;
+    letter-spacing: -0.02em;
+    font-size: 1.05rem;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .logo__zel {
+    color: #7cc11f;
+  }
+
+  .logo__med {
+    color: #0b2a4a;
+  }
+
+  .header__nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.15rem;
+    min-width: 0;
+    flex-wrap: nowrap;
+  }
+
+  .nav-link,
+  .nav-catalog {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-height: 40px;
+    padding: 0.4rem 0.7rem;
+    border-radius: 999px;
+    border: 0;
+    background: transparent;
+    font-weight: 650;
+    color: var(--color-ink-soft);
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .nav-link:hover,
+  .nav-catalog:hover,
+  .nav-catalog[aria-expanded="true"] {
+    background: var(--color-chip);
+    color: var(--color-accent);
+  }
+
+  .nav-item--mega {
+    position: relative;
+  }
+
+  .mega {
+    position: absolute;
+    top: calc(100% + 0.75rem);
+    left: 0;
+    width: min(920px, 78vw);
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+    padding: 1.25rem;
+    z-index: 30;
+  }
+
+  .mega__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .mega__title {
+    display: block;
+    font-weight: 800;
+    margin-bottom: 0.65rem;
+    color: var(--color-ink);
+  }
+
+  .mega__col a {
+    display: block;
+    padding: 0.35rem 0;
+    color: var(--color-muted);
+    font-size: 0.9rem;
+  }
+
+  .mega__col a:hover {
+    color: var(--color-accent);
+  }
+
+  .mega__all {
+    display: inline-block;
+    margin-top: 1rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid var(--color-border);
+    width: 100%;
+    font-weight: 750;
+    color: var(--color-accent);
+  }
+
+  .header__cta {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    flex-shrink: 0;
+  }
+
+  .header__search-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--color-border);
+    background: #fff;
+    color: var(--color-ink);
+    cursor: pointer;
+  }
+
+  .burger {
+    display: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    border: 1px solid var(--color-border);
+    background: #fff;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+  }
+
+  .burger span {
+    width: 18px;
+    height: 2px;
+    background: var(--color-ink);
+    border-radius: 2px;
+  }
+
+  .drawer {
+    position: fixed;
+    inset: 0;
+    background: rgba(11, 42, 74, 0.45);
+    z-index: 60;
+  }
+
+  .drawer[hidden],
+  .mega[hidden] {
+    display: none !important;
+  }
+
+  .drawer__panel {
+    margin-left: auto;
+    width: min(360px, 100%);
+    height: 100%;
+    background: #fff;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .drawer__panel a {
+    font-weight: 700;
+    padding: 0.65rem 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .drawer__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .drawer__head button {
+    border: 0;
+    background: transparent;
+    font-size: 1.8rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  @media (max-width: 1180px) {
+    .header__phone-btn {
+      display: none;
+    }
+  }
+
+  @media (max-width: 980px) {
+    .header__nav {
+      display: none;
+    }
+
+    .burger {
+      display: inline-flex;
+    }
+
+    .header__main-inner {
+      grid-template-columns: 1fr auto;
+    }
+
+    .header__place {
+      display: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .logo__text {
+      display: none;
+    }
+
+    .header__kp {
+      display: none;
+    }
+
+    .header__top-actions a:not(.header__pdf) {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  const header = document.querySelector('[data-header]');
+  const megaToggle = document.querySelector('[data-mega-toggle]');
+  const mega = document.querySelector('[data-mega]');
+  const burger = document.querySelector('[data-burger]');
+  const drawer = document.querySelector('[data-drawer]');
+  const drawerClose = document.querySelector('[data-drawer-close]');
+
+  const onScroll = () => {
+    header?.classList.toggle('is-compact', window.scrollY > 24);
+  };
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  megaToggle?.addEventListener('click', (e) => {
+    if (window.matchMedia('(min-width: 981px)').matches) {
+      e.preventDefault();
+      const open = megaToggle.getAttribute('aria-expanded') === 'true';
+      megaToggle.setAttribute('aria-expanded', String(!open));
+      mega?.toggleAttribute('hidden', open);
+    }
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!mega || !megaToggle) return;
+    const t = e.target as Node;
+    if (!mega.contains(t) && !megaToggle.contains(t)) {
+      mega.hidden = true;
+      megaToggle.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  const openDrawer = () => {
+    drawer?.removeAttribute('hidden');
+    burger?.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  };
+  const closeDrawer = () => {
+    drawer?.setAttribute('hidden', '');
+    burger?.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  };
+
+  burger?.addEventListener('click', openDrawer);
+  drawerClose?.addEventListener('click', closeDrawer);
+  drawer?.addEventListener('click', (e) => {
+    if (e.target === drawer) closeDrawer();
+  });
+</script>

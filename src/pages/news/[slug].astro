@@ -1,0 +1,39 @@
+---
+import { url } from '../../lib/paths';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SearchOverlay from '../../components/SearchOverlay.astro';
+import news from '../../data/news.json';
+
+export function getStaticPaths() {
+  return news.map((n) => ({ params: { slug: n.slug }, props: { item: n } }));
+}
+
+const { item } = Astro.props;
+---
+
+<BaseLayout title={`${item.title} — новости ЗелМедСервис`} description={item.body.slice(0, 150)}>
+  <SearchOverlay />
+  <article class="section">
+    <div class="container article">
+      <nav class="crumbs">
+        <a href={url('/')}>Главная</a><span>/</span>
+        <a href={url('news/')}>Новости</a><span>/</span>
+        <span>{item.title}</span>
+      </nav>
+      <time>{item.date || ''}</time>
+      <h1>{item.title}</h1>
+      <div class="body">
+        {item.body.split(/\n+/).filter(Boolean).map((p) => <p>{p}</p>)}
+      </div>
+      <a class="btn btn--ghost" href={url('news/')}>← Все новости</a>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .crumbs { display:flex; flex-wrap:wrap; gap:.45rem; color:var(--color-muted); margin-bottom:1rem; }
+  .article { max-width: 760px; }
+  time { color: var(--color-accent); font-weight: 800; }
+  h1 { margin: .4rem 0 1rem; font-size: clamp(1.4rem, 2.5vw, 2rem); }
+  .body p { color: var(--color-ink-soft); line-height: 1.65; }
+</style>

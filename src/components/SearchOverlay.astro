@@ -1,0 +1,172 @@
+---
+import { searchIndex } from '../lib/catalog';
+
+const index = searchIndex();
+---
+
+<div class="search-overlay no-print" data-search-overlay hidden>
+  <div class="search-overlay__panel" role="dialog" aria-modal="true" aria-label="Поиск по каталогу">
+    <div class="search-overlay__head">
+      <label class="visually-hidden" for="site-search">Поиск</label>
+      <input
+        id="site-search"
+        type="search"
+        placeholder="КТ, МРТ, Samsung, маммограф…"
+        autocomplete="off"
+        data-search-input
+      />
+      <button type="button" data-close-search aria-label="Закрыть поиск">×</button>
+    </div>
+    <p class="search-overlay__hint">Поиск по каталогу 2026: название, бренд, категория.</p>
+    <ul class="search-overlay__results" data-search-results></ul>
+  </div>
+</div>
+
+<script define:vars={{ index }}>
+  const overlay = document.querySelector('[data-search-overlay]');
+  const input = document.querySelector('[data-search-input]');
+  const results = document.querySelector('[data-search-results]');
+
+  const open = () => {
+    overlay?.removeAttribute('hidden');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => input?.focus(), 30);
+  };
+  const close = () => {
+    overlay?.setAttribute('hidden', '');
+    document.body.style.overflow = '';
+  };
+
+  document.querySelectorAll('[data-open-search]').forEach((el) => {
+    el.addEventListener('click', open);
+  });
+  document.querySelector('[data-close-search]')?.addEventListener('click', close);
+  overlay?.addEventListener('click', (e) => {
+    if (e.target === overlay) close();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') close();
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      open();
+    }
+  });
+
+  const render = (items) => {
+    if (!results) return;
+    if (!items.length) {
+      results.innerHTML = '<li class="empty">Ничего не найдено. Попробуйте «КТ», «Samsung» или «маммограф».</li>';
+      return;
+    }
+    results.innerHTML = items
+      .map(
+        (item) =>
+          `<li><a href="${item.href}"><strong>${item.name}</strong><span>${item.brand} · ${item.category}</span></a></li>`
+      )
+      .join('');
+    results.querySelectorAll('a').forEach((a) => a.addEventListener('click', close));
+  };
+
+  render(index.slice(0, 8));
+
+  input?.addEventListener('input', () => {
+    const q = (input.value || '').trim().toLowerCase();
+    if (!q) {
+      render(index.slice(0, 8));
+      return;
+    }
+    const filtered = index.filter(
+      (item) =>
+        item.name.toLowerCase().includes(q) ||
+        item.brand.toLowerCase().includes(q) ||
+        item.category.toLowerCase().includes(q) ||
+        item.description.toLowerCase().includes(q)
+    );
+    render(filtered.slice(0, 12));
+  });
+</script>
+
+<style>
+  .search-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    background: rgba(11, 42, 74, 0.5);
+    display: grid;
+    align-items: start;
+    justify-items: center;
+    padding: 10vh 1rem 1rem;
+  }
+
+  .search-overlay[hidden] {
+    display: none !important;
+  }
+
+  .search-overlay__panel {
+    width: min(680px, 100%);
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+
+  .search-overlay__head {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .search-overlay__head input {
+    flex: 1;
+    border: 0;
+    outline: none;
+    font-size: 1.05rem;
+    min-height: 44px;
+  }
+
+  .search-overlay__head button {
+    width: 40px;
+    height: 40px;
+    border: 0;
+    background: transparent;
+    font-size: 1.6rem;
+    cursor: pointer;
+  }
+
+  .search-overlay__hint {
+    margin: 0;
+    padding: 0.7rem 1rem 0;
+    color: var(--color-muted);
+    font-size: 0.85rem;
+  }
+
+  .search-overlay__results {
+    padding: 0.5rem;
+    max-height: 50vh;
+    overflow: auto;
+  }
+
+  .search-overlay__results a {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: 0.85rem 0.9rem;
+    border-radius: 12px;
+  }
+
+  .search-overlay__results a:hover {
+    background: var(--color-chip);
+  }
+
+  .search-overlay__results span {
+    color: var(--color-muted);
+    font-size: 0.85rem;
+  }
+
+  .search-overlay__results .empty {
+    padding: 1rem;
+    color: var(--color-muted);
+  }
+</style>

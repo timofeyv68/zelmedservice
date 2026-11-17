@@ -1,0 +1,130 @@
+---
+import { getProducts, productPath } from '../../lib/catalog';
+import { qrSvg, absoluteUrl } from '../../lib/qr';
+import { site } from '../../lib/site';
+import { url as withBase } from '../../lib/paths';
+
+export function getStaticPaths() {
+  return getProducts().map((p) => ({ params: { slug: p.slug }, props: { product: p } }));
+}
+
+const { product } = Astro.props;
+const path = productPath(product);
+const pageUrl = absoluteUrl(path, Astro.site?.toString() || site.url);
+const svg = await qrSvg(pageUrl, 260);
+const logo = withBase('img/brand/logo-mark.png');
+const image = product.image
+  ? product.image.startsWith('http')
+    ? product.image
+    : withBase(product.image.replace(/^\//, ''))
+  : null;
+---
+
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Брошюра для стенда — {product.name}</title>
+    <meta name="robots" content="noindex" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="toolbar no-print">
+      <button type="button" onclick="window.print()">Распечатать A4</button>
+      <a href={path}>К карточке товара</a>
+    </div>
+
+    <article class="sheet">
+      <header class="sheet__head">
+        <img src={logo} alt="" width="48" height="48" />
+        <div>
+          <strong><span class="zel">ЗЕЛ</span><span class="med">МЕДСЕРВИС</span></strong>
+          <p>Брошюра для стенда · каталог 2026</p>
+        </div>
+      </header>
+
+      <p class="brand">{product.brand}</p>
+      <h1>{product.name}</h1>
+
+      <div class="sheet__grid">
+        <div class="media">
+          {image ? (
+            <img src={image} alt={product.name} />
+          ) : (
+            <div class="ph">{product.brand}</div>
+          )}
+        </div>
+        <div class="qr" set:html={svg}></div>
+      </div>
+
+      <p class="desc">{product.description}</p>
+
+      <ul class="facts">
+        <li>Категория: {product.category}</li>
+        <li>Цена: по запросу</li>
+        <li>Тел.: {site.phone}</li>
+        <li>{site.email}</li>
+      </ul>
+
+      <footer>
+        <span>{pageUrl.replace('https://', '')}</span>
+        <span>Наведите камеру на QR</span>
+      </footer>
+    </article>
+  </body>
+</html>
+
+<style is:global>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: Manrope, system-ui, sans-serif;
+    background: #e8eef5;
+    color: #0b2a4a;
+  }
+  .toolbar {
+    display: flex; gap: 0.75rem; justify-content: center;
+    padding: 1rem; position: sticky; top: 0; background: #fff; border-bottom: 1px solid #d7e2ef;
+  }
+  .toolbar button, .toolbar a {
+    min-height: 44px; padding: 0.6rem 1rem; border-radius: 999px;
+    border: 1px solid #d7e2ef; background: #7cc11f; color: #0b2a4a;
+    font-weight: 800; text-decoration: none; cursor: pointer;
+  }
+  .toolbar a { background: #fff; }
+  .sheet {
+    width: min(210mm, 100% - 2rem);
+    min-height: 297mm;
+    margin: 1.25rem auto;
+    background: #fff;
+    padding: 18mm 16mm;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(11,42,74,.08);
+  }
+  .sheet__head { display: flex; gap: 0.75rem; align-items: center; margin-bottom: 1.25rem; }
+  .sheet__head p { margin: 0.15rem 0 0; color: #5a6f86; font-size: 0.9rem; }
+  .zel { color: #7cc11f; font-style: italic; }
+  .med { color: #0b2a4a; font-style: italic; }
+  .brand { text-transform: uppercase; letter-spacing: .08em; color: #1f5fbf; font-weight: 800; font-size: .8rem; }
+  h1 { font-size: 1.7rem; line-height: 1.2; margin: 0.2rem 0 1rem; }
+  .sheet__grid { display: grid; grid-template-columns: 1.3fr 0.7fr; gap: 1rem; align-items: center; }
+  .media, .ph {
+    border: 1px solid #d7e2ef; border-radius: 12px; background: #f5f8fb;
+    min-height: 220px; display: grid; place-items: center; overflow: hidden;
+  }
+  .media img { width: 100%; height: 240px; object-fit: contain; padding: 0.75rem; }
+  .qr { background: #fff; border: 1px solid #d7e2ef; border-radius: 12px; padding: 0.6rem; }
+  .qr svg { width: 100%; height: auto; display: block; }
+  .desc { color: #5a6f86; margin: 1rem 0; }
+  .facts { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.4rem; font-weight: 700; }
+  footer {
+    margin-top: 1.5rem; padding-top: 0.85rem; border-top: 1px solid #d7e2ef;
+    display: flex; justify-content: space-between; gap: 1rem; color: #5a6f86; font-size: 0.9rem;
+  }
+  @media print {
+    body { background: #fff; }
+    .no-print { display: none !important; }
+    .sheet { box-shadow: none; margin: 0; width: auto; border-radius: 0; }
+  }
+</style>

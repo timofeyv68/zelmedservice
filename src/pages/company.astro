@@ -1,0 +1,112 @@
+---
+import { url } from '../lib/paths';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SearchOverlay from '../components/SearchOverlay.astro';
+import company from '../data/company.json';
+---
+
+<BaseLayout
+  title="О компании ЗелМедСервис — поставщик медицинского оборудования"
+  description="С 2011 года поставляем КТ, МРТ, УЗИ, рентген и эндоскопию для ЛПУ. Сервис, монтаж, сопровождение 44-ФЗ и 223-ФЗ."
+>
+  <SearchOverlay />
+  <section class="section company">
+    <div class="container">
+      <nav class="crumbs"><a href={url('/')}>Главная</a><span>/</span><span>О компании</span></nav>
+      <span class="section__eyebrow">О компании</span>
+      <h1>{company.headline}</h1>
+      <p class="lead">{company.lead}</p>
+
+      <div class="stats">
+        {company.stats.map((s) => (
+          <article class="stat card">
+            <strong>{s.value}</strong>
+            <span>{s.label}</span>
+          </article>
+        ))}
+      </div>
+
+      <div class="about-grid">
+        <div>
+          {company.about.map((p) => <p>{p}</p>)}
+          <div class="focus">
+            {company.focus.map((f) => <span class="chip is-active">{f}</span>)}
+          </div>
+        </div>
+        <aside class="card aside">
+          <h2>Продуктовая линейка</h2>
+          <ul>
+            {company.productLine.map((item) => <li>{item}</li>)}
+          </ul>
+          <div class="aside__links">
+            {company.links.map((l) => (
+              <a class="btn btn--soft" href={url(l.href)}>{l.label}</a>
+            ))}
+          </div>
+        </aside>
+      </div>
+
+      <h2 class="block-title">Почему выбирают ЗелМедСервис</h2>
+      <div class="adv">
+        {company.advantages.map((a) => (
+          <article class="card adv__item">
+            <h3>{a.title}</h3>
+            <p>{a.text}</p>
+          </article>
+        ))}
+      </div>
+
+      <h2 class="block-title">Сервисное обслуживание МО</h2>
+      <p class="muted">Контракт неопределённого объёма — регламентные работы и запасные части по факту потребности.</p>
+      <div class="steps">
+        {company.serviceSteps.map((s) => (
+          <article class="step card">
+            <span>{s.n}</span>
+            <h3>{s.title}</h3>
+            <p>{s.text}</p>
+          </article>
+        ))}
+      </div>
+      <ul class="service-points">
+        {company.servicePoints.map((p) => <li>{p}</li>)}
+      </ul>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .crumbs { display:flex; gap:.5rem; color:var(--color-muted); margin-bottom:1rem; }
+  h1 { font-size: clamp(1.7rem, 3vw, 2.4rem); max-width: 18ch; }
+  .lead { color: var(--color-muted); max-width: 46rem; font-size: 1.05rem; }
+  .stats {
+    display: grid; grid-template-columns: repeat(4,1fr); gap: .85rem; margin: 1.75rem 0 2rem;
+  }
+  .stat { padding: 1.1rem; display:grid; gap:.35rem; }
+  .stat strong { font-size: 1.5rem; color: var(--color-accent); }
+  .stat span { color: var(--color-muted); font-size: .9rem; }
+  .about-grid { display:grid; grid-template-columns: 1.3fr .9fr; gap: 1.5rem; }
+  .focus { display:flex; gap:.5rem; flex-wrap:wrap; margin-top:1rem; }
+  .aside { padding: 1.2rem; }
+  .aside h2 { font-size: 1.1rem; }
+  .aside li { padding: .4rem 0; border-bottom: 1px solid var(--color-border); color: var(--color-ink-soft); }
+  .aside__links { display:flex; flex-wrap:wrap; gap:.45rem; margin-top:1rem; }
+  .block-title { margin: 2.5rem 0 1rem; font-size: 1.5rem; }
+  .muted { color: var(--color-muted); }
+  .adv { display:grid; grid-template-columns: repeat(4,1fr); gap:.85rem; }
+  .adv__item { padding: 1.1rem; }
+  .adv__item p { color: var(--color-muted); margin:0; }
+  .steps { display:grid; grid-template-columns: repeat(4,1fr); gap:.85rem; margin: 1rem 0 1.25rem; }
+  .step { padding: 1.1rem; }
+  .step span { font-weight: 800; color: var(--color-green-dark); }
+  .service-points { display:grid; gap:.55rem; }
+  .service-points li {
+    padding: .85rem 1rem; background:#fff; border:1px solid var(--color-border);
+    border-radius: 12px;
+  }
+  @media (max-width: 1000px) {
+    .stats, .adv, .steps, .about-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 640px) {
+    .stats, .adv, .steps, .about-grid { grid-template-columns: 1fr; }
+  }
+</style>

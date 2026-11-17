@@ -1,0 +1,42 @@
+[
+  {
+    "slug": "luchevaya-diagnostika",
+    "name": "Лучевая диагностика",
+    "shortName": "Лучевая",
+    "description": "КТ, МРТ, ангиография, рентген, маммография и мобильные модули",
+    "icon": "ct",
+    "categorySlugs": [
+      "kompyuternye-tomografy",
+      "mrt",
+      "angiografy",
+      "mobilnye-moduli",
+      "rentgenodiagnostika",
+      "rentgenokhirurgiya",
+      "mammografy"
+    ]
+  },
+  {
+    "slug": "ultrazvukovaya-diagnostika",
+    "name": "Ультразвуковая диагностика",
+    "shortName": "УЗИ",
+    "description": "УЗ-системы Canon, Samsung, Alpinion для ЛПУ",
+    "icon": "us",
+    "categorySlugs": ["ultrazvukovye-sistemy"]
+  },
+  {
+    "slug": "endoskopiya",
+    "name": "Эндоскопия",
+    "shortName": "Эндоскопия",
+    "description": "Системы Fujifilm, Concemed и ЭФА-М",
+    "icon": "endo",
+    "categorySlugs": ["endoskopiya"]
+  },
+  {
+    "slug": "stomatologiya",
+    "name": "Стоматология",
+    "shortName": "Стоматология",
+    "description": "Стоматологические установки CINGOL",
+    "icon": "dental",
+    "categorySlugs": ["stomatologicheskie-ustanovki"]
+  }
+]
