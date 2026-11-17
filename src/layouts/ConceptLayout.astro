@@ -1,0 +1,37 @@
+---
+import '../styles/global.css';
+import '../styles/concept.css';
+import { site } from '../lib/site';
+import { url } from '../lib/paths';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = `${site.name} — концепция главной`,
+  description = 'Концепция главной страницы. Рабочая версия сайта не изменена.',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content="noindex" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Onest:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href={url('/favicon.svg')} type="image/svg+xml" />
+  </head>
+  <body class="concept">
+    <slot />
+  </body>
+</html>

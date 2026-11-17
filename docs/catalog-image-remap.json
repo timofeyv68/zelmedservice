@@ -1,0 +1,766 @@
+[
+  {
+    "page": 1,
+    "products": [],
+    "heroes": [
+      "img/catalog/p01_000_2035x883.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 5,
+    "products": [
+      "canon-aquilion-one-prism-edition",
+      "canon-aplio-i-series-prism-edition"
+    ],
+    "heroes": [
+      "img/catalog/p05_003_683x456.png",
+      "img/catalog/p05_002_2040x324.png"
+    ],
+    "clinical": [
+      "img/catalog/p05_002_2040x324.png"
+    ]
+  },
+  {
+    "page": 6,
+    "products": [
+      "canon-aquilion-exceed-lb"
+    ],
+    "heroes": [
+      "img/catalog/p06_005_1118x735.png",
+      "img/catalog/p06_007_629x249.png"
+    ],
+    "clinical": [
+      "img/catalog/p06_007_629x249.png"
+    ]
+  },
+  {
+    "page": 7,
+    "products": [
+      "canon-aquilion-prime-sp",
+      "canon-aquilion-serve",
+      "universalnyy-rentgenovskiy-apparat-univers-flyuorograf-mt",
+      "mtl-tsifrovoy-universalnyy-apparat-dlya-polipozitsionnoy-rentgenografii-univers-mt",
+      "neusoft-neuviz-prime"
+    ],
+    "heroes": [
+      "img/catalog/p07_009_627x510.png",
+      "img/catalog/p07_011_389x401.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 8,
+    "products": [
+      "neusoft-neuviz-128",
+      "minfound-scintcare-ct-128"
+    ],
+    "heroes": [
+      "img/catalog/p08_013_788x507.png",
+      "img/catalog/p08_024_287x225.png",
+      "img/catalog/p08_022_292x223.png",
+      "img/catalog/p08_020_246x225.png",
+      "img/catalog/p08_016_235x225.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 9,
+    "products": [
+      "neusoft-neuviz-prime",
+      "neusoft-neuviz-128",
+      "minfound-scintcare-ct-128"
+    ],
+    "heroes": [
+      "img/catalog/p09_028_763x491.png",
+      "img/catalog/p09_036_289x224.png",
+      "img/catalog/p09_038_265x224.png",
+      "img/catalog/p09_040_221x223.png",
+      "img/catalog/p09_030_186x224.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 10,
+    "products": [
+      "universalnyy-rentgenovskiy-apparat-univers-flyuorograf-mt",
+      "mtl-tsifrovoy-universalnyy-apparat-dlya-polipozitsionnoy-rentgenografii-univers-mt",
+      "neusoft-neuviz-ace-ace-sp",
+      "neusoft-neuviz-16-classic"
+    ],
+    "heroes": [
+      "img/catalog/p10_045_652x576.png",
+      "img/catalog/p10_044_685x457.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 11,
+    "products": [
+      "minfound-quantumeye-789",
+      "fujifilm-cad-eye"
+    ],
+    "heroes": [
+      "img/catalog/p11_058_1062x598.png",
+      "img/catalog/p11_048_973x548.png",
+      "img/catalog/p11_050_278x227.png",
+      "img/catalog/p11_052_880x225.png",
+      "img/catalog/p11_054_880x225.png"
+    ],
+    "clinical": [
+      "img/catalog/p11_052_880x225.png",
+      "img/catalog/p11_054_880x225.png",
+      "img/catalog/p11_056_880x225.png"
+    ]
+  },
+  {
+    "page": 12,
+    "products": [
+      "minfound-scintcare-pet-kt-730t"
+    ],
+    "heroes": [
+      "img/catalog/p12_062_822x612.png",
+      "img/catalog/p12_060_973x548.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 13,
+    "products": [
+      "minfound-scintcare-blue-755",
+      "minfound-scintcare-pet-kt-730t"
+    ],
+    "heroes": [
+      "img/catalog/p13_065_1019x573.png",
+      "img/catalog/p13_064_646x363.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 14,
+    "products": [
+      "minfound-scintcare-ct-128",
+      "minfound-scintcare-ct-16",
+      "minfound-scintcare-pet-kt-730t",
+      "neusoft-neuviz-128"
+    ],
+    "heroes": [
+      "img/catalog/p14_069_1018x573.png",
+      "img/catalog/p14_071_1019x573.png",
+      "img/catalog/p14_067_984x553.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 15,
+    "products": [
+      "mtl-malahit",
+      "neusoft-neuviz-128",
+      "minfound-scintcare-ct-128"
+    ],
+    "heroes": [
+      "img/catalog/p15_073_746x540.png",
+      "img/catalog/p15_075_225x225.png",
+      "img/catalog/p15_077_225x225.png",
+      "img/catalog/p15_076_225x225.png",
+      "img/catalog/p15_078_225x225.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 16,
+    "products": [
+      "canon-vantage-orian",
+      "canon-vantage-elan"
+    ],
+    "heroes": [
+      "img/catalog/p16_081_603x419.png",
+      "img/catalog/p16_079_701x365.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 17,
+    "products": [
+      "canon-alphenix"
+    ],
+    "heroes": [
+      "img/catalog/p17_083_724x543.png",
+      "img/catalog/p17_084_226x226.png",
+      "img/catalog/p17_085_226x226.png",
+      "img/catalog/p17_086_226x226.png",
+      "img/catalog/p17_087_226x226.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 18,
+    "products": [
+      "mobilnyy-modul-dlya-kt-mrt-i-angiografa"
+    ],
+    "heroes": [
+      "img/catalog/p18_091_650x356.png",
+      "img/catalog/p18_089_239x360.png",
+      "img/catalog/p18_090_322x221.png",
+      "img/catalog/p18_088_293x195.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 19,
+    "products": [
+      "vko-medprom-teleupravlyaemyy-rentgenodiagnosticheskiy-apparat-r-600-polidiagnost"
+    ],
+    "heroes": [
+      "img/catalog/p19_096_1085x611.png",
+      "img/catalog/p19_095_345x225.png",
+      "img/catalog/p19_093_351x225.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 20,
+    "products": [
+      "vko-medprom-rentgenodiagnosticheskiy-apparat-na-dva-rabochih-mesta-ekspertnogo-urovnya-r-6"
+    ],
+    "heroes": [
+      "img/catalog/p20_100_961x580.png",
+      "img/catalog/p20_098_229x221.png",
+      "img/catalog/p20_099_155x221.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 21,
+    "products": [
+      "vko-medprom-flyuorograficheskiy-apparat-r-600-flyuoro",
+      "universalnyy-rentgenovskiy-apparat-univers-flyuorograf-mt"
+    ],
+    "heroes": [
+      "img/catalog/p21_104_647x970.png",
+      "img/catalog/p21_102_397x226.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 22,
+    "products": [
+      "universalnyy-rentgenovskiy-apparat-univers-flyuorograf-mt",
+      "mtl-tsifrovoy-universalnyy-apparat-dlya-polipozitsionnoy-rentgenografii-univers-mt",
+      "vko-medprom-flyuorograficheskiy-apparat-r-600-flyuoro"
+    ],
+    "heroes": [
+      "img/catalog/p22_106_440x750.png",
+      "img/catalog/p22_108_465x224.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 23,
+    "products": [
+      "mtl-diagnosticheskiy-rentgenovskiy-apparat-na-dva-rabochih-mesta-unikord-mt-plyus"
+    ],
+    "heroes": [
+      "img/catalog/p23_112_744x744.png",
+      "img/catalog/p23_110_608x225.png"
+    ],
+    "clinical": [
+      "img/catalog/p23_110_608x225.png"
+    ]
+  },
+  {
+    "page": 24,
+    "products": [
+      "universalnyy-rentgenovskiy-apparat-univers-flyuorograf-mt",
+      "mtl-tsifrovoy-universalnyy-apparat-dlya-polipozitsionnoy-rentgenografii-univers-mt"
+    ],
+    "heroes": [
+      "img/catalog/p24_114_686x655.png",
+      "img/catalog/p24_117_241x225.png",
+      "img/catalog/p24_118_203x225.png",
+      "img/catalog/p24_116_166x225.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 25,
+    "products": [
+      "mtl-teleupravlyaemyy-rentgenovskiy-kompleks-telekord-7mt"
+    ],
+    "heroes": [
+      "img/catalog/p25_121_1000x854.png",
+      "img/catalog/p25_119_674x225.png"
+    ],
+    "clinical": [
+      "img/catalog/p25_119_674x225.png"
+    ]
+  },
+  {
+    "page": 26,
+    "products": [
+      "mtl-palatnyy-apparat-dlya-ekstrennyh-i-planovyh-issledovaniy-mobiren-5mt"
+    ],
+    "heroes": [
+      "img/catalog/p26_123_393x714.png",
+      "img/catalog/p26_125_185x225.png",
+      "img/catalog/p26_126_144x225.png",
+      "img/catalog/p26_127_145x224.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 27,
+    "products": [
+      "mtl-palatnyy-apparat-dlya-ekstrennyh-i-planovyh-issledovaniy-mobiren-4mt"
+    ],
+    "heroes": [
+      "img/catalog/p27_130_371x747.png",
+      "img/catalog/p27_128_594x225.png"
+    ],
+    "clinical": [
+      "img/catalog/p27_128_594x225.png"
+    ]
+  },
+  {
+    "page": 28,
+    "products": [
+      "vko-medprom-mobilnyy-rentgenohirurgicheskiy-apparat-r-600-operviz"
+    ],
+    "heroes": [
+      "img/catalog/p28_138_1242x699.png",
+      "img/catalog/p28_132_482x879.png",
+      "img/catalog/p28_134_482x879.png",
+      "img/catalog/p28_136_482x879.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 29,
+    "products": [
+      "mtl-rentgenohirurgicheskaya-tsifrovaya-mobilnaya-sistema-s-duga-sikord-2mt"
+    ],
+    "heroes": [
+      "img/catalog/p29_140_1411x662.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 30,
+    "products": [
+      "mtl-tsifrovoy-mammograf-mammo-6mt",
+      "mtl-tsifrovoy-mammograf-mammo-5mt-s-tomosintezom",
+      "mtl-tsifrovoy-mammograf-mammo-5mt-biopsiynyy",
+      "mtl-tsifrovoy-mammograf-mammo-4mt-plyus",
+      "fujifilm-tsifrovoy-mammograf-amulet-innovality"
+    ],
+    "heroes": [
+      "img/catalog/p30_142_636x744.png",
+      "img/catalog/p30_146_123x225.png",
+      "img/catalog/p30_145_122x225.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 31,
+    "products": [
+      "mtl-tsifrovoy-mammograf-mammo-5mt-s-tomosintezom",
+      "mtl-tsifrovoy-mammograf-mammo-5mt-biopsiynyy",
+      "mtl-tsifrovoy-mammograf-mammo-6mt",
+      "mtl-tsifrovoy-mammograf-mammo-4mt-plyus",
+      "fujifilm-tsifrovoy-mammograf-amulet-innovality"
+    ],
+    "heroes": [
+      "img/catalog/p31_148_1379x726.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 32,
+    "products": [
+      "mtl-tsifrovoy-mammograf-mammo-5mt-s-tomosintezom",
+      "mtl-tsifrovoy-mammograf-mammo-5mt-biopsiynyy",
+      "mtl-tsifrovoy-mammograf-mammo-6mt",
+      "mtl-tsifrovoy-mammograf-mammo-4mt-plyus",
+      "fujifilm-tsifrovoy-mammograf-amulet-innovality"
+    ],
+    "heroes": [
+      "img/catalog/p32_150_1342x731.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 33,
+    "products": [
+      "mtl-tsifrovoy-mammograf-mammo-4mt-plyus",
+      "mtl-tsifrovoy-mammograf-mammo-6mt",
+      "mtl-tsifrovoy-mammograf-mammo-5mt-s-tomosintezom",
+      "mtl-tsifrovoy-mammograf-mammo-5mt-biopsiynyy",
+      "fujifilm-tsifrovoy-mammograf-amulet-innovality"
+    ],
+    "heroes": [
+      "img/catalog/p33_152_1196x789.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 34,
+    "products": [
+      "fujifilm-tsifrovoy-mammograf-amulet-innovality",
+      "mtl-tsifrovoy-mammograf-mammo-6mt",
+      "mtl-tsifrovoy-mammograf-mammo-5mt-s-tomosintezom",
+      "mtl-tsifrovoy-mammograf-mammo-5mt-biopsiynyy",
+      "mtl-tsifrovoy-mammograf-mammo-4mt-plyus"
+    ],
+    "heroes": [
+      "img/catalog/p34_154_377x783.png",
+      "img/catalog/p34_158_178x225.png",
+      "img/catalog/p34_157_178x225.png",
+      "img/catalog/p34_156_179x225.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 35,
+    "products": [
+      "canon-aplio-i-series-prism-edition",
+      "canon-aplio-flex-aplio-go",
+      "canon-aplio-a-series",
+      "canon-aplio-flex",
+      "canon-aplio-go",
+      "canon-aquilion-one-prism-edition"
+    ],
+    "heroes": [
+      "img/catalog/p35_161_516x418.png",
+      "img/catalog/p35_165_384x511.png",
+      "img/catalog/p35_167_384x511.png",
+      "img/catalog/p35_159_205x351.png",
+      "img/catalog/p35_163_192x352.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 36,
+    "products": [
+      "canon-aplio-flex",
+      "canon-aplio-flex-aplio-go",
+      "canon-aplio-go"
+    ],
+    "heroes": [
+      "img/catalog/p36_179_426x567.png",
+      "img/catalog/p36_181_426x567.png",
+      "img/catalog/p36_169_710x189.png",
+      "img/catalog/p36_171_710x189.png",
+      "img/catalog/p36_173_710x189.png"
+    ],
+    "clinical": [
+      "img/catalog/p36_169_710x189.png",
+      "img/catalog/p36_171_710x189.png",
+      "img/catalog/p36_173_710x189.png",
+      "img/catalog/p36_175_710x189.png",
+      "img/catalog/p36_177_710x189.png"
+    ]
+  },
+  {
+    "page": 37,
+    "products": [
+      "alpinion-x-cube-90"
+    ],
+    "heroes": [
+      "img/catalog/p37_183_481x833.png",
+      "img/catalog/p37_185_374x224.png",
+      "img/catalog/p37_187_302x224.png",
+      "img/catalog/p37_189_302x224.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 38,
+    "products": [
+      "universalnyy-rentgenovskiy-apparat-univers-flyuorograf-mt",
+      "mtl-tsifrovoy-universalnyy-apparat-dlya-polipozitsionnoy-rentgenografii-univers-mt",
+      "alpinion-seriya-e-cube-15",
+      "alpinion-seriya-e-cube-i7",
+      "alpinion-seriya-e-cube-8"
+    ],
+    "heroes": [
+      "img/catalog/p38_193_449x449.png",
+      "img/catalog/p38_195_295x445.png",
+      "img/catalog/p38_191_247x456.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 39,
+    "products": [
+      "samsung-w10-rus",
+      "samsung-w9-rus",
+      "samsung-z20-rus",
+      "samsung-rs85-rus",
+      "samsung-hs50-rus",
+      "samsung-hs40-rus",
+      "samsung-hs30-rus"
+    ],
+    "heroes": [
+      "img/catalog/p39_197_1023x682.png",
+      "img/catalog/p39_199_470x704.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 40,
+    "products": [
+      "samsung-z20-rus",
+      "samsung-w9-rus",
+      "samsung-w10-rus",
+      "samsung-rs85-rus",
+      "samsung-hs50-rus",
+      "samsung-hs40-rus",
+      "samsung-hs30-rus"
+    ],
+    "heroes": [
+      "img/catalog/p40_200_646x968.png",
+      "img/catalog/p40_202_279x224.png",
+      "img/catalog/p40_204_276x223.png",
+      "img/catalog/p40_206_243x223.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 41,
+    "products": [
+      "samsung-rs85-rus",
+      "samsung-w9-rus",
+      "samsung-w10-rus",
+      "samsung-z20-rus",
+      "samsung-hs50-rus",
+      "samsung-hs40-rus",
+      "samsung-hs30-rus"
+    ],
+    "heroes": [
+      "img/catalog/p41_208_532x798.png",
+      "img/catalog/p41_211_732x488.png",
+      "img/catalog/p41_210_425x290.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 42,
+    "products": [
+      "samsung-v-seriya-v6-v7-v8",
+      "samsung-hs50-rus",
+      "samsung-hm70-evo",
+      "samsung-w9-rus",
+      "samsung-w10-rus",
+      "samsung-z20-rus",
+      "samsung-rs85-rus",
+      "samsung-hs40-rus",
+      "samsung-hs30-rus"
+    ],
+    "heroes": [
+      "img/catalog/p42_217_770x514.png",
+      "img/catalog/p42_213_732x488.png",
+      "img/catalog/p42_215_328x562.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 43,
+    "products": [
+      "samsung-hs40-rus",
+      "samsung-hs30-rus",
+      "samsung-w9-rus",
+      "samsung-w10-rus",
+      "samsung-z20-rus",
+      "samsung-rs85-rus",
+      "samsung-hs50-rus"
+    ],
+    "heroes": [
+      "img/catalog/p43_221_336x503.png",
+      "img/catalog/p43_219_302x497.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 44,
+    "products": [
+      "fujifilm-eluxeo-7000",
+      "fujifilm-eluxeo-6000"
+    ],
+    "heroes": [
+      "img/catalog/p44_222_437x582.png",
+      "img/catalog/p44_223_388x581.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 45,
+    "products": [
+      "fujifilm-cad-eye"
+    ],
+    "heroes": [
+      "img/catalog/p45_225_380x573.png",
+      "img/catalog/p45_227_418x226.png",
+      "img/catalog/p45_229_418x226.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 46,
+    "products": [],
+    "heroes": [
+      "img/catalog/p46_231_626x418.png",
+      "img/catalog/p46_237_348x521.png",
+      "img/catalog/p46_235_441x294.png",
+      "img/catalog/p46_233_426x284.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 47,
+    "products": [
+      "efa-medika-efa-m"
+    ],
+    "heroes": [
+      "img/catalog/p47_239_331x775.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 48,
+    "products": [
+      "efa-medika-efa-m"
+    ],
+    "heroes": [
+      "img/catalog/p48_248_421x328.png",
+      "img/catalog/p48_246_417x205.png",
+      "img/catalog/p48_244_386x180.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 49,
+    "products": [
+      "efa-medika-efa-m"
+    ],
+    "heroes": [
+      "img/catalog/p49_254_380x186.png",
+      "img/catalog/p49_252_386x180.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 50,
+    "products": [
+      "concemed-videoendoskopicheskaya-sistema-v-1000"
+    ],
+    "heroes": [
+      "img/catalog/p50_256_1274x849.png",
+      "img/catalog/p50_257_319x159.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 51,
+    "products": [
+      "concemed-videoendoskopicheskaya-sistema-v-1000"
+    ],
+    "heroes": [
+      "img/catalog/p51_260_712x475.png",
+      "img/catalog/p51_259_389x259.png",
+      "img/catalog/p51_261_345x230.png",
+      "img/catalog/p51_262_319x159.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 52,
+    "products": [
+      "concemed-videoendoskopicheskaya-sistema-v-1000"
+    ],
+    "heroes": [
+      "img/catalog/p52_266_474x656.png",
+      "img/catalog/p52_264_319x159.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 53,
+    "products": [
+      "concemed-videoendoskopicheskaya-sistema-v-800"
+    ],
+    "heroes": [
+      "img/catalog/p53_268_1274x849.png",
+      "img/catalog/p53_269_319x159.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 54,
+    "products": [
+      "concemed-videoendoskopicheskaya-sistema-v-800"
+    ],
+    "heroes": [
+      "img/catalog/p54_272_712x475.png",
+      "img/catalog/p54_271_389x259.png",
+      "img/catalog/p54_273_308x205.png",
+      "img/catalog/p54_274_319x159.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 55,
+    "products": [
+      "cingol-stomatologicheskaya-ustanovka-serii-x1"
+    ],
+    "heroes": [
+      "img/catalog/p55_278_617x297.png",
+      "img/catalog/p55_276_597x289.png",
+      "img/catalog/p55_277_597x289.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 56,
+    "products": [
+      "cingol-stomatologicheskaya-ustanovka-serii-x3"
+    ],
+    "heroes": [
+      "img/catalog/p56_283_610x294.png",
+      "img/catalog/p56_281_615x297.png",
+      "img/catalog/p56_286_617x297.png",
+      "img/catalog/p56_287_608x295.png",
+      "img/catalog/p56_282_597x289.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 57,
+    "products": [
+      "cingol-stomatologicheskaya-ustanovka-serii-x5",
+      "cingol-stomatologicheskaya-ustanovka-serii-x5-plus"
+    ],
+    "heroes": [
+      "img/catalog/p57_289_606x293.png",
+      "img/catalog/p57_292_617x297.png",
+      "img/catalog/p57_291_602x291.png",
+      "img/catalog/p57_293_597x289.png",
+      "img/catalog/p57_288_597x289.png"
+    ],
+    "clinical": []
+  },
+  {
+    "page": 58,
+    "products": [
+      "cingol-stomatologicheskaya-ustanovka-serii-x5",
+      "cingol-stomatologicheskaya-ustanovka-serii-x5-plus"
+    ],
+    "heroes": [
+      "img/catalog/p58_301_615x297.png",
+      "img/catalog/p58_297_606x293.png",
+      "img/catalog/p58_298_608x295.png",
+      "img/catalog/p58_300_602x291.png",
+      "img/catalog/p58_296_597x289.png"
+    ],
+    "clinical": []
+  }
+]

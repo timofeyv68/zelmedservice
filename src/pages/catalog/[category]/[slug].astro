@@ -16,9 +16,16 @@ export function getStaticPaths() {
 const { product } = Astro.props;
 const path = productPath(product);
 const brochure = standPath(product);
+const img = (p?: string | null) => (p ? url(p.replace(/^\//, '')) : '');
+const hero = img(product.image);
+const gallery = (product.gallery || []).map(img).filter(Boolean);
+const clinical = (product.clinical || []).map(img).filter(Boolean);
+const bullets = (product.bullets || []).slice(0, 8);
+const specs = (product.specs || []).slice(0, 6);
+const tagline = (product.tagline || '').replace(/\s+/g, ' ').trim().slice(0, 120);
 ---
 
-<BaseLayout title={product.seoTitle} description={product.seoDescription}>
+<BaseLayout title={product.seoTitle} description={product.seoDescription} ogImage={hero || undefined}>
   <SearchOverlay />
   <section class="section product">
     <div class="container">
@@ -30,13 +37,25 @@ const brochure = standPath(product);
       </nav>
 
       <div class="product__grid">
-        <div class="product__media card">
-          {product.image ? (
-            <img src={product.image} alt={product.name} width="900" height="700" />
+        <div class="product__media">
+          {hero ? (
+            <figure class="product__hero card">
+              <img src={hero} alt={product.name} width="900" height="700" />
+            </figure>
           ) : (
-            <div class="product__ph">
+            <div class="product__ph card">
               <strong>{product.brand}</strong>
-              <span>Изображение появится позже</span>
+              <span>Изображение из каталога 2026</span>
+            </div>
+          )}
+
+          {gallery.length > 0 && (
+            <div class="product__thumbs" aria-label="Дополнительные изображения">
+              {gallery.slice(0, 6).map((src) => (
+                <a class="product__thumb card" href={src} target="_blank" rel="noopener">
+                  <img src={src} alt="" loading="lazy" width="160" height="120" />
+                </a>
+              ))}
             </div>
           )}
         </div>
@@ -44,13 +63,33 @@ const brochure = standPath(product);
         <div class="product__info">
           <p class="product__brand">{product.brand}</p>
           <h1>{product.name}</h1>
+          {tagline && <p class="product__tagline">{tagline}</p>}
+
+          {specs.length > 0 && (
+            <ul class="product__specs">
+              {specs.map((s) => (
+                <li>{s}</li>
+              ))}
+            </ul>
+          )}
+
           <p class="product__desc">{product.description}</p>
+
+          {bullets.length > 0 && (
+            <ul class="product__bullets">
+              {bullets.map((b) => (
+                <li>{b}</li>
+              ))}
+            </ul>
+          )}
+
           <p class="product__price">Цена: по запросу</p>
 
           <div class="product__cta">
             <a class="btn btn--accent" href={`${url('contacts/')}#request`}>Запросить КП</a>
             <a class="btn btn--primary" href={brochure}>Брошюра для стенда</a>
-            <a class="btn btn--ghost" href={`tel:+74959688829`}>{site.phone}</a>
+            <a class="btn btn--ghost" href={url(site.catalogPdf)} target="_blank" rel="noopener">PDF-каталог</a>
+            <a class="btn btn--ghost" href={site.phoneHref}>{site.phone}</a>
           </div>
 
           <ul class="product__facts">
@@ -60,6 +99,20 @@ const brochure = standPath(product);
           </ul>
         </div>
       </div>
+
+      {clinical.length > 0 && (
+        <section class="product__clinical">
+          <h2>Клинические изображения</h2>
+          <p>Примеры визуализации из каталога ЗелМедСервис 2026.</p>
+          <div class="product__clinical-grid">
+            {clinical.map((src) => (
+              <figure class="card">
+                <img src={src} alt={`Клинические изображения — ${product.name}`} loading="lazy" width="1200" height="320" />
+              </figure>
+            ))}
+          </div>
+        </section>
+      )}
 
       <div class="product__share card" id="share">
         <div>
@@ -80,25 +133,76 @@ const brochure = standPath(product);
   }
   .product__grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1.05fr 0.95fr;
     gap: 1.5rem;
     align-items: start;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.75rem;
   }
-  .product__media { overflow: hidden; }
-  .product__media img, .product__ph {
+  .product__hero {
+    overflow: hidden;
+    background: #f3f7fc;
+  }
+  .product__hero img, .product__ph {
     width: 100%; aspect-ratio: 5/4; object-fit: contain; background: #f3f7fc;
   }
   .product__ph {
     display: grid; place-content: center; gap: 0.4rem; text-align: center;
     color: var(--color-muted);
   }
+  .product__thumbs {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 0.45rem;
+    margin-top: 0.65rem;
+  }
+  .product__thumb {
+    overflow: hidden;
+    aspect-ratio: 4/3;
+    background: #f3f7fc;
+  }
+  .product__thumb img {
+    width: 100%; height: 100%; object-fit: cover;
+  }
   .product__brand {
     text-transform: uppercase; letter-spacing: 0.06em; font-weight: 800;
-    color: var(--color-accent); font-size: 0.8rem;
+    color: var(--color-accent); font-size: 0.8rem; margin: 0;
   }
-  h1 { font-size: clamp(1.45rem, 2.5vw, 2rem); margin: 0.3rem 0 0.8rem; }
+  h1 { font-size: clamp(1.45rem, 2.5vw, 2rem); margin: 0.3rem 0 0.45rem; }
+  .product__tagline {
+    color: var(--color-ink-soft);
+    font-weight: 700;
+    margin: 0 0 0.9rem;
+  }
+  .product__specs {
+    display: grid;
+    gap: 0.35rem;
+    padding: 0.85rem 1rem;
+    margin: 0 0 1rem;
+    background: #eaf2ff;
+    border: 1px solid #c9dbf5;
+    border-radius: var(--radius-sm);
+    color: var(--color-accent);
+    font-weight: 750;
+  }
   .product__desc { color: var(--color-muted); }
+  .product__bullets {
+    display: grid;
+    gap: 0.55rem;
+    margin: 0.85rem 0 1rem;
+  }
+  .product__bullets li {
+    position: relative;
+    padding-left: 0.95rem;
+    color: var(--color-ink-soft);
+  }
+  .product__bullets li::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0.55em;
+    width: 0.4rem; height: 0.4rem;
+    border-radius: 50%;
+    background: var(--color-green);
+  }
   .product__price { font-size: 1.15rem; font-weight: 800; }
   .product__cta { display: flex; flex-wrap: wrap; gap: 0.55rem; margin: 1rem 0 1.25rem; }
   .product__facts { display: grid; gap: 0.55rem; }
@@ -107,11 +211,19 @@ const brochure = standPath(product);
     padding: 0.7rem 0; border-bottom: 1px solid var(--color-border);
   }
   .product__facts span:first-child { color: var(--color-muted); }
+  .product__clinical { margin-bottom: 1.5rem; }
+  .product__clinical h2 { margin-bottom: 0.35rem; }
+  .product__clinical > p { color: var(--color-muted); margin-bottom: 0.85rem; }
+  .product__clinical-grid { display: grid; gap: 0.75rem; }
+  .product__clinical-grid img {
+    width: 100%; max-height: 280px; object-fit: contain; background: #0b1220;
+  }
   .product__share {
     display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 1.25rem;
     padding: 1.35rem; align-items: center;
   }
   @media (max-width: 900px) {
     .product__grid, .product__share { grid-template-columns: 1fr; }
+    .product__thumbs { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   }
 </style>

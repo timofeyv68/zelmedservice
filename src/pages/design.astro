@@ -10,14 +10,13 @@ import featured from '../data/featured.json';
 import brands from '../data/brands.json';
 
 const mods = [
-  { label: 'КТ', href: '#flagships' },
-  { label: 'МРТ', href: '#flagships' },
-  { label: 'ПЭТ/КТ', href: '#flagships' },
-  { label: 'УЗИ', href: '#flagships' },
-  { label: 'Маммография', href: '#flagships' },
-  { label: 'Рентген', href: '#flagships' },
-  { label: 'Эндоскопия', href: '#flagships' },
-  { label: 'Стоматология', href: '#flagships' },
+  { label: 'КТ', href: url('catalog/kompyuternye-tomografy/') },
+  { label: 'МРТ', href: url('catalog/mrt/') },
+  { label: 'УЗИ', href: url('catalog/ultrazvukovye-sistemy/') },
+  { label: 'Маммография', href: url('catalog/mammografy/') },
+  { label: 'Рентген', href: url('catalog/rentgenodiagnostika/') },
+  { label: 'Эндоскопия', href: url('catalog/endoskopiya/') },
+  { label: 'Стоматология', href: url('catalog/stomatologicheskie-ustanovki/') },
 ];
 
 const nav = [
@@ -103,17 +102,17 @@ const pad = (n: number) => String(n).padStart(2, '0');
                 const cats = categories.filter((c) => c.directionSlug === dir.slug);
                 return (
                   <div>
-                    <a class="d-mega__title" href="#directions">{dir.name}</a>
+                    <a class="d-mega__title" href={`${url('catalog/')}?direction=${dir.slug}`}>{dir.name}</a>
                     <ul>
                       {cats.map((c) => (
-                        <li><a href="#flagships">{c.name}</a></li>
+                        <li><a href={url(`catalog/${c.slug}/`)}>{c.name}</a></li>
                       ))}
                     </ul>
                   </div>
                 );
               })}
             </div>
-            <p class="d-mega__note">Полный каталог с фильтрами появится в следующей итерации.</p>
+            <p class="d-mega__note"><a href={url('catalog/')}>Открыть полный каталог с фильтрами →</a></p>
           </div>
         </div>
         {nav.map((item) => (
@@ -142,6 +141,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
         <span>Меню</span>
         <button type="button" data-d-drawer-close aria-label="Закрыть">×</button>
       </div>
+      <a href={url('catalog/')}>Каталог</a>
       <a href="#directions">Направления</a>
       <a href="#flagships">Оборудование</a>
       <a href="#company">Компания</a>
@@ -152,7 +152,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
         <a href={`mailto:${site.email}`}>{site.email}</a>
       </div>
       <div class="d-drawer__actions">
-        <a class="d-btn" href="#request">Запросить КП</a>
+        <a class="d-btn" href={url('catalog/')}>Открыть каталог</a>
         <a class="d-btn d-btn--line" href={url(site.catalogPdf)} target="_blank" rel="noopener">Скачать PDF-каталог</a>
       </div>
     </div>
@@ -169,7 +169,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
             выставки — и переход в карточку по QR.
           </p>
 
-          <form class="d-search" action="#" method="get" data-hero-search>
+          <form class="d-search" action={url('catalog/')} method="get" data-hero-search>
             <label for="hero-q">Найти в каталоге</label>
             <div class="d-search__row">
               <input id="hero-q" name="q" type="search" placeholder="КТ, УЗИ, бренд…" />
@@ -184,7 +184,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
           </nav>
 
           <div class="d-cta">
-            <a class="d-btn" href="#flagships">Смотреть оборудование</a>
+            <a class="d-btn" href={url('catalog/')}>Открыть каталог</a>
             <a class="d-btn d-btn--line" href={url(site.catalogPdf)} target="_blank" rel="noopener">PDF-каталог 2026</a>
           </div>
         </div>
@@ -271,10 +271,10 @@ const pad = (n: number) => String(n).padStart(2, '0');
         <header class="d-sec">
           <p class="d-kicker">02 / Подборка</p>
           <h2>Флагманские модели</h2>
-          <p class="d-sec__note">Полный каталог с фильтрами и брошюрой для стенда — в следующей итерации.</p>
+          <p class="d-sec__note">В каталоге — фильтры по направлению, категории и бренду; в карточках — QR и «Брошюра для стенда».</p>
         </header>
         <p class="d-qrnote" data-qr-note hidden>
-          В карточке товара здесь будет QR и кнопка «Брошюра для стенда».
+          В карточке товара: QR на страницу модели и кнопка «Брошюра для стенда» (печать A4).
         </p>
         <div class="d-units">
           {featured.map((product, i) => (
@@ -346,7 +346,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
           <h2>Поделитесь сайтом с коллегами</h2>
           <p>
             Наведите камеру телефона на QR — откроется главная ЗелМедСервис.
-            В карточках каталога появится кнопка <strong>«Брошюра для стенда»</strong>:
+            В карточках каталога есть кнопка <strong>«Брошюра для стенда»</strong>:
             печатный лист A4 с фото, характеристиками и QR на страницу товара.
           </p>
           <div class="d-cta">

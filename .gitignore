@@ -5,5 +5,8 @@ dist/
 *.log
 .env
 .env.*
-
 gh-auth-*.txt
+public/img/catalog/_raw/
+public/img/catalog/_pages/
+public/img/catalog/page-texts.json
+public/img/catalog/pdfimages-list.txt
