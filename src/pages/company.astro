@@ -3,6 +3,9 @@ import { url } from '../lib/paths';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SearchOverlay from '../components/SearchOverlay.astro';
 import company from '../data/company.json';
+import { getCategories } from '../lib/catalog';
+
+const categories = getCategories();
 ---
 
 <BaseLayout
@@ -17,33 +20,31 @@ import company from '../data/company.json';
       <h1>{company.headline}</h1>
       <p class="lead">{company.lead}</p>
 
-      <div class="slide-grid">
-        <article class="contract card">
-          <div class="contract__head">
-            <span class="contract__check" aria-hidden="true">✓</span>
-            <div>
-              <h2>{company.contractTitle}</h2>
-              <p>{company.contractLead}</p>
-            </div>
+      <article class="contract card">
+        <div class="contract__head">
+          <span class="contract__check" aria-hidden="true">✓</span>
+          <div>
+            <h2>{company.contractTitle}</h2>
+            <p>{company.contractLead}</p>
           </div>
-          <ul class="contract__list">
-            {company.servicePoints.map((p) => (
-              <li>{p}</li>
-            ))}
-          </ul>
-        </article>
+        </div>
+        <ul class="contract__list">
+          {company.servicePoints.map((p) => (
+            <li>{p}</li>
+          ))}
+        </ul>
+      </article>
 
-        <aside class="stages">
-          <h2>{company.serviceStepsTitle}</h2>
-          <ol class="stages__list">
-            {company.serviceSteps.map((s) => (
-              <li class="stages__item">
-                <span class="stages__n">{s.n}</span>
-                <div class="stages__bar">{s.title}</div>
-              </li>
-            ))}
-          </ol>
-        </aside>
+      <div class="stages">
+        <h2>{company.serviceStepsTitle}</h2>
+        <ol class="stages__list">
+          {company.serviceSteps.map((s) => (
+            <li class="stages__item">
+              <span class="stages__n">{s.n}</span>
+              <div class="stages__bar">{s.title}</div>
+            </li>
+          ))}
+        </ol>
       </div>
 
       <div class="stats">
@@ -55,25 +56,26 @@ import company from '../data/company.json';
         ))}
       </div>
 
-      <div class="about-grid">
-        <div>
-          <h2 class="block-title">О компании</h2>
-          {company.about.map((p) => <p>{p}</p>)}
-          <div class="focus">
-            {company.focus.map((f) => <span class="chip is-active">{f}</span>)}
-          </div>
+      <div class="about-block">
+        <h2 class="block-title">О компании</h2>
+        {company.about.map((p) => <p>{p}</p>)}
+      </div>
+
+      <div class="lineup">
+        <h2 class="block-title">Продуктовая линейка</h2>
+        <div class="lineup__grid">
+          {categories.map((c) => (
+            <a class="card lineup__tile" href={url(`catalog/${c.slug}/`)}>
+              <strong>{c.name}</strong>
+              <span>{c.count} моделей</span>
+            </a>
+          ))}
         </div>
-        <aside class="card aside">
-          <h2>Продуктовая линейка</h2>
-          <ul>
-            {company.productLine.map((item) => <li>{item}</li>)}
-          </ul>
-          <div class="aside__links">
-            {company.links.map((l) => (
-              <a class="btn btn--soft" href={url(l.href)}>{l.label}</a>
-            ))}
-          </div>
-        </aside>
+        <div class="lineup__links">
+          {company.links.map((l) => (
+            <a class="btn btn--soft" href={url(l.href)}>{l.label}</a>
+          ))}
+        </div>
       </div>
 
       <h2 class="block-title">Почему выбирают ЗелМедСервис</h2>
@@ -94,15 +96,11 @@ import company from '../data/company.json';
   h1 { font-size: clamp(1.7rem, 3vw, 2.4rem); max-width: 18ch; }
   .lead { color: var(--color-ink-soft); max-width: 54rem; font-size: 1.08rem; line-height: 1.55; }
 
-  .slide-grid {
-    display: grid;
-    grid-template-columns: 1.25fr 0.95fr;
-    gap: 1.35rem;
-    margin: 1.75rem 0 2rem;
-    align-items: start;
+  .contract {
+    padding: 0;
+    overflow: hidden;
+    margin: 1.75rem 0 1.5rem;
   }
-
-  .contract { padding: 0; overflow: hidden; }
   .contract__head {
     display: grid;
     grid-template-columns: auto 1fr;
@@ -158,6 +156,9 @@ import company from '../data/company.json';
     background: var(--color-green);
   }
 
+  .stages {
+    margin: 0 0 2rem;
+  }
   .stages h2 {
     margin: 0 0 1rem;
     font-size: 1.05rem;
@@ -171,29 +172,31 @@ import company from '../data/company.json';
     margin: 0;
     padding: 0;
     display: grid;
-    gap: 0.85rem;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.75rem;
   }
   .stages__item {
     display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 0.75rem;
-    align-items: center;
+    gap: 0.45rem;
+    min-width: 0;
   }
   .stages__n {
-    font-size: 1.55rem;
+    font-size: 1.35rem;
     font-weight: 800;
     color: var(--color-green);
     letter-spacing: -0.03em;
-    min-width: 2.2rem;
   }
   .stages__bar {
     background: var(--color-ink);
     color: #fff;
-    border-radius: 999px;
-    padding: 0.95rem 1.2rem;
+    border-radius: 16px;
+    padding: 0.85rem 1rem;
     font-weight: 700;
-    font-size: 0.98rem;
+    font-size: 0.92rem;
     line-height: 1.3;
+    min-height: 4.5rem;
+    display: flex;
+    align-items: center;
   }
 
   .stats {
@@ -202,23 +205,57 @@ import company from '../data/company.json';
   .stat { padding: 1.1rem; display:grid; gap:.35rem; }
   .stat strong { font-size: 1.5rem; color: var(--color-accent); }
   .stat span { color: var(--color-muted); font-size: .9rem; }
-  .about-grid { display:grid; grid-template-columns: 1.3fr .9fr; gap: 1.5rem; }
-  .about-grid p { color: var(--color-ink-soft); }
-  .focus { display:flex; gap:.5rem; flex-wrap:wrap; margin-top:1rem; }
-  .aside { padding: 1.2rem; }
-  .aside h2 { font-size: 1.1rem; }
-  .aside li { padding: .4rem 0; border-bottom: 1px solid var(--color-border); color: var(--color-ink-soft); }
-  .aside__links { display:flex; flex-wrap:wrap; gap:.45rem; margin-top:1rem; }
+
+  .about-block {
+    margin-bottom: 2rem;
+  }
+  .about-block p { color: var(--color-ink-soft); max-width: 54rem; }
+
+  .lineup { margin-bottom: 2rem; }
+  .lineup__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.85rem;
+  }
+  .lineup__tile {
+    padding: 1.1rem 1.15rem;
+    display: grid;
+    gap: 0.35rem;
+    min-height: 5.5rem;
+    align-content: center;
+  }
+  .lineup__tile strong {
+    font-size: 1rem;
+    line-height: 1.3;
+  }
+  .lineup__tile span {
+    color: var(--color-muted);
+    font-size: 0.88rem;
+    font-weight: 650;
+  }
+  .lineup__tile:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+  .lineup__tile:hover span { color: var(--color-accent); }
+  .lineup__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-top: 1rem;
+  }
+
   .block-title { margin: 0 0 1rem; font-size: 1.5rem; }
   .adv { display:grid; grid-template-columns: repeat(4,1fr); gap:.85rem; margin-top: 1rem; }
   .adv__item { padding: 1.1rem; }
   .adv__item p { color: var(--color-muted); margin:0; }
 
   @media (max-width: 1000px) {
-    .stats, .adv, .about-grid, .slide-grid { grid-template-columns: 1fr 1fr; }
+    .stats, .adv, .lineup__grid { grid-template-columns: 1fr 1fr; }
+    .stages__list { grid-template-columns: 1fr 1fr; }
   }
-  @media (max-width: 720px) {
-    .stats, .adv, .about-grid, .slide-grid { grid-template-columns: 1fr; }
-    .stages__bar { border-radius: 16px; }
+  @media (max-width: 640px) {
+    .stats, .adv, .lineup__grid, .stages__list { grid-template-columns: 1fr; }
+    .stages__bar { min-height: 0; }
   }
 </style>
