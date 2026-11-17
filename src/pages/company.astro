@@ -69,15 +69,6 @@ const categories = getCategories();
         </div>
       </div>
 
-      <h2 class="block-title">Почему выбирают ЗелМедСервис</h2>
-      <div class="stats">
-        {company.stats.map((s) => (
-          <article class="stat card">
-            <strong>{s.value}</strong>
-            <span>{s.label}</span>
-          </article>
-        ))}
-      </div>
     </div>
   </section>
 </BaseLayout>
@@ -195,13 +186,6 @@ const categories = getCategories();
     min-height: 3.4rem;
   }
 
-  .stats {
-    display: grid; grid-template-columns: repeat(4,1fr); gap: .85rem; margin-top: 1rem;
-  }
-  .stat { padding: 1.1rem; display:grid; gap:.35rem; }
-  .stat strong { font-size: 1.5rem; color: var(--color-accent); }
-  .stat span { color: var(--color-muted); font-size: .9rem; }
-
   .about-block {
     margin-bottom: 2rem;
   }
@@ -244,12 +228,12 @@ const categories = getCategories();
   .block-title { margin: 0 0 1rem; font-size: 1.5rem; }
 
   @media (max-width: 1000px) {
-    .stats, .lineup__grid { grid-template-columns: 1fr 1fr; }
+    .lineup__grid { grid-template-columns: 1fr 1fr; }
     .stages__list { flex-wrap: wrap; }
     .stages__item { flex: 1 1 calc(50% - 0.65rem); }
   }
   @media (max-width: 640px) {
-    .stats, .lineup__grid { grid-template-columns: 1fr; }
+    .lineup__grid { grid-template-columns: 1fr; }
     .stages__item { flex: 1 1 100%; }
     .stages__bar { border-radius: 16px; min-height: 0; }
   }
