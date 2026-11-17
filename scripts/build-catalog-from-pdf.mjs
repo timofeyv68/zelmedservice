@@ -152,7 +152,6 @@ const out = products.map((p, i) => {
     specs: [],
     image: null,
     price: 'По запросу',
-    source: 'ЗелМедСервис_каталог_2026.pdf',
   };
 });
 
