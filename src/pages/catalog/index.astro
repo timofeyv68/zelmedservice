@@ -68,6 +68,40 @@ const description =
             {brands.map((b) => <option value={b.slug}>{b.name} ({b.count})</option>)}
           </select>
         </label>
+        <label>
+          Срезы КТ
+          <select name="slices" data-filter-slices>
+            <option value="">Все</option>
+            <option value="16">16</option>
+            <option value="32">32</option>
+            <option value="64">64+</option>
+            <option value="128">128</option>
+            <option value="160">160+</option>
+            <option value="512">512+</option>
+          </select>
+        </label>
+        <label>
+          Класс УЗИ
+          <select name="usclass" data-filter-usclass>
+            <option value="">Все</option>
+            <option value="premium">Премиальный</option>
+            <option value="expert">Экспертный</option>
+            <option value="high">Высокий</option>
+            <option value="compact">Компактный</option>
+            <option value="portable">Портативный</option>
+          </select>
+        </label>
+        <label>
+          Тип рентгена
+          <select name="xray" data-filter-xray>
+            <option value="">Все</option>
+            <option value="mobile">Палатный</option>
+            <option value="remote">Телеуправляемый</option>
+            <option value="two-station">2 раб. места</option>
+            <option value="fluoro">Флюорограф</option>
+            <option value="universal">Универсальный</option>
+          </select>
+        </label>
       </form>
 
       <div class="category-chips">
@@ -85,8 +119,11 @@ const description =
             data-category={p.categorySlug}
             data-brand={p.brandSlug}
             data-direction={p.direction}
+            data-slices={p.filters?.slices ?? ''}
+            data-usclass={p.filters?.usClass ?? ''}
+            data-xray={p.filters?.xrayType ?? ''}
             data-name={p.name.toLowerCase()}
-            data-search={`${p.name} ${p.brand} ${p.category} ${p.description}`.toLowerCase()}
+            data-search={`${p.name} ${p.brand} ${p.category} ${p.description} ${(p.specs || []).join(' ')}`.toLowerCase()}
           >
             <ProductCard
               name={p.name}
@@ -134,10 +171,13 @@ const description =
 
   .filters {
     display: grid;
-    grid-template-columns: 1.4fr repeat(3, 1fr);
+    grid-template-columns: 1.3fr repeat(3, 1fr);
     gap: 0.85rem;
     padding: 1rem;
     margin-bottom: 1rem;
+  }
+  .filters label:nth-child(n + 5) {
+    grid-column: span 1;
   }
 
   .filters label {
@@ -198,6 +238,9 @@ const description =
   const direction = document.querySelector('[data-filter-direction]') as HTMLSelectElement | null;
   const category = document.querySelector('[data-filter-category]') as HTMLSelectElement | null;
   const brand = document.querySelector('[data-filter-brand]') as HTMLSelectElement | null;
+  const slices = document.querySelector('[data-filter-slices]') as HTMLSelectElement | null;
+  const usclass = document.querySelector('[data-filter-usclass]') as HTMLSelectElement | null;
+  const xray = document.querySelector('[data-filter-xray]') as HTMLSelectElement | null;
   const countEl = document.querySelector('[data-result-count]');
   const items = [...document.querySelectorAll<HTMLElement>('[data-product]')];
 
@@ -205,19 +248,41 @@ const description =
   if (direction && params.get('direction')) direction.value = params.get('direction') || '';
   if (category && params.get('category')) category.value = params.get('category') || '';
   if (brand && params.get('brand')) brand.value = params.get('brand') || '';
+  if (slices && params.get('slices')) slices.value = params.get('slices') || '';
+  if (usclass && params.get('usclass')) usclass.value = params.get('usclass') || '';
+  if (xray && params.get('xray')) xray.value = params.get('xray') || '';
+
+  const matchSlices = (raw: string, want: string) => {
+    if (!want) return true;
+    const n = Number(raw);
+    if (!Number.isFinite(n)) return false;
+    if (want === '16') return n === 16;
+    if (want === '32') return n === 32;
+    if (want === '64') return n >= 64 && n < 128;
+    if (want === '128') return n === 128;
+    if (want === '160') return n >= 160 && n < 512;
+    if (want === '512') return n >= 512;
+    return false;
+  };
 
   const apply = () => {
     const qq = (q?.value || '').trim().toLowerCase();
     const d = direction?.value || '';
     const c = category?.value || '';
     const b = brand?.value || '';
+    const s = slices?.value || '';
+    const u = usclass?.value || '';
+    const x = xray?.value || '';
     let visible = 0;
     items.forEach((el) => {
       const ok =
         (!qq || (el.dataset.search || '').includes(qq)) &&
         (!d || el.dataset.direction === d) &&
         (!c || el.dataset.category === c) &&
-        (!b || el.dataset.brand === b);
+        (!b || el.dataset.brand === b) &&
+        matchSlices(el.dataset.slices || '', s) &&
+        (!u || el.dataset.usclass === u) &&
+        (!x || el.dataset.xray === x);
       el.hidden = !ok;
       if (ok) visible += 1;
     });
@@ -227,10 +292,13 @@ const description =
     if (d) next.set('direction', d);
     if (c) next.set('category', c);
     if (b) next.set('brand', b);
+    if (s) next.set('slices', s);
+    if (u) next.set('usclass', u);
+    if (x) next.set('xray', x);
     history.replaceState(null, '', `${location.pathname}${next.toString() ? `?${next}` : ''}`);
   };
 
-  [q, direction, category, brand].forEach((el) => el?.addEventListener('input', apply));
-  [direction, category, brand].forEach((el) => el?.addEventListener('change', apply));
+  [q, direction, category, brand, slices, usclass, xray].forEach((el) => el?.addEventListener('input', apply));
+  [direction, category, brand, slices, usclass, xray].forEach((el) => el?.addEventListener('change', apply));
   apply();
 </script>

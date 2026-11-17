@@ -1,0 +1,148 @@
+---
+import { url } from '../../lib/paths';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SearchOverlay from '../../components/SearchOverlay.astro';
+import scenarios from '../../data/scenarios.json';
+
+const title = 'Сценарии подбора оборудования | ЗелМедСервис';
+const description =
+  'Подбор медицинского оборудования по задаче: новое оснащение, замена парка, тендер 44-ФЗ, мобильное решение, сервисный контракт.';
+---
+
+<BaseLayout title={title} description={description}>
+  <SearchOverlay />
+  <section class="section scenarios">
+    <div class="container">
+      <nav class="crumbs">
+        <a href={url('/')}>Главная</a><span>/</span>
+        <span>Сценарии</span>
+      </nav>
+
+      <div class="scenarios__head">
+        <div>
+          <span class="section__eyebrow">Под задачу</span>
+          <h1>Сценарии</h1>
+          <p class="lead">
+            Выберите ситуацию — откроется подборка категорий и моделей из каталога 2026
+            с комплектацией: поставка, монтаж, обучение, сервис.
+          </p>
+        </div>
+      </div>
+
+      <div class="role-filters" role="group" aria-label="Фильтр по роли">
+        <button type="button" class="role-filters__btn is-active" data-role-filter="all">Все</button>
+        <button type="button" class="role-filters__btn" data-role-filter="buyer">Закупщику</button>
+        <button type="button" class="role-filters__btn" data-role-filter="director">Руководителю клиники</button>
+      </div>
+
+      <div class="scenarios__grid">
+        {scenarios.map((s) => (
+          <a
+            class="scenario-card card"
+            href={url(`scenarios/${s.slug}/`)}
+            data-scenario-card
+            data-roles={s.roles.join(' ')}
+          >
+            <p class="scenario-card__audience">{s.audience}</p>
+            <h2>{s.title}</h2>
+            <p>{s.lead}</p>
+            <span class="scenario-card__more">Открыть сценарий →</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .crumbs {
+    display: flex; flex-wrap: wrap; gap: 0.45rem;
+    color: var(--color-muted); margin-bottom: 1rem; font-size: 0.9rem;
+  }
+  .scenarios__head { margin-bottom: 1.25rem; }
+  h1 { margin: 0.25rem 0 0.5rem; font-size: clamp(1.7rem, 3vw, 2.4rem); }
+  .lead { color: var(--color-muted); max-width: 44rem; margin: 0; }
+
+  .role-filters {
+    display: flex; flex-wrap: wrap; gap: 0.45rem;
+    margin-bottom: 1.35rem;
+  }
+  .role-filters__btn {
+    border: 1px solid var(--color-border);
+    background: #fff;
+    border-radius: 999px;
+    padding: 0.45rem 0.95rem;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    color: var(--color-ink-soft);
+  }
+  .role-filters__btn.is-active {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: #fff;
+  }
+
+  .scenarios__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+  .scenario-card {
+    display: grid;
+    gap: 0.55rem;
+    padding: 1.25rem;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .scenario-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
+  }
+  .scenario-card__audience {
+    margin: 0;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+  .scenario-card h2 {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+  .scenario-card p {
+    margin: 0;
+    color: var(--color-muted);
+    font-size: 0.95rem;
+  }
+  .scenario-card__more {
+    margin-top: 0.35rem;
+    font-weight: 750;
+    color: var(--color-accent);
+  }
+
+  @media (max-width: 1000px) {
+    .scenarios__grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .scenarios__grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+<script>
+  const buttons = [...document.querySelectorAll<HTMLButtonElement>('[data-role-filter]')];
+  const cards = [...document.querySelectorAll<HTMLElement>('[data-scenario-card]')];
+
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const role = btn.dataset.roleFilter || 'all';
+      buttons.forEach((b) => b.classList.toggle('is-active', b === btn));
+      cards.forEach((card) => {
+        const roles = (card.dataset.roles || '').split(/\s+/);
+        card.hidden = role !== 'all' && !roles.includes(role);
+      });
+    });
+  });
+</script>

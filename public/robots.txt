@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://timofeyv68.github.io/zelmedservice/sitemap.xml

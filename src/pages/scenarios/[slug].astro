@@ -1,0 +1,230 @@
+---
+import { url } from '../../lib/paths';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import SearchOverlay from '../../components/SearchOverlay.astro';
+import RequestDrawer from '../../components/RequestDrawer.astro';
+import scenarios from '../../data/scenarios.json';
+import includes from '../../data/includes.json';
+import company from '../../data/company.json';
+import { getProducts, getCategories } from '../../lib/catalog';
+
+export function getStaticPaths() {
+  return scenarios.map((s) => ({ params: { slug: s.slug }, props: { scenario: s } }));
+}
+
+const { scenario } = Astro.props;
+const allProducts = getProducts();
+const categories = getCategories().filter((c) => scenario.categorySlugs.includes(c.slug));
+const products = scenario.productSlugs
+  .map((slug) => allProducts.find((p) => p.slug === slug))
+  .filter((p): p is (typeof allProducts)[number] => Boolean(p));
+
+const showService = Boolean(scenario.showServiceContract || scenario.showServiceOnly);
+const serviceOnly = Boolean(scenario.showServiceOnly);
+---
+
+<BaseLayout title={scenario.seoTitle} description={scenario.seoDescription}>
+  <SearchOverlay />
+  <section class="section scenario">
+    <div class="container">
+      <nav class="crumbs">
+        <a href={url('/')}>Главная</a><span>/</span>
+        <a href={url('scenarios/')}>Сценарии</a><span>/</span>
+        <span>{scenario.title}</span>
+      </nav>
+
+      <p class="scenario__audience">{scenario.audience}</p>
+      <h1>{scenario.title}</h1>
+      <p class="lead">{scenario.lead}</p>
+
+      <div class="scenario__cta">
+        <RequestDrawer productName={scenario.title} buttonLabel={scenario.ctaLabel} buttonClass="btn btn--accent" />
+        <a class="btn btn--primary" href={url('catalog/')}>Каталог</a>
+        {scenario.relatedBuy && (
+          <a class="btn btn--ghost" href={url(`buy/${scenario.relatedBuy}/`)}>Подробнее о закупке</a>
+        )}
+      </div>
+
+      {scenario.steps?.length > 0 && (
+        <section class="steps card">
+          <h2>Как пройти сценарий</h2>
+          <ol>
+            {scenario.steps.map((step, i) => (
+              <li>
+                <span>{String(i + 1).padStart(2, '0')}</span>
+                <strong>{step}</strong>
+              </li>
+            ))}
+          </ol>
+        </section>
+      )}
+
+      {!serviceOnly && (
+        <section class="includes">
+          <h2>Что входит</h2>
+          <ul>
+            {includes.map((item) => (
+              <li>
+                <strong>{item.title}</strong>
+                <span>{item.text}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {showService && (
+        <section class="service card">
+          <h2>{company.contractTitle}</h2>
+          <p>{company.contractLead}</p>
+          <ul class="service__points">
+            {company.servicePoints.slice(0, 6).map((point) => (
+              <li>{point}</li>
+            ))}
+          </ul>
+          <a class="btn btn--ghost" href={url('company/')}>О компании и сервисе</a>
+        </section>
+      )}
+
+      {!serviceOnly && categories.length > 0 && (
+        <section class="cats">
+          <h2>Категории</h2>
+          <div class="cats__grid">
+            {categories.map((c) => (
+              <a class="cats__item card" href={url(`catalog/${c.slug}/`)}>
+                <strong>{c.name}</strong>
+                <span>{c.count} моделей</span>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {!serviceOnly && products.length > 0 && (
+        <section class="models">
+          <h2>Рекомендуемые модели</h2>
+          <p class="models__note">Подборка из каталога 2026 под этот сценарий — не полный ассортимент.</p>
+          <div class="models__grid">
+            {products.map((p) => (
+              <ProductCard
+                name={p.name}
+                brand={p.brand}
+                description={p.description}
+                categorySlug={p.categorySlug}
+                slug={p.slug}
+                image={p.image}
+                specs={p.specs}
+              />
+            ))}
+          </div>
+        </section>
+      )}
+
+      <section class="other">
+        <h2>Другие сценарии</h2>
+        <div class="other__list">
+          {scenarios
+            .filter((s) => s.slug !== scenario.slug)
+            .map((s) => (
+              <a href={url(`scenarios/${s.slug}/`)}>{s.menuLabel}</a>
+            ))}
+        </div>
+      </section>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .crumbs {
+    display: flex; flex-wrap: wrap; gap: 0.45rem;
+    color: var(--color-muted); margin-bottom: 1rem; font-size: 0.9rem;
+  }
+  .scenario__audience {
+    margin: 0;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+  h1 { margin: 0.35rem 0 0.5rem; font-size: clamp(1.6rem, 3vw, 2.3rem); }
+  .lead { color: var(--color-muted); max-width: 46rem; }
+  .scenario__cta {
+    display: flex; flex-wrap: wrap; gap: 0.55rem;
+    margin: 1.25rem 0 1.75rem;
+  }
+
+  .steps { padding: 1.15rem 1.25rem; margin-bottom: 1.5rem; }
+  .steps h2 { margin: 0 0 0.85rem; font-size: 1.15rem; }
+  .steps ol { display: grid; gap: 0.75rem; margin: 0; padding: 0; list-style: none; }
+  .steps li { display: flex; gap: 0.85rem; align-items: start; }
+  .steps span {
+    flex: 0 0 auto;
+    font-weight: 800;
+    color: var(--color-accent);
+  }
+
+  .includes { margin-bottom: 1.75rem; }
+  .includes h2 { margin-bottom: 0.75rem; }
+  .includes ul {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.75rem;
+    margin: 0;
+  }
+  .includes li {
+    display: grid; gap: 0.35rem; padding: 1rem;
+    background: #f3f7fc; border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+  }
+  .includes span { color: var(--color-muted); font-size: 0.92rem; }
+
+  .service { padding: 1.2rem 1.3rem; margin-bottom: 1.75rem; display: grid; gap: 0.75rem; }
+  .service h2 { margin: 0; }
+  .service p { margin: 0; color: var(--color-muted); }
+  .service__points { display: grid; gap: 0.45rem; margin: 0; }
+  .service__points li { padding-left: 0.85rem; position: relative; }
+  .service__points li::before {
+    content: '';
+    position: absolute; left: 0; top: 0.55em;
+    width: 0.35rem; height: 0.35rem; border-radius: 50%;
+    background: var(--color-green);
+  }
+
+  .cats, .models { margin-bottom: 1.75rem; }
+  .cats h2, .models h2 { margin-bottom: 0.75rem; }
+  .models__note { color: var(--color-muted); margin: -0.25rem 0 0.85rem; }
+  .cats__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+  .cats__item {
+    display: grid; gap: 0.25rem; padding: 1rem 1.1rem;
+    text-decoration: none; color: inherit;
+  }
+  .cats__item span { color: var(--color-muted); font-size: 0.88rem; }
+  .models__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .other h2 { margin-bottom: 0.65rem; }
+  .other__list { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .other__list a {
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    padding: 0.4rem 0.85rem;
+    font-weight: 700;
+    background: #fff;
+  }
+
+  @media (max-width: 1000px) {
+    .includes ul, .cats__grid, .models__grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .includes ul, .cats__grid, .models__grid { grid-template-columns: 1fr; }
+  }
+</style>

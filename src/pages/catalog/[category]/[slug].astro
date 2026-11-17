@@ -1,8 +1,11 @@
 ---
 import { url } from '../../../lib/paths';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ProductCard from '../../../components/ProductCard.astro';
 import QrShare from '../../../components/QrShare.astro';
 import SearchOverlay from '../../../components/SearchOverlay.astro';
+import RequestDrawer from '../../../components/RequestDrawer.astro';
+import includesData from '../../../data/includes.json';
 import { getProducts, productPath, standPath } from '../../../lib/catalog';
 import { site } from '../../../lib/site';
 
@@ -21,11 +24,70 @@ const hero = img(product.image);
 const gallery = (product.gallery || []).map(img).filter(Boolean);
 const clinical = (product.clinical || []).map(img).filter(Boolean);
 const bullets = (product.bullets || []).slice(0, 8);
-const specs = (product.specs || []).slice(0, 6);
+const specTable = product.specTable || [];
+const chips = (product.specs || []).slice(0, 6);
 const tagline = (product.tagline || '').replace(/\s+/g, ' ').trim().slice(0, 120);
+const includes = product.includes || includesData;
+const procurement = product.procurement || [
+  { label: 'Категория', value: product.category },
+  { label: 'Бренд', value: product.brand },
+  { label: 'Цена', value: 'По запросу' },
+  { label: 'Комплектация', value: 'Поставка, монтаж, обучение, сервис' },
+];
+
+const related = getProducts()
+  .filter((p) => p.direction === product.direction && p.id !== product.id)
+  .slice(0, 4);
+
+const sameCategory = getProducts()
+  .filter((p) => p.categorySlug === product.categorySlug && p.id !== product.id)
+  .slice(0, 4);
+
+const showRelated = related.length >= 2;
+const showSameCategory = sameCategory.length >= 2 && product.categorySlug !== 'mobilnye-moduli';
+
+const absoluteUrl = new URL(path, Astro.site).href;
+const productSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: product.name,
+  brand: { '@type': 'Brand', name: product.brand },
+  description: product.seoDescription || product.description,
+  image: hero ? new URL(hero, Astro.site).href : undefined,
+  url: absoluteUrl,
+  category: product.category,
+  offers: {
+    '@type': 'Offer',
+    priceCurrency: 'RUB',
+    availability: 'https://schema.org/InStock',
+    url: absoluteUrl,
+    description: 'Цена по запросу',
+  },
+};
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Главная', item: new URL(url('/'), Astro.site).href },
+    { '@type': 'ListItem', position: 2, name: 'Каталог', item: new URL(url('catalog/'), Astro.site).href },
+    {
+      '@type': 'ListItem',
+      position: 3,
+      name: product.category,
+      item: new URL(url(`catalog/${product.categorySlug}/`), Astro.site).href,
+    },
+    { '@type': 'ListItem', position: 4, name: product.name, item: absoluteUrl },
+  ],
+};
 ---
 
-<BaseLayout title={product.seoTitle} description={product.seoDescription} ogImage={hero || undefined}>
+<BaseLayout
+  title={product.seoTitle}
+  description={product.seoDescription}
+  ogImage={hero || undefined}
+  jsonLd={[productSchema, breadcrumbSchema]}
+>
   <SearchOverlay />
   <section class="section product">
     <div class="container">
@@ -65,9 +127,9 @@ const tagline = (product.tagline || '').replace(/\s+/g, ' ').trim().slice(0, 120
           <h1>{product.name}</h1>
           {tagline && <p class="product__tagline">{tagline}</p>}
 
-          {specs.length > 0 && (
-            <ul class="product__specs">
-              {specs.map((s) => (
+          {chips.length > 0 && (
+            <ul class="product__chips">
+              {chips.map((s) => (
                 <li>{s}</li>
               ))}
             </ul>
@@ -86,7 +148,7 @@ const tagline = (product.tagline || '').replace(/\s+/g, ' ').trim().slice(0, 120
           <p class="product__price">Цена: по запросу</p>
 
           <div class="product__cta">
-            <a class="btn btn--accent" href={`${url('contacts/')}#request`}>Запросить КП</a>
+            <RequestDrawer productName={product.name} buttonClass="btn btn--accent" />
             <a class="btn btn--primary" href={brochure}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M6 9V3h12v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
@@ -97,12 +159,57 @@ const tagline = (product.tagline || '').replace(/\s+/g, ' ').trim().slice(0, 120
             </a>
             <a class="btn btn--ghost" href={url(site.catalogPdf)} target="_blank" rel="noopener">PDF-каталог</a>
           </div>
-
-          <ul class="product__facts">
-            <li><span>Категория</span><a href={url(`catalog/${product.categorySlug}/`)}>{product.category}</a></li>
-            <li><span>Бренд</span><a href={url(`brands/${product.brandSlug}/`)}>{product.brand}</a></li>
-          </ul>
         </div>
+      </div>
+
+      {specTable.length > 0 && (
+        <section class="product__table-wrap card" id="specs">
+          <h2>Технические характеристики</h2>
+          <table class="product__table">
+            <tbody>
+              {specTable.map((row) => (
+                <tr>
+                  <th scope="row">{row.label}</th>
+                  <td>{row.value}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </section>
+      )}
+
+      <div class="product__blocks">
+        <section class="card product__includes">
+          <h2>Что входит</h2>
+          <ul>
+            {includes.map((item) => (
+              <li>
+                <strong>{item.title}</strong>
+                <span>{item.text}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section class="card product__buy">
+          <h2>Для закупки</h2>
+          <ul>
+            {procurement.map((row) => (
+              <li>
+                <span>{row.label}</span>
+                <strong>{row.value}</strong>
+              </li>
+            ))}
+          </ul>
+          <div class="product__buy-cta">
+            <RequestDrawer
+              productName={product.name}
+              buttonLabel="Запросить спецификацию для ТЗ"
+              buttonClass="btn btn--accent"
+            />
+            <a class="btn btn--ghost" href={url(`brands/${product.brandSlug}/`)}>{product.brand}</a>
+          </div>
+        </section>
       </div>
 
       {clinical.length > 0 && (
@@ -114,6 +221,53 @@ const tagline = (product.tagline || '').replace(/\s+/g, ' ').trim().slice(0, 120
               <figure class="card">
                 <img src={src} alt={`Клинические изображения — ${product.name}`} loading="lazy" width="1200" height="320" />
               </figure>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {showRelated && (
+        <section class="product__related">
+          <div class="product__related-head">
+            <h2>Похожие товары</h2>
+            <p>Другие модели того же направления</p>
+          </div>
+          <div class="product__related-grid">
+            {related.map((p) => (
+              <ProductCard
+                name={p.name}
+                brand={p.brand}
+                description={p.description}
+                categorySlug={p.categorySlug}
+                slug={p.slug}
+                image={p.image}
+                specs={p.specs}
+              />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {showSameCategory && (
+        <section class="product__related">
+          <div class="product__related-head">
+            <h2>Другие товары в категории</h2>
+            <p>
+              Ещё в разделе
+              <a href={url(`catalog/${product.categorySlug}/`)}>{product.category}</a>
+            </p>
+          </div>
+          <div class="product__related-grid">
+            {sameCategory.map((p) => (
+              <ProductCard
+                name={p.name}
+                brand={p.brand}
+                description={p.description}
+                categorySlug={p.categorySlug}
+                slug={p.slug}
+                image={p.image}
+                specs={p.specs}
+              />
             ))}
           </div>
         </section>
@@ -138,10 +292,7 @@ const tagline = (product.tagline || '').replace(/\s+/g, ' ').trim().slice(0, 120
     align-items: start;
     margin-bottom: 1.75rem;
   }
-  .product__hero {
-    overflow: hidden;
-    background: #f3f7fc;
-  }
+  .product__hero { overflow: hidden; background: #f3f7fc; }
   .product__hero img, .product__ph {
     width: 100%; aspect-ratio: 5/4; object-fit: contain; background: #f3f7fc;
   }
@@ -155,14 +306,8 @@ const tagline = (product.tagline || '').replace(/\s+/g, ' ').trim().slice(0, 120
     gap: 0.45rem;
     margin-top: 0.65rem;
   }
-  .product__thumb {
-    overflow: hidden;
-    aspect-ratio: 4/3;
-    background: #f3f7fc;
-  }
-  .product__thumb img {
-    width: 100%; height: 100%; object-fit: cover;
-  }
+  .product__thumb { overflow: hidden; aspect-ratio: 4/3; background: #f3f7fc; }
+  .product__thumb img { width: 100%; height: 100%; object-fit: cover; }
   .product__brand {
     text-transform: uppercase; letter-spacing: 0.06em; font-weight: 800;
     color: var(--color-accent); font-size: 0.8rem; margin: 0;
@@ -173,44 +318,61 @@ const tagline = (product.tagline || '').replace(/\s+/g, ' ').trim().slice(0, 120
     font-weight: 700;
     margin: 0 0 0.9rem;
   }
-  .product__specs {
-    display: grid;
-    gap: 0.35rem;
-    padding: 0.85rem 1rem;
-    margin: 0 0 1rem;
-    background: #eaf2ff;
-    border: 1px solid #c9dbf5;
-    border-radius: var(--radius-sm);
+  .product__chips {
+    display: flex; flex-wrap: wrap; gap: 0.4rem;
+    margin: 0 0 1rem; padding: 0;
+  }
+  .product__chips li {
+    font-size: 0.82rem; font-weight: 750;
+    background: #eaf2ff; border: 1px solid #c9dbf5;
+    border-radius: 999px; padding: 0.3rem 0.7rem;
     color: var(--color-accent);
-    font-weight: 750;
   }
   .product__desc { color: var(--color-muted); }
-  .product__bullets {
-    display: grid;
-    gap: 0.55rem;
-    margin: 0.85rem 0 1rem;
-  }
+  .product__bullets { display: grid; gap: 0.55rem; margin: 0.85rem 0 1rem; }
   .product__bullets li {
-    position: relative;
-    padding-left: 0.95rem;
-    color: var(--color-ink-soft);
+    position: relative; padding-left: 0.95rem; color: var(--color-ink-soft);
   }
   .product__bullets li::before {
     content: '';
-    position: absolute;
-    left: 0; top: 0.55em;
-    width: 0.4rem; height: 0.4rem;
-    border-radius: 50%;
+    position: absolute; left: 0; top: 0.55em;
+    width: 0.4rem; height: 0.4rem; border-radius: 50%;
     background: var(--color-green);
   }
   .product__price { font-size: 1.15rem; font-weight: 800; }
-  .product__cta { display: flex; flex-wrap: wrap; gap: 0.55rem; margin: 1rem 0 1.25rem; }
-  .product__facts { display: grid; gap: 0.55rem; }
-  .product__facts li {
-    display: flex; justify-content: space-between; gap: 1rem;
-    padding: 0.7rem 0; border-bottom: 1px solid var(--color-border);
+  .product__cta { display: flex; flex-wrap: wrap; gap: 0.55rem; margin: 1rem 0 0.25rem; }
+
+  .product__table-wrap { padding: 1.15rem 1.25rem; margin-bottom: 1.25rem; }
+  .product__table-wrap h2 { margin: 0 0 0.85rem; font-size: 1.2rem; }
+  .product__table { width: 100%; border-collapse: collapse; }
+  .product__table th, .product__table td {
+    text-align: left; padding: 0.7rem 0.35rem;
+    border-bottom: 1px solid var(--color-border);
+    vertical-align: top;
   }
-  .product__facts span:first-child { color: var(--color-muted); }
+  .product__table th {
+    width: 38%; color: var(--color-muted); font-weight: 650;
+  }
+  .product__table td { font-weight: 700; }
+
+  .product__blocks {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .product__includes, .product__buy { padding: 1.15rem 1.25rem; }
+  .product__includes h2, .product__buy h2 { margin: 0 0 0.85rem; font-size: 1.15rem; }
+  .product__includes ul, .product__buy ul { display: grid; gap: 0.7rem; margin: 0; }
+  .product__includes li { display: grid; gap: 0.2rem; }
+  .product__includes span { color: var(--color-muted); font-size: 0.92rem; }
+  .product__buy li {
+    display: flex; justify-content: space-between; gap: 1rem;
+    padding-bottom: 0.55rem; border-bottom: 1px solid var(--color-border);
+  }
+  .product__buy li span { color: var(--color-muted); }
+  .product__buy-cta { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+
   .product__clinical { margin-bottom: 1.5rem; }
   .product__clinical h2 { margin-bottom: 0.35rem; }
   .product__clinical > p { color: var(--color-muted); margin-bottom: 0.85rem; }
@@ -218,19 +380,31 @@ const tagline = (product.tagline || '').replace(/\s+/g, ' ').trim().slice(0, 120
   .product__clinical-grid img {
     width: 100%; max-height: 280px; object-fit: contain; background: #0b1220;
   }
+
+  .product__related { margin-bottom: 1.75rem; }
+  .product__related-head { margin-bottom: 0.85rem; }
+  .product__related-head h2 { margin: 0 0 0.25rem; }
+  .product__related-head p { margin: 0; color: var(--color-muted); }
+  .product__related-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
   .product__share {
-    display: flex;
-    align-items: center;
-    padding: 0.85rem 1.15rem;
+    display: flex; align-items: center; padding: 0.85rem 1.15rem;
   }
-  .product__share :global(.qr) {
-    width: 100%;
-  }
-  .product__share :global(.qr__label) {
-    display: none;
+  .product__share :global(.qr) { width: 100%; }
+  .product__share :global(.qr__label) { display: none; }
+
+  @media (max-width: 1100px) {
+    .product__related-grid { grid-template-columns: repeat(2, 1fr); }
   }
   @media (max-width: 900px) {
-    .product__grid { grid-template-columns: 1fr; }
+    .product__grid, .product__blocks { grid-template-columns: 1fr; }
     .product__thumbs { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  @media (max-width: 640px) {
+    .product__related-grid { grid-template-columns: 1fr; }
   }
 </style>

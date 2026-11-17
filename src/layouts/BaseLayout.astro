@@ -10,13 +10,35 @@ interface Props {
   title?: string;
   description?: string;
   ogImage?: string;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[] | null;
 }
 
 const {
   title = `${site.name} — медицинское оборудование для ЛПУ`,
   description = 'Поставка медицинского оборудования экспертного класса: КТ, МРТ, УЗИ, рентген, эндоскопия. Москва, Зеленоград.',
   ogImage,
+  jsonLd,
 } = Astro.props;
+
+const orgSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: site.legalName,
+  alternateName: site.name,
+  url: site.url,
+  email: site.email,
+  telephone: site.phone,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'проезд 4922, дом 4 стр. 5, Технопарк «ЭЛМА»',
+    addressLocality: 'Зеленоград',
+    addressRegion: 'Москва',
+    postalCode: '124489',
+    addressCountry: 'RU',
+  },
+};
+
+const schemas = [orgSchema, ...(jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [])];
 ---
 
 <!doctype html>
@@ -26,6 +48,7 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="robots" content="index,follow" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -35,7 +58,12 @@ const {
     {ogImage && <meta property="og:image" content={ogImage} />}
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="ru_RU" />
     <link rel="icon" href={url('favicon.svg')} type="image/svg+xml" />
+    {schemas.map((s) => (
+      <script type="application/ld+json" set:html={JSON.stringify(s)} />
+    ))}
   </head>
   <body>
     <Header />

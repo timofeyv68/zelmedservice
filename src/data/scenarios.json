@@ -1,0 +1,151 @@
+[
+  {
+    "slug": "novoe-osnashchenie",
+    "title": "Новое оснащение отделения",
+    "menuLabel": "Новое оснащение",
+    "seoTitle": "Новое оснащение отделения — подбор оборудования | ЗелМедСервис",
+    "seoDescription": "Сценарий для руководителя клиники: оснащение отделения КТ, МРТ, УЗИ, рентгеном или эндоскопией. Поставка, монтаж, обучение, сервис.",
+    "roles": ["director"],
+    "lead": "Открываете кабинет или отделение с нуля — подберите направление и модели из каталога 2026.",
+    "audience": "Руководитель клиники",
+    "categorySlugs": [
+      "kompyuternye-tomografy",
+      "mrt",
+      "ultrazvukovye-sistemy",
+      "rentgenodiagnostika",
+      "mammografy",
+      "endoskopiya"
+    ],
+    "productSlugs": [
+      "canon-aquilion-serve",
+      "canon-vantage-elan",
+      "samsung-hs50-rus",
+      "fujifilm-eluxeo-7000",
+      "fujifilm-tsifrovoy-mammograf-amulet-innovality",
+      "mtl-diagnosticheskiy-rentgenovskiy-apparat-na-dva-rabochih-mesta-unikord-mt-plyus"
+    ],
+    "steps": [
+      "Выберите направление диагностики",
+      "Сверьте модели и характеристики в каталоге",
+      "Запросите КП с комплектацией: поставка, монтаж, обучение, сервис"
+    ],
+    "ctaLabel": "Запросить КП на оснащение",
+    "relatedBuy": "osnashchenie-lpu-pod-klyuch"
+  },
+  {
+    "slug": "zamena-parka",
+    "title": "Замена парка",
+    "menuLabel": "Замена парка",
+    "seoTitle": "Замена парка оборудования — подбор аналогов | ЗелМедСервис",
+    "seoDescription": "Обновление диагностического парка: аналоги в тех же категориях каталога 2026. Поставка и сервис ЗелМедСервис.",
+    "roles": ["director", "buyer"],
+    "lead": "Меняете устаревшие системы — смотрите актуальные модели в той же категории без смены клинического профиля.",
+    "audience": "Руководитель и закупщик",
+    "categorySlugs": [
+      "kompyuternye-tomografy",
+      "ultrazvukovye-sistemy",
+      "rentgenodiagnostika",
+      "mammografy",
+      "rentgenokhirurgiya",
+      "endoskopiya"
+    ],
+    "productSlugs": [
+      "canon-aquilion-prime-sp",
+      "neusoft-neuviz-128",
+      "minfound-scintcare-ct-128",
+      "samsung-rs85-rus",
+      "samsung-v-seriya-v6-v7-v8",
+      "mtl-tsifrovoy-mammograf-mammo-5mt-s-tomosintezom",
+      "mtl-rentgenohirurgicheskaya-tsifrovaya-mobilnaya-sistema-s-duga-sikord-2mt"
+    ],
+    "steps": [
+      "Определите категорию текущего оборудования",
+      "Сравните 2–3 модели в каталоге",
+      "Запросите спецификацию для ТЗ и план замены"
+    ],
+    "ctaLabel": "Запросить КП на замену",
+    "relatedBuy": null
+  },
+  {
+    "slug": "tender-44-fz",
+    "title": "Тендер / 44-ФЗ",
+    "menuLabel": "Тендер / 44-ФЗ",
+    "seoTitle": "Тендер 44-ФЗ — медтехника и комплектация | ЗелМедСервис",
+    "seoDescription": "Сценарий для закупщика: каталог для ТЗ, комплектация поставки и сопровождение закупок по 44-ФЗ / 223-ФЗ.",
+    "roles": ["buyer"],
+    "lead": "Готовите закупку — соберите модели, характеристики и запросите спецификацию для технического задания.",
+    "audience": "Закупщик",
+    "categorySlugs": [
+      "kompyuternye-tomografy",
+      "mrt",
+      "ultrazvukovye-sistemy",
+      "rentgenodiagnostika",
+      "rentgenokhirurgiya",
+      "mammografy",
+      "endoskopiya"
+    ],
+    "productSlugs": [
+      "canon-aquilion-one-prism-edition",
+      "neusoft-neuviz-ace-ace-sp",
+      "mtl-malahit",
+      "samsung-z20-rus",
+      "vko-medprom-mobilnyy-rentgenohirurgicheskiy-apparat-r-600-operviz"
+    ],
+    "steps": [
+      "Отберите модели и зафиксируйте ключевые ТТХ",
+      "Укажите в заявке МО, ИНН, регион и срок / № извещения",
+      "Запросите спецификацию для ТЗ"
+    ],
+    "ctaLabel": "Запросить спецификацию для ТЗ",
+    "relatedBuy": "tendery-44-fz-medtehnika",
+    "showServiceContract": true
+  },
+  {
+    "slug": "mobilnoe-reshenie",
+    "title": "Мобильное / временное решение",
+    "menuLabel": "Мобильное решение",
+    "seoTitle": "Мобильный модуль и выездная диагностика | ЗелМедСервис",
+    "seoDescription": "Временное или мобильное оснащение: модуль для КТ/МРТ/ангиографа, палатный рентген и портативное УЗИ.",
+    "roles": ["director"],
+    "lead": "Нет готового кабинета, стройка или выездная помощь — начните с мобильных решений из каталога.",
+    "audience": "Руководитель клиники",
+    "categorySlugs": ["mobilnye-moduli", "rentgenodiagnostika", "ultrazvukovye-sistemy"],
+    "productSlugs": [
+      "mobilnyy-modul-dlya-kt-mrt-i-angiografa",
+      "mtl-palatnyy-apparat-dlya-ekstrennyh-i-planovyh-issledovaniy-mobiren-5mt",
+      "mtl-palatnyy-apparat-dlya-ekstrennyh-i-planovyh-issledovaniy-mobiren-4mt",
+      "samsung-hm70-evo",
+      "alpinion-seriya-e-cube-i7",
+      "canon-aplio-go"
+    ],
+    "steps": [
+      "Оцените, нужен модуль или мобильный аппарат",
+      "Выберите модель в каталоге",
+      "Запросите КП с монтажом и вводом"
+    ],
+    "ctaLabel": "Запросить КП на мобильное решение",
+    "relatedBuy": null
+  },
+  {
+    "slug": "servis-zhiznennyy-cikl",
+    "title": "Сервис и жизненный цикл",
+    "menuLabel": "Сервис",
+    "seoTitle": "Сервисный контракт и жизненный цикл оборудования | ЗелМедСервис",
+    "seoDescription": "Контракт неопределённого объёма, этапы централизованного сервиса МО. Сопровождение парка диагностического оборудования.",
+    "roles": ["buyer"],
+    "lead": "Нужно не купить новое, а стабильно обслуживать парк — контракт неопределённого объёма и этапы сервиса.",
+    "audience": "Закупщик",
+    "categorySlugs": [],
+    "productSlugs": [],
+    "steps": [
+      "Анализ парка оборудования заказчика",
+      "Расчёт оптимального ценового предложения",
+      "Соответствие нормам 44-ФЗ, 223-ФЗ",
+      "Заключение контракта"
+    ],
+    "ctaLabel": "Запросить сервисный контракт",
+    "relatedBuy": "tendery-44-fz-medtehnika",
+    "showServiceContract": true,
+    "showServiceOnly": true
+  }
+]

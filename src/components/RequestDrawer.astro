@@ -1,0 +1,196 @@
+---
+import { site } from '../lib/site';
+
+interface Props {
+  productName?: string;
+  buttonLabel?: string;
+  buttonClass?: string;
+}
+
+const {
+  productName = '',
+  buttonLabel = 'Запросить КП',
+  buttonClass = 'btn btn--accent',
+} = Astro.props;
+const id = `kp-${Astro.props.productName ? Astro.props.productName.replace(/\W+/g, '-').slice(0, 40) : 'general'}-${buttonLabel.replace(/\W+/g, '-').slice(0, 20)}`;
+---
+
+<button class={buttonClass} type="button" data-open-kp={id} data-product={productName}>
+  {buttonLabel}
+</button>
+
+<dialog class="kp-drawer" data-kp-drawer={id} aria-labelledby={`${id}-title`}>
+  <div class="kp-drawer__panel">
+    <header class="kp-drawer__head">
+      <div>
+        <p class="kp-drawer__eyebrow">Коммерческое предложение</p>
+        <h2 id={`${id}-title`}>Запросить КП</h2>
+        {productName && <p class="kp-drawer__product">{productName}</p>}
+      </div>
+      <button class="kp-drawer__close" type="button" data-close-kp aria-label="Закрыть">×</button>
+    </header>
+
+    <form class="kp-drawer__form" data-kp-form data-email={site.email} data-product={productName}>
+      <label>Имя<input name="name" required placeholder="Как к вам обращаться" autocomplete="name" /></label>
+      <label>Организация / МО<input name="org" placeholder="ЛПУ / клиника" autocomplete="organization" /></label>
+      <label>ИНН организации<input name="inn" placeholder="Если нужно для закупки" inputmode="numeric" /></label>
+      <label>Регион<input name="region" placeholder="Город / субъект РФ" /></label>
+      <label>Телефон или email<input name="contact" required placeholder="+7 … или email" autocomplete="email" /></label>
+      <label>Срок / номер извещения<input name="deadline" placeholder="Срок поставки или № извещения 44-ФЗ" /></label>
+      <label>
+        Что интересует
+        <textarea name="message" rows="4" placeholder="Модель, комплектация, для ТЗ…"></textarea>
+      </label>
+      <div class="kp-drawer__actions">
+        <button class="btn btn--accent" type="submit">Отправить запрос</button>
+        <button class="btn btn--ghost" type="button" data-close-kp>Отмена</button>
+      </div>
+      <p class="kp-drawer__note">Откроется почтовый клиент с готовым письмом на {site.email}.</p>
+    </form>
+  </div>
+</dialog>
+
+<style>
+  .kp-drawer {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: rgba(11, 42, 74, 0.45);
+  }
+  .kp-drawer::backdrop { background: transparent; }
+  .kp-drawer__panel {
+    position: absolute;
+    top: 0; right: 0;
+    width: min(420px, 100%);
+    height: 100%;
+    background: #fff;
+    box-shadow: -12px 0 40px rgba(11, 42, 74, 0.18);
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    animation: kp-slide 0.22s ease;
+  }
+  @keyframes kp-slide {
+    from { transform: translateX(18px); opacity: 0.6; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+  .kp-drawer__head {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.25rem 1.25rem 0.75rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .kp-drawer__eyebrow {
+    margin: 0;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+  .kp-drawer__head h2 { margin: 0.2rem 0 0; font-size: 1.25rem; }
+  .kp-drawer__product {
+    margin: 0.35rem 0 0;
+    color: var(--color-muted);
+    font-size: 0.9rem;
+  }
+  .kp-drawer__close {
+    width: 40px; height: 40px;
+    border: 0; border-radius: 10px;
+    background: var(--color-chip);
+    font-size: 1.5rem; line-height: 1;
+    cursor: pointer;
+  }
+  .kp-drawer__form {
+    display: grid;
+    gap: 0.75rem;
+    padding: 1.1rem 1.25rem 1.5rem;
+  }
+  .kp-drawer__form label {
+    display: grid;
+    gap: 0.3rem;
+    font-weight: 700;
+    font-size: 0.88rem;
+  }
+  .kp-drawer__form input,
+  .kp-drawer__form textarea {
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 0.7rem 0.85rem;
+    font: inherit;
+  }
+  .kp-drawer__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+  }
+  .kp-drawer__note {
+    margin: 0;
+    color: var(--color-muted);
+    font-size: 0.78rem;
+  }
+  @media (max-width: 520px) {
+    .kp-drawer__panel { width: 100%; }
+  }
+</style>
+
+<script>
+  function wire() {
+    document.querySelectorAll<HTMLElement>('[data-open-kp]').forEach((btn) => {
+      if (btn.dataset.wired) return;
+      btn.dataset.wired = '1';
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-open-kp');
+        const dlg = document.querySelector<HTMLDialogElement>(`[data-kp-drawer="${id}"]`);
+        dlg?.showModal();
+      });
+    });
+
+    document.querySelectorAll<HTMLDialogElement>('[data-kp-drawer]').forEach((dlg) => {
+      if (dlg.dataset.wired) return;
+      dlg.dataset.wired = '1';
+      dlg.querySelectorAll('[data-close-kp]').forEach((el) => {
+        el.addEventListener('click', () => dlg.close());
+      });
+      dlg.addEventListener('click', (e) => {
+        if (e.target === dlg) dlg.close();
+      });
+      const form = dlg.querySelector<HTMLFormElement>('[data-kp-form]');
+      form?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const email = form.dataset.email || 'sale@zelmedservice.ru';
+        const product = form.dataset.product || '';
+        const data = new FormData(form);
+        const body = [
+          product ? `Оборудование: ${product}` : '',
+          `Имя: ${data.get('name') || ''}`,
+          `Организация: ${data.get('org') || ''}`,
+          `ИНН: ${data.get('inn') || ''}`,
+          `Регион: ${data.get('region') || ''}`,
+          `Контакт: ${data.get('contact') || ''}`,
+          `Срок / извещение: ${data.get('deadline') || ''}`,
+          '',
+          String(data.get('message') || ''),
+        ]
+          .filter((line, i, arr) => !(line === '' && arr[i - 1] === ''))
+          .join('\n');
+        const subject = product
+          ? `Запрос КП — ${product}`
+          : 'Запрос КП — zelmedservice.ru';
+        window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        dlg.close();
+      });
+    });
+  }
+
+  wire();
+  document.addEventListener('astro:page-load', wire);
+</script>

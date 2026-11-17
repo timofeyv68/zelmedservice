@@ -1,0 +1,137 @@
+---
+import { url } from '../../lib/paths';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import SearchOverlay from '../../components/SearchOverlay.astro';
+import RequestDrawer from '../../components/RequestDrawer.astro';
+import landings from '../../data/landings.json';
+import includes from '../../data/includes.json';
+import { getProducts, getProductsByCategory } from '../../lib/catalog';
+
+export function getStaticPaths() {
+  return landings.map((l) => ({ params: { slug: l.slug }, props: { landing: l } }));
+}
+
+const { landing } = Astro.props;
+let products = getProducts();
+const categorySlug = 'categorySlug' in landing ? landing.categorySlug : undefined;
+const directionSlug = 'directionSlug' in landing ? landing.directionSlug : undefined;
+if (categorySlug) {
+  products = getProductsByCategory(categorySlug);
+} else if (directionSlug) {
+  products = products.filter((p) => p.direction === directionSlug);
+}
+products = products.slice(0, 12);
+
+const faqSchema = landing.faq?.length
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: landing.faq.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
+    }
+  : null;
+---
+
+<BaseLayout title={`${landing.title} | ЗелМедСервис`} description={landing.description} jsonLd={faqSchema}>
+  <SearchOverlay />
+  <section class="section">
+    <div class="container">
+      <nav class="crumbs">
+        <a href={url('/')}>Главная</a><span>/</span>
+        <a href={url('catalog/')}>Каталог</a><span>/</span>
+        <span>{landing.h1}</span>
+      </nav>
+      <h1>{landing.h1}</h1>
+      <p class="lead">{landing.description}</p>
+
+      <div class="cta-row">
+        <RequestDrawer buttonLabel="Запросить КП" buttonClass="btn btn--accent" />
+        <a class="btn btn--primary" href={url('catalog/')}>Весь каталог</a>
+        {categorySlug && (
+          <a class="btn btn--ghost" href={url(`catalog/${categorySlug}/`)}>Открыть категорию</a>
+        )}
+      </div>
+
+      <section class="includes">
+        <h2>Что входит</h2>
+        <ul>
+          {includes.map((item) => (
+            <li>
+              <strong>{item.title}</strong>
+              <span>{item.text}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {products.length > 0 && (
+        <section class="models">
+          <h2>Модели из каталога</h2>
+          <div class="grid">
+            {products.map((p) => (
+              <ProductCard
+                name={p.name}
+                brand={p.brand}
+                description={p.description}
+                categorySlug={p.categorySlug}
+                slug={p.slug}
+                image={p.image}
+                specs={p.specs}
+              />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {landing.faq?.length > 0 && (
+        <section class="faq">
+          <h2>Вопросы</h2>
+          <div class="faq__list">
+            {landing.faq.map((f) => (
+              <details>
+                <summary>{f.q}</summary>
+                <p>{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .crumbs { display:flex; flex-wrap:wrap; gap:.45rem; color:var(--color-muted); margin-bottom:1rem; font-size:.9rem; }
+  h1 { margin:0 0 .5rem; font-size:clamp(1.6rem,3vw,2.3rem); }
+  .lead { color:var(--color-muted); max-width:46rem; }
+  .cta-row { display:flex; flex-wrap:wrap; gap:.55rem; margin:1.25rem 0 1.75rem; }
+  .includes h2, .models h2, .faq h2 { margin-bottom:.75rem; }
+  .includes ul {
+    display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:.75rem;
+    margin:0 0 2rem;
+  }
+  .includes li {
+    display:grid; gap:.35rem; padding:1rem;
+    background:#f3f7fc; border:1px solid var(--color-border); border-radius:var(--radius-sm);
+  }
+  .includes span { color:var(--color-muted); font-size:.92rem; }
+  .grid {
+    display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:1rem; margin-bottom:2rem;
+  }
+  .faq__list { display:grid; gap:.55rem; max-width:44rem; }
+  details {
+    border:1px solid var(--color-border); border-radius:12px; padding:.85rem 1rem; background:#fff;
+  }
+  summary { cursor:pointer; font-weight:750; }
+  details p { margin:.55rem 0 0; color:var(--color-muted); }
+  @media (max-width:1100px) {
+    .includes ul, .grid { grid-template-columns:repeat(2,1fr); }
+  }
+  @media (max-width:640px) {
+    .includes ul, .grid { grid-template-columns:1fr; }
+  }
+</style>
