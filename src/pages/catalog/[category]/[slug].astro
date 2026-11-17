@@ -113,12 +113,11 @@ const tagline = (product.tagline || '').replace(/\s+/g, ' ').trim().slice(0, 120
       )}
 
       <div class="product__share card" id="share">
-        <div>
+        <div class="product__share-copy">
           <h2>Поделиться моделью</h2>
-          <p>QR-код ведёт на эту страницу — удобно на выставке и при согласовании закупки.</p>
-          <a class="btn btn--soft" href={brochure}>Открыть брошюру для стенда</a>
+          <p>QR ведёт на эту страницу — удобно на выставке и при согласовании закупки.</p>
         </div>
-        <QrShare path={path} label="QR страницы товара" size={180} />
+        <QrShare path={path} label="QR страницы товара" size={120} layout="row" />
       </div>
     </div>
   </section>
@@ -217,11 +216,30 @@ const tagline = (product.tagline || '').replace(/\s+/g, ' ').trim().slice(0, 120
     width: 100%; max-height: 280px; object-fit: contain; background: #0b1220;
   }
   .product__share {
-    display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 1.25rem;
-    padding: 1.35rem; align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.5rem;
+    padding: 1rem 1.25rem;
+  }
+  .product__share-copy {
+    flex: 1 1 220px;
+    min-width: 0;
+  }
+  .product__share-copy h2 {
+    margin: 0 0 0.25rem;
+    font-size: 1.15rem;
+  }
+  .product__share-copy p {
+    margin: 0;
+    color: var(--color-muted);
+    font-size: 0.92rem;
+  }
+  .product__share :global(.qr) {
+    flex: 1 1 320px;
   }
   @media (max-width: 900px) {
-    .product__grid, .product__share { grid-template-columns: 1fr; }
+    .product__grid { grid-template-columns: 1fr; }
     .product__thumbs { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   }
 </style>

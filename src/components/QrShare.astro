@@ -6,21 +6,36 @@ interface Props {
   label?: string;
   size?: number;
   compact?: boolean;
+  layout?: 'stack' | 'row';
 }
 
-const { path, label = 'Поделиться страницей', size = 160, compact = false } = Astro.props;
+const {
+  path,
+  label = 'Поделиться страницей',
+  size = 160,
+  compact = false,
+  layout = 'stack',
+} = Astro.props;
 const url = absoluteUrl(path, Astro.site?.toString() || 'https://zelmedservice.ru');
 const svg = await qrSvg(url, size);
 ---
 
-<div class:list={['qr', compact && 'qr--compact']} data-qr-share data-url={url}>
+<div
+  class:list={['qr', compact && 'qr--compact', layout === 'row' && 'qr--row']}
+  data-qr-share
+  data-url={url}
+>
   {!compact && <p class="qr__label">{label}</p>}
-  <div class="qr__frame" set:html={svg} aria-hidden="true"></div>
-  <p class="qr__url">{url.replace('https://', '')}</p>
-  <div class="qr__actions">
-    <button class="btn btn--soft" type="button" data-qr-copy>Копировать ссылку</button>
-    <button class="btn btn--ghost" type="button" data-qr-share-btn>Поделиться</button>
-    <button class="btn btn--ghost" type="button" data-qr-download>Скачать QR</button>
+  <div class="qr__body">
+    <div class="qr__frame" set:html={svg} aria-hidden="true"></div>
+    <div class="qr__meta">
+      <p class="qr__url">{url.replace('https://', '')}</p>
+      <div class="qr__actions">
+        <button class="btn btn--soft" type="button" data-qr-copy>Копировать ссылку</button>
+        <button class="btn btn--ghost" type="button" data-qr-share-btn>Поделиться</button>
+        <button class="btn btn--ghost" type="button" data-qr-download>Скачать QR</button>
+      </div>
+    </div>
   </div>
   <span class="qr__toast" data-qr-toast hidden>Ссылка скопирована</span>
 </div>
@@ -29,7 +44,7 @@ const svg = await qrSvg(url, size);
   .qr {
     position: relative;
     display: grid;
-    gap: 0.75rem;
+    gap: 0.65rem;
     justify-items: start;
   }
 
@@ -41,13 +56,27 @@ const svg = await qrSvg(url, size);
   .qr__label {
     margin: 0;
     font-weight: 800;
+    font-size: 0.9rem;
+  }
+
+  .qr__body {
+    display: grid;
+    gap: 0.75rem;
+    justify-items: start;
+  }
+
+  .qr--row .qr__body {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: 0.9rem 1rem;
+    width: 100%;
   }
 
   .qr__frame {
     background: #fff;
     border: 1px solid var(--color-border);
-    border-radius: 16px;
-    padding: 0.65rem;
+    border-radius: 14px;
+    padding: 0.45rem;
     box-shadow: var(--shadow-sm);
   }
 
@@ -57,9 +86,19 @@ const svg = await qrSvg(url, size);
     height: auto;
   }
 
+  .qr--row .qr__frame {
+    width: 120px;
+  }
+
+  .qr__meta {
+    display: grid;
+    gap: 0.55rem;
+    min-width: 0;
+  }
+
   .qr__url {
     margin: 0;
-    font-size: 0.82rem;
+    font-size: 0.8rem;
     color: var(--color-muted);
     word-break: break-all;
   }
@@ -67,7 +106,7 @@ const svg = await qrSvg(url, size);
   .qr__actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.45rem;
+    gap: 0.4rem;
   }
 
   .qr__toast {
@@ -79,6 +118,12 @@ const svg = await qrSvg(url, size);
     font-size: 0.8rem;
     padding: 0.35rem 0.7rem;
     border-radius: 999px;
+  }
+
+  @media (max-width: 560px) {
+    .qr--row .qr__body {
+      grid-template-columns: 1fr;
+    }
   }
 </style>
 
