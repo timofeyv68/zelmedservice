@@ -1,0 +1,1180 @@
+/* Концепция 2 «Пультовая». Подключается только со страницы /design/v2/. */
+
+body.concept {
+  --c-night: #0a1520;
+  --c-night-2: #0f1d2b;
+  --c-steel: #1b2c3d;
+  --c-paper: #eef1f4;
+  --c-white: #ffffff;
+  --c-ink: #0c1a28;
+  --c-ink-soft: #33465a;
+  --c-muted: #66778a;
+  --c-line: #d3dae2;
+  --c-line-dark: rgba(214, 228, 240, 0.14);
+  --c-text-dark: #c9d5e1;
+  --c-blue: #1f5fbf;
+  --c-laser: #8bd425;
+  --c-laser-soft: rgba(139, 212, 37, 0.55);
+  --c-sans: "Onest", "Segoe UI", system-ui, sans-serif;
+  --c-mono: "JetBrains Mono", ui-monospace, "Cascadia Mono", monospace;
+  --c-wrap: 1200px;
+  margin: 0;
+  padding: 0;
+  background: var(--c-paper);
+  color: var(--c-ink);
+  font-family: var(--c-sans);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+html:has(body.concept) {
+  scroll-padding-top: 84px;
+}
+
+body.concept h1,
+body.concept h2,
+body.concept h3 {
+  margin: 0;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+}
+
+body.concept p,
+body.concept ul,
+body.concept ol {
+  margin: 0;
+  padding: 0;
+}
+
+body.concept ul,
+body.concept ol {
+  list-style: none;
+}
+
+body.concept a {
+  color: inherit;
+  text-decoration: none;
+}
+
+body.concept button,
+body.concept input,
+body.concept textarea {
+  font: inherit;
+  color: inherit;
+}
+
+body.concept :focus-visible {
+  outline: 2px solid var(--c-laser);
+  outline-offset: 2px;
+}
+
+body.concept .c-wrap {
+  width: min(calc(100% - 3rem), var(--c-wrap));
+  margin-inline: auto;
+}
+
+/* Фоны */
+
+body.concept .c-dark {
+  position: relative;
+  color: var(--c-text-dark);
+  background-color: var(--c-night);
+  background-image:
+    radial-gradient(90% 70% at 72% 18%, rgba(31, 95, 191, 0.22), transparent 62%),
+    radial-gradient(60% 50% at 10% 100%, rgba(139, 212, 37, 0.05), transparent 70%),
+    linear-gradient(rgba(214, 228, 240, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(214, 228, 240, 0.05) 1px, transparent 1px),
+    linear-gradient(rgba(214, 228, 240, 0.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(214, 228, 240, 0.022) 1px, transparent 1px);
+  background-size:
+    auto,
+    auto,
+    120px 120px,
+    120px 120px,
+    24px 24px,
+    24px 24px;
+  background-position: center top;
+}
+
+body.concept .c-dark h1,
+body.concept .c-dark h2,
+body.concept .c-dark h3 {
+  color: var(--c-white);
+}
+
+/* Светлый «технический лист»: сетка проступает только у правого верхнего края. */
+body.concept .c-light {
+  position: relative;
+  isolation: isolate;
+  background: var(--c-paper);
+  color: var(--c-ink);
+}
+
+body.concept .c-light::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(12, 26, 40, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(12, 26, 40, 0.07) 1px, transparent 1px),
+    linear-gradient(rgba(12, 26, 40, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(12, 26, 40, 0.035) 1px, transparent 1px);
+  background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px;
+  -webkit-mask-image: radial-gradient(70% 90% at 100% 0%, #000, transparent 70%);
+  mask-image: radial-gradient(70% 90% at 100% 0%, #000, transparent 70%);
+}
+
+/* Общие элементы */
+
+body.concept .c-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0.7rem 1.25rem;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  line-height: 1;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+body.concept .c-btn--green {
+  background: var(--c-laser);
+  color: var(--c-night);
+}
+
+body.concept .c-btn--green:hover {
+  background: #9de23a;
+}
+
+body.concept .c-btn--line {
+  border-color: rgba(214, 228, 240, 0.35);
+  color: var(--c-white);
+}
+
+body.concept .c-btn--line:hover {
+  border-color: var(--c-white);
+}
+
+body.concept .c-link {
+  font-weight: 500;
+  font-size: 0.95rem;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 1px;
+}
+
+body.concept .c-light .c-link {
+  color: var(--c-blue);
+}
+
+body.concept .c-dark .c-link:hover {
+  color: var(--c-laser);
+}
+
+body.concept .c-block {
+  padding: 5rem 0;
+  scroll-margin-top: 72px;
+}
+
+body.concept .c-head {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+  padding-bottom: 1.1rem;
+}
+
+/* Линейка под заголовком секции: шкала с мелкими и крупными делениями. */
+body.concept .c-head::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 9px;
+  border-bottom: 1px solid currentColor;
+  opacity: 0.28;
+  background:
+    repeating-linear-gradient(90deg, currentColor 0 1px, transparent 1px 60px) left bottom / 100% 9px no-repeat,
+    repeating-linear-gradient(90deg, currentColor 0 1px, transparent 1px 12px) left bottom / 100% 4px no-repeat;
+}
+
+body.concept .c-head--plain::after {
+  display: none;
+}
+
+body.concept .c-head h2 {
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+}
+
+/* Служебная плашка макета */
+
+body.concept .c-review {
+  background: #050b11;
+  color: #8fa3b6;
+  font-family: var(--c-mono);
+  font-size: 0.72rem;
+}
+
+body.concept .c-review__in {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  min-height: 32px;
+}
+
+body.concept .c-review span {
+  display: flex;
+  gap: 1.1rem;
+}
+
+body.concept .c-review a {
+  color: var(--c-laser);
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+/* Шапка */
+
+body.concept .c-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--c-line);
+}
+
+body.concept .c-header__bar {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  min-height: 68px;
+}
+
+body.concept .c-logo img {
+  display: block;
+  width: 180px;
+  height: auto;
+}
+
+body.concept .c-nav {
+  display: flex;
+  gap: 1.5rem;
+  margin-right: auto;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+body.concept .c-nav a:hover {
+  color: var(--c-blue);
+}
+
+body.concept .c-header__tools {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+body.concept .c-header__phone {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+body.concept .c-iconbtn {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--c-line);
+  border-radius: 2px;
+  background: transparent;
+  cursor: pointer;
+}
+
+body.concept .c-iconbtn:hover {
+  border-color: var(--c-ink);
+}
+
+body.concept .c-header .c-btn {
+  min-height: 44px;
+}
+
+/* Первый экран */
+
+body.concept .c-hero {
+  overflow: hidden;
+  padding: 4.5rem 0 3rem;
+}
+
+body.concept .c-hero__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr);
+  gap: 3.5rem;
+  align-items: center;
+}
+
+body.concept .c-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1.25rem;
+  font-family: var(--c-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #9fb2c4;
+}
+
+body.concept .c-laser-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--c-laser);
+  box-shadow: 0 0 0 4px rgba(139, 212, 37, 0.16), 0 0 12px var(--c-laser);
+}
+
+body.concept .c-hero h1 {
+  font-size: clamp(2.3rem, 4.4vw, 3.6rem);
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+}
+
+body.concept .c-hero__lead {
+  max-width: 34rem;
+  margin-top: 1.35rem;
+  font-size: 1.1rem;
+  color: var(--c-text-dark);
+}
+
+body.concept .c-search {
+  display: flex;
+  max-width: 34rem;
+  margin-top: 2rem;
+  border: 1px solid rgba(214, 228, 240, 0.28);
+  border-radius: 2px;
+  background: rgba(10, 21, 32, 0.6);
+}
+
+body.concept .c-search:focus-within {
+  border-color: var(--c-laser);
+}
+
+body.concept .c-search input {
+  flex: 1;
+  min-width: 0;
+  min-height: 52px;
+  padding: 0 1rem;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--c-white);
+  appearance: none;
+}
+
+body.concept .c-search input::placeholder {
+  color: #7d90a3;
+}
+
+body.concept .c-search button {
+  padding: 0 1.4rem;
+  border: 0;
+  border-left: 1px solid rgba(214, 228, 240, 0.28);
+  background: transparent;
+  color: var(--c-white);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+body.concept .c-search button:hover {
+  background: rgba(214, 228, 240, 0.08);
+}
+
+body.concept .c-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+/* Просмотровое окно: снимок на световой панели, лазеры центровки и замер апертуры. */
+
+body.concept .c-viewer {
+  position: relative;
+  margin: 0;
+}
+
+body.concept .c-viewer__tags {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.55rem 0;
+  font-family: var(--c-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #8ea2b5;
+}
+
+body.concept .c-viewer__box {
+  position: relative;
+  display: block;
+  aspect-ratio: 683 / 456;
+  background: #fff;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.6),
+    0 0 60px rgba(160, 200, 255, 0.18),
+    0 30px 80px rgba(0, 0, 0, 0.45);
+}
+
+body.concept .c-viewer__box img {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+body.concept .c-viewer__marks {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+body.concept .c-rings circle {
+  fill: none;
+  stroke: rgba(214, 228, 240, 0.09);
+  stroke-width: 1;
+}
+
+body.concept .c-rings circle:nth-child(2) {
+  stroke-dasharray: 2 10;
+  stroke: rgba(214, 228, 240, 0.16);
+}
+
+body.concept .c-lasers line {
+  stroke-width: 1;
+  filter: drop-shadow(0 0 3px rgba(139, 212, 37, 0.8));
+}
+
+body.concept .c-measure circle,
+body.concept .c-measure polyline {
+  fill: none;
+  stroke: var(--c-blue);
+  stroke-width: 1.2;
+}
+
+body.concept .c-measure circle {
+  stroke-dasharray: 4 4;
+}
+
+body.concept .c-measure text {
+  fill: var(--c-blue);
+  font-family: var(--c-mono);
+  font-size: 15px;
+}
+
+/* Серии: быстрый выбор типа оборудования */
+
+body.concept .c-series {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 1px;
+  margin-top: 3.5rem;
+  border: 1px solid var(--c-line-dark);
+  background: var(--c-line-dark);
+}
+
+body.concept .c-series__item {
+  display: flex;
+  flex-direction: column;
+  background: var(--c-night-2);
+  transition: background-color 0.15s ease;
+}
+
+body.concept .c-series__img {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 11;
+  margin: 6px 6px 0;
+  background: #fff;
+  opacity: 0.88;
+  transition: opacity 0.15s ease;
+}
+
+body.concept .c-series__img img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 6px;
+}
+
+body.concept .c-series__meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.4rem;
+  padding: 0.55rem 0.6rem 0.65rem;
+}
+
+body.concept .c-series__meta strong {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--c-white);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+body.concept .c-series__meta small {
+  font-family: var(--c-mono);
+  font-size: 0.72rem;
+  color: #7d90a3;
+}
+
+body.concept .c-series__item:hover {
+  background: var(--c-steel);
+}
+
+body.concept .c-series__item:hover .c-series__img {
+  opacity: 1;
+}
+
+body.concept .c-series__item:hover small {
+  color: var(--c-laser);
+}
+
+/* Направления */
+
+body.concept .c-dirs {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: 1px;
+  border: 1px solid var(--c-line);
+  background: var(--c-line);
+}
+
+body.concept .c-dir {
+  display: grid;
+  grid-template-columns: 5.5rem minmax(0, 1fr);
+  gap: 1.25rem;
+  align-items: start;
+  padding: 1.6rem 1.6rem 1.5rem;
+  background: var(--c-white);
+  transition: background-color 0.15s ease;
+}
+
+body.concept a.c-dir:hover,
+body.concept .c-dir__top:hover {
+  background: #f7f9fb;
+}
+
+body.concept a.c-dir:hover h3,
+body.concept .c-dir__top:hover h3 {
+  color: var(--c-blue);
+}
+
+body.concept .c-dir--main {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+body.concept .c-dir__top {
+  display: grid;
+  grid-template-columns: 5.5rem minmax(0, 1fr);
+  gap: 1.25rem;
+  padding: 1.6rem 1.6rem 1.25rem;
+}
+
+body.concept .c-dir__num {
+  font-family: var(--c-mono);
+  font-size: 2.6rem;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.06em;
+  color: var(--c-ink);
+}
+
+body.concept .c-dir--main .c-dir__num {
+  font-size: 3.6rem;
+}
+
+body.concept .c-dir h3 {
+  font-size: 1.3rem;
+  transition: color 0.15s ease;
+}
+
+body.concept .c-dir p {
+  margin-top: 0.45rem;
+  color: var(--c-muted);
+  font-size: 0.95rem;
+}
+
+body.concept .c-dir__list {
+  margin: 0 1.6rem 1.4rem calc(1.6rem + 6.75rem);
+  border-top: 1px solid var(--c-ink);
+}
+
+body.concept .c-dir__list a {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.62rem 0;
+  border-bottom: 1px solid var(--c-line);
+}
+
+body.concept .c-dir__list a:hover {
+  color: var(--c-blue);
+}
+
+body.concept .c-dir__count {
+  font-family: var(--c-mono);
+  font-size: 0.9rem;
+  color: var(--c-muted);
+}
+
+body.concept .c-dirs__side {
+  display: grid;
+  gap: 1px;
+  grid-auto-rows: 1fr;
+}
+
+/* Стена световых панелей */
+
+body.concept .c-wall {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+body.concept .c-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+body.concept .c-panel__light {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  background: #fff;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.5), 0 0 40px rgba(160, 200, 255, 0.08);
+  transition: box-shadow 0.2s ease;
+}
+
+body.concept .c-panel__light img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 0.9rem;
+}
+
+body.concept .c-panel__scan {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -2px;
+  height: 2px;
+  background: var(--c-laser);
+  box-shadow: 0 0 10px var(--c-laser);
+  opacity: 0;
+}
+
+body.concept .c-panel:hover .c-panel__light {
+  box-shadow: 0 0 0 1px #fff, 0 0 50px rgba(160, 200, 255, 0.22);
+}
+
+body.concept .c-panel:hover .c-panel__scan {
+  animation: c-scan 1.4s ease-in-out 1;
+}
+
+@keyframes c-scan {
+  0% { top: -2px; opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+body.concept .c-panel__body {
+  display: grid;
+  gap: 0.3rem;
+  padding: 0.9rem 0 0;
+}
+
+body.concept .c-panel__code {
+  font-family: var(--c-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--c-laser);
+}
+
+body.concept .c-panel strong {
+  color: var(--c-white);
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+body.concept .c-panel:hover strong {
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: 1px;
+}
+
+body.concept .c-panel__specs {
+  color: #8ea2b5;
+  font-size: 0.88rem;
+}
+
+body.concept .c-wall__note {
+  margin-top: 2rem;
+  color: #8ea2b5;
+  font-size: 0.9rem;
+}
+
+/* Шкала этапов */
+
+body.concept .c-scale {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+body.concept .c-scale::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 14px;
+  border-top: 2px solid var(--c-ink);
+  background: repeating-linear-gradient(90deg, var(--c-ink-soft) 0 1px, transparent 1px 16px) left top / 100% 6px no-repeat;
+  opacity: 0.6;
+}
+
+body.concept .c-scale li {
+  position: relative;
+  padding: 1.9rem 1.25rem 0 0;
+}
+
+body.concept .c-scale li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 2px;
+  height: 22px;
+  background: var(--c-ink);
+}
+
+body.concept .c-scale li:last-child::before {
+  background: var(--c-laser);
+  box-shadow: 0 0 8px var(--c-laser);
+}
+
+body.concept .c-scale__n {
+  display: block;
+  margin-bottom: 0.6rem;
+  font-family: var(--c-mono);
+  font-size: 0.8rem;
+  color: var(--c-muted);
+}
+
+body.concept .c-scale h3 {
+  font-size: 1.12rem;
+}
+
+body.concept .c-scale p {
+  margin-top: 0.45rem;
+  color: var(--c-muted);
+  font-size: 0.92rem;
+}
+
+body.concept .c-brands {
+  display: grid;
+  grid-template-columns: 12rem minmax(0, 1fr);
+  gap: 1.5rem;
+  margin-top: 4.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--c-line);
+}
+
+body.concept .c-brands__label {
+  color: var(--c-muted);
+  font-size: 0.9rem;
+}
+
+body.concept .c-brands ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 2rem;
+}
+
+body.concept .c-brands a {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+body.concept .c-brands a:hover {
+  color: var(--c-blue);
+}
+
+body.concept .c-brands small {
+  font-family: var(--c-mono);
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: var(--c-muted);
+}
+
+/* Заявка */
+
+body.concept .c-final {
+  scroll-margin-top: 68px;
+}
+
+body.concept .c-final__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 4rem;
+  align-items: start;
+}
+
+body.concept .c-final h2 {
+  font-size: clamp(1.9rem, 3.2vw, 2.7rem);
+  max-width: 14em;
+}
+
+body.concept .c-final__copy > p {
+  max-width: 30rem;
+  margin-top: 1rem;
+}
+
+body.concept .c-phone {
+  display: inline-block;
+  margin-top: 1.75rem;
+  color: var(--c-white);
+  font-size: clamp(1.5rem, 2.6vw, 2rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+body.concept .c-phone:hover {
+  color: var(--c-laser);
+}
+
+body.concept .c-final__contacts {
+  display: grid;
+  gap: 0.35rem;
+  margin-top: 0.75rem;
+  color: #8ea2b5;
+  font-size: 0.95rem;
+}
+
+body.concept .c-final__contacts a:hover {
+  color: var(--c-white);
+}
+
+body.concept .c-plate {
+  display: inline-block;
+  margin-top: 2.5rem;
+  padding: 1rem;
+  background: #fff;
+  color: var(--c-ink);
+  box-shadow: 0 0 50px rgba(160, 200, 255, 0.14);
+}
+
+body.concept .c-plate .qr__frame {
+  border-radius: 0;
+  box-shadow: none;
+}
+
+body.concept .c-plate .qr__label {
+  font-weight: 600;
+}
+
+body.concept .c-plate .qr .btn {
+  min-height: 34px;
+  padding: 0.35rem 0.6rem;
+  border-radius: 2px;
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+
+body.concept .c-form {
+  display: grid;
+  gap: 1.15rem;
+  padding: 2rem;
+  background: rgba(15, 29, 43, 0.85);
+  border: 1px solid var(--c-line-dark);
+}
+
+body.concept .c-form label {
+  display: grid;
+  gap: 0.35rem;
+}
+
+body.concept .c-form label span {
+  font-size: 0.85rem;
+  color: #8ea2b5;
+}
+
+body.concept .c-form input,
+body.concept .c-form textarea {
+  width: 100%;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid rgba(214, 228, 240, 0.2);
+  border-radius: 2px;
+  background: rgba(10, 21, 32, 0.7);
+  color: var(--c-white);
+  outline: none;
+  resize: vertical;
+}
+
+body.concept .c-form input:focus,
+body.concept .c-form textarea:focus {
+  border-color: var(--c-laser);
+}
+
+body.concept .c-form input::placeholder,
+body.concept .c-form textarea::placeholder {
+  color: #5f7387;
+}
+
+body.concept .c-form .c-btn {
+  justify-self: start;
+}
+
+body.concept .c-form__note {
+  color: #6f8397;
+  font-size: 0.8rem;
+}
+
+/* Подвал */
+
+body.concept .c-footer {
+  background: #050b11;
+  color: #7d90a3;
+  font-size: 0.9rem;
+}
+
+body.concept .c-footer__grid {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  min-height: 72px;
+}
+
+body.concept .c-footer nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+body.concept .c-footer a:hover {
+  color: var(--c-white);
+}
+
+body.concept .c-dock {
+  display: none;
+}
+
+/* Поиск и QR в стилистике концепции */
+
+body.concept .search-overlay {
+  background: rgba(5, 11, 17, 0.7);
+}
+
+body.concept .search-overlay__panel {
+  border-radius: 2px;
+  font-family: var(--c-sans);
+}
+
+body.concept .search-overlay__results a {
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.concept .c-panel:hover .c-panel__scan {
+    animation: none;
+  }
+}
+
+@media (max-width: 1100px) {
+  body.concept .c-nav {
+    display: none;
+  }
+
+  body.concept .c-header__bar {
+    justify-content: space-between;
+  }
+
+  body.concept .c-series {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+  }
+
+  body.concept .c-series__item {
+    flex: 0 0 132px;
+    scroll-snap-align: start;
+  }
+
+  body.concept .c-wall {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  body.concept .c-scale {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    row-gap: 2.5rem;
+  }
+}
+
+@media (max-width: 900px) {
+  body.concept .c-hero__grid,
+  body.concept .c-dirs,
+  body.concept .c-final__grid {
+    grid-template-columns: 1fr;
+  }
+
+  body.concept .c-hero__grid {
+    gap: 2.5rem;
+  }
+
+  body.concept .c-final__grid {
+    gap: 2.5rem;
+  }
+
+  body.concept .c-brands {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+}
+
+@media (max-width: 720px) {
+  body.concept {
+    padding-bottom: 56px;
+  }
+
+  body.concept .c-wrap {
+    width: min(calc(100% - 2rem), var(--c-wrap));
+  }
+
+  body.concept .c-header__phone,
+  body.concept .c-header__kp {
+    display: none;
+  }
+
+  body.concept .c-logo img {
+    width: 150px;
+  }
+
+  body.concept .c-hero {
+    padding-top: 2.5rem;
+  }
+
+  body.concept .c-block {
+    padding: 3.5rem 0;
+  }
+
+  body.concept .c-viewer__tags span:last-child {
+    display: none;
+  }
+
+  body.concept .c-dir,
+  body.concept .c-dir__top {
+    grid-template-columns: 4rem minmax(0, 1fr);
+    gap: 0.9rem;
+    padding: 1.25rem;
+  }
+
+  body.concept .c-dir__num,
+  body.concept .c-dir--main .c-dir__num {
+    font-size: 2.2rem;
+  }
+
+  body.concept .c-dir__list {
+    margin: 0 1.25rem 1.25rem;
+  }
+
+  body.concept .c-scale {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  body.concept .c-form {
+    padding: 1.25rem;
+  }
+
+  body.concept .c-dock {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 45;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.2fr;
+    background: var(--c-night);
+    border-top: 1px solid var(--c-line-dark);
+  }
+
+  body.concept .c-dock a,
+  body.concept .c-dock button {
+    display: grid;
+    place-items: center;
+    min-height: 56px;
+    border: 0;
+    border-right: 1px solid var(--c-line-dark);
+    background: transparent;
+    color: var(--c-white);
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
+
+  body.concept .c-dock a:last-child {
+    border-right: 0;
+    background: var(--c-laser);
+    color: var(--c-night);
+  }
+}
+
+@media (max-width: 480px) {
+  body.concept .c-wall,
+  body.concept .c-scale {
+    grid-template-columns: 1fr;
+  }
+
+  body.concept .c-search {
+    flex-direction: column;
+  }
+
+  body.concept .c-search button {
+    min-height: 48px;
+    border-left: 0;
+    border-top: 1px solid rgba(214, 228, 240, 0.28);
+  }
+}

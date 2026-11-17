@@ -1,0 +1,384 @@
+---
+import ConceptLayout from '../../layouts/ConceptLayout.astro';
+import QrShare from '../../components/QrShare.astro';
+import SearchOverlay from '../../components/SearchOverlay.astro';
+import { site } from '../../lib/site';
+import { url } from '../../lib/paths';
+import { getBrands, getCategories, getDirections, getProducts, productPath } from '../../lib/catalog';
+
+const products = getProducts();
+const categories = getCategories();
+const directions = getDirections();
+const brands = getBrands();
+
+const img = (path?: string | null) => (path ? url(path) : '');
+const pad = (n: number) => String(n).padStart(2, '0');
+
+const seriesCovers: Record<string, string> = {
+  'ultrazvukovye-sistemy': 'img/products/samsung-z20.jpg',
+};
+
+const series = categories.map((c) => {
+  const lead = products.find((p) => p.categorySlug === c.slug && p.image);
+  return {
+    code: c.chip || c.name,
+    name: c.name,
+    count: c.count,
+    href: url(`catalog/${c.slug}/`),
+    image: img(seriesCovers[c.slug] || lead?.image),
+  };
+});
+
+const [radiology, ...otherDirections] = directions.map((d) => {
+  const cats = categories.filter((c) => c.directionSlug === d.slug);
+  return {
+    ...d,
+    href: `${url('catalog/')}?direction=${d.slug}`,
+    total: cats.reduce((sum, c) => sum + (c.count || 0), 0),
+    cats: cats.map((c) => ({ name: c.name, count: c.count, href: url(`catalog/${c.slug}/`) })),
+  };
+});
+
+const flagshipPicks = [
+  { name: 'Canon Aquilion ONE/PRISM Edition', code: 'КТ', title: 'Canon Aquilion ONE / PRISM Edition', specs: ['640 срезов', 'Апертура 78 см'] },
+  { name: 'Canon Vantage Orian', code: 'МРТ', title: 'Canon Vantage Orian', specs: ['2D- и 3D-сканирование'] },
+  { name: 'Samsung Z20-RUS', code: 'УЗИ', title: 'Samsung Z20-RUS', specs: ['Экспертный класс', 'ИИ-ассистенты'] },
+  { name: 'Samsung RS85-RUS', code: 'УЗИ', title: 'Samsung RS85-RUS', specs: ['Премиум-класс', 'Мультипрофильный'] },
+  { name: 'Fujifilm Цифровой маммограф AMULET Innovality', code: 'ММГ', title: 'Fujifilm AMULET Innovality', specs: ['Томосинтез', 'Скрининг'] },
+  { name: 'Canon Alphenix', code: 'АНГИО', title: 'Canon Alphenix', specs: ['Интервенционная система'] },
+  { name: 'MinFound QuantumEye 789', code: 'КТ', title: 'MinFound QuantumEye 789', specs: ['256–512 срезов', 'Апертура 80 см'] },
+  { name: 'МТЛ Рентгенохирургическая цифровая мобильная система (С-дуга) СиКоРД-2МТ', code: 'С-ДУГА', title: 'МТЛ СиКоРД-2МТ', specs: ['Мобильная цифровая С-дуга'] },
+];
+
+const flagships = flagshipPicks.flatMap((pick) => {
+  const p = products.find((item) => item.name === pick.name);
+  return p ? [{ ...pick, brand: p.brand, href: productPath(p), image: img(p.image) }] : [];
+});
+
+const hero = flagships[0];
+
+const steps = [
+  { title: 'Подбор и ТЗ', text: 'Комплектация под задачу отделения и требования помещения.' },
+  { title: 'КП и тендер', text: 'Коммерческое предложение, документы для 44-ФЗ и 223-ФЗ.' },
+  { title: 'Поставка', text: 'Логистика по России и полный пакет документов.' },
+  { title: 'Монтаж', text: 'Установка и пусконаладка на площадке заказчика.' },
+  { title: 'Обучение', text: 'Инструктаж врачей и технического персонала.' },
+  { title: 'Сервис', text: 'Гарантийное и постгарантийное сопровождение.' },
+];
+
+const nav = [
+  { href: '#directions', label: 'Направления' },
+  { href: '#flagships', label: 'Оборудование' },
+  { href: '#process', label: 'Как работаем' },
+  { href: '#request', label: 'Контакты' },
+];
+---
+
+<ConceptLayout
+  title={`Концепция · ${site.name} — диагностическое оборудование для ЛПУ`}
+  description="Концепция главной: каталог КТ, МРТ, УЗИ, рентгена и эндоскопии для ЛПУ."
+>
+  <div class="c-review">
+    <div class="c-wrap c-review__in">
+      <p>Концепция 2 · «Пультовая». Рабочий сайт не изменён.</p>
+      <span>
+        <a href={url('/')}>Текущая главная</a>
+        <a href={url('design/')}>Макет 1</a>
+      </span>
+    </div>
+  </div>
+
+  <header class="c-header">
+    <div class="c-wrap c-header__bar">
+      <a class="c-logo" href={url('design/v2/')} aria-label={site.name}>
+        <img src={url('img/brand/logo-full.png')} alt={site.name} width="180" height="25" />
+      </a>
+      <nav class="c-nav" aria-label="Основное меню">
+        <a href={url('catalog/')}>Каталог</a>
+        {nav.map((item) => <a href={item.href}>{item.label}</a>)}
+      </nav>
+      <div class="c-header__tools">
+        <a class="c-header__phone" href={site.phoneHref}>{site.phone}</a>
+        <button class="c-iconbtn" type="button" data-open-search aria-label="Поиск по каталогу">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8" />
+            <path d="M16.5 16.5L21 21" stroke="currentColor" stroke-width="1.8" />
+          </svg>
+        </button>
+        <a class="c-btn c-btn--green c-header__kp" href="#request">Запросить КП</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="c-hero c-dark">
+      <div class="c-wrap c-hero__grid">
+        <div class="c-hero__copy">
+          <p class="c-eyebrow"><span class="c-laser-dot" aria-hidden="true"></span>Поставка · монтаж · сервис · {site.years}</p>
+          <h1>Диагностическое оборудование экспертного класса для&nbsp;ЛПУ</h1>
+          <p class="c-hero__lead">
+            {products.length} моделей КТ, МРТ, УЗИ, рентгена и эндоскопии в каталоге 2026.
+            Подберём комплектацию, подготовим документы для тендера и введём систему в работу.
+          </p>
+
+          <form class="c-search" action={url('catalog/')} method="get" data-hero-search>
+            <label class="visually-hidden" for="c-hero-q">Найти в каталоге</label>
+            <input id="c-hero-q" name="q" type="search" placeholder="Модель, бренд или тип: «КТ 128», Samsung…" />
+            <button type="submit">Найти</button>
+          </form>
+
+          <div class="c-cta">
+            <a class="c-btn c-btn--green" href="#request">Запросить КП</a>
+            <a class="c-btn c-btn--line" href={url(site.catalogPdf)} target="_blank" rel="noopener">Каталог 2026, PDF</a>
+          </div>
+        </div>
+
+        {hero && (
+          <figure class="c-viewer">
+            <div class="c-viewer__tags" aria-hidden="true">
+              <span>{hero.brand} · {hero.code}</span>
+              <span>{hero.specs.join(' · ')}</span>
+            </div>
+            <a class="c-viewer__box" href={hero.href}>
+              <img src={hero.image} alt={hero.title} width="683" height="456" fetchpriority="high" />
+              <svg class="c-viewer__marks" viewBox="0 0 683 456" aria-hidden="true">
+                <defs>
+                  <linearGradient id="c-laser-h" gradientUnits="userSpaceOnUse" x1="-120" y1="0" x2="900" y2="0">
+                    <stop offset="0" stop-color="#8bd425" stop-opacity="0" />
+                    <stop offset="0.2" stop-color="#8bd425" stop-opacity="0.85" />
+                    <stop offset="0.8" stop-color="#8bd425" stop-opacity="0.85" />
+                    <stop offset="1" stop-color="#8bd425" stop-opacity="0" />
+                  </linearGradient>
+                  <linearGradient id="c-laser-v" gradientUnits="userSpaceOnUse" x1="0" y1="-170" x2="0" y2="560">
+                    <stop offset="0" stop-color="#8bd425" stop-opacity="0" />
+                    <stop offset="0.25" stop-color="#8bd425" stop-opacity="0.85" />
+                    <stop offset="0.8" stop-color="#8bd425" stop-opacity="0.85" />
+                    <stop offset="1" stop-color="#8bd425" stop-opacity="0" />
+                  </linearGradient>
+                </defs>
+                <g class="c-rings">
+                  <circle cx="427" cy="172" r="250" />
+                  <circle cx="427" cy="172" r="360" />
+                  <circle cx="427" cy="172" r="470" />
+                </g>
+                <g class="c-lasers">
+                  <line x1="427" y1="-170" x2="427" y2="560" stroke="url(#c-laser-v)" />
+                  <line x1="-120" y1="172" x2="900" y2="172" stroke="url(#c-laser-h)" />
+                </g>
+                <g class="c-measure">
+                  <circle cx="427" cy="172" r="72" />
+                  <polyline points="376,121 336,81 252,81" />
+                  <text x="254" y="73">⌀ 78 см</text>
+                </g>
+              </svg>
+            </a>
+            <figcaption class="c-viewer__tags">
+              <span>{hero.title}</span>
+              <span>01 / {pad(flagships.length)}</span>
+            </figcaption>
+          </figure>
+        )}
+      </div>
+
+      <div class="c-wrap">
+        <nav class="c-series" aria-label="Типы оборудования">
+          {series.map((s) => (
+            <a class="c-series__item" href={s.href}>
+              <span class="c-series__img">
+                {s.image && <img src={s.image} alt="" width="160" height="110" loading="lazy" />}
+              </span>
+              <span class="c-series__meta">
+                <strong>{s.code}</strong>
+                <small>{s.count}</small>
+              </span>
+            </a>
+          ))}
+        </nav>
+      </div>
+    </section>
+
+    <section class="c-block c-light" id="directions">
+      <div class="c-wrap">
+        <header class="c-head">
+          <h2>Направления</h2>
+          <a class="c-link" href={url('catalog/')}>Каталог с фильтрами</a>
+        </header>
+
+        <div class="c-dirs">
+          {radiology && (
+            <article class="c-dir c-dir--main">
+              <a class="c-dir__top" href={radiology.href}>
+                <span class="c-dir__num">{radiology.total}</span>
+                <span>
+                  <h3>{radiology.name}</h3>
+                  <p>{radiology.description}</p>
+                </span>
+              </a>
+              <ul class="c-dir__list">
+                {radiology.cats.map((c) => (
+                  <li>
+                    <a href={c.href}>
+                      <span>{c.name}</span>
+                      <span class="c-dir__count">{c.count}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </article>
+          )}
+          <div class="c-dirs__side">
+            {otherDirections.map((d) => (
+              <a class="c-dir" href={d.href}>
+                <span class="c-dir__num">{d.total}</span>
+                <span>
+                  <h3>{d.name}</h3>
+                  <p>{d.description}</p>
+                </span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="c-block c-dark" id="flagships">
+      <div class="c-wrap">
+        <header class="c-head">
+          <h2>Флагманские системы</h2>
+          <a class="c-link" href={url('catalog/')}>Все {products.length} моделей</a>
+        </header>
+
+        <div class="c-wall">
+          {flagships.map((p) => (
+            <a class="c-panel" href={p.href}>
+              <span class="c-panel__light">
+                <img src={p.image} alt={p.title} width="480" height="320" loading="lazy" />
+                <span class="c-panel__scan" aria-hidden="true"></span>
+              </span>
+              <span class="c-panel__body">
+                <span class="c-panel__code">{p.code} · {p.brand}</span>
+                <strong>{p.title}</strong>
+                <span class="c-panel__specs">{p.specs.join(' · ')}</span>
+              </span>
+            </a>
+          ))}
+        </div>
+        <p class="c-wall__note">Цена и комплектация — по запросу. В каждой карточке есть QR и брошюра для стенда.</p>
+      </div>
+    </section>
+
+    <section class="c-block c-light" id="process">
+      <div class="c-wrap">
+        <header class="c-head c-head--plain">
+          <h2>От заявки до сервиса</h2>
+          <a class="c-link" href={url('company/')}>О компании</a>
+        </header>
+        <ol class="c-scale">
+          {steps.map((s, i) => (
+            <li>
+              <span class="c-scale__n">{pad(i + 1)}</span>
+              <h3>{s.title}</h3>
+              <p>{s.text}</p>
+            </li>
+          ))}
+        </ol>
+
+        <div class="c-brands">
+          <p class="c-brands__label">Производители в каталоге</p>
+          <ul>
+            {brands.map((b) => (
+              <li><a href={url(`brands/${b.slug}/`)}>{b.name}<small>{b.count}</small></a></li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="c-block c-dark c-final" id="request">
+      <div class="c-wrap c-final__grid">
+        <div class="c-final__copy">
+          <h2>Запросить коммерческое предложение</h2>
+          <p>Укажите модель или задачу отделения — подготовим КП и ответим по срокам поставки.</p>
+          <a class="c-phone" href={site.phoneHref}>{site.phone}</a>
+          <ul class="c-final__contacts">
+            <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+            <li>{site.address}</li>
+          </ul>
+          <div class="c-plate">
+            <QrShare path="/" label="QR для коллег на выставке" size={168} />
+          </div>
+        </div>
+
+        <form class="c-form" data-request-form data-email={site.email}>
+          <label>
+            <span>Имя</span>
+            <input name="name" type="text" required placeholder="Как к вам обращаться" />
+          </label>
+          <label>
+            <span>Организация</span>
+            <input name="org" type="text" placeholder="ЛПУ, клиника" />
+          </label>
+          <label>
+            <span>Телефон или email</span>
+            <input name="contact" type="text" required placeholder="+7 … или email" />
+          </label>
+          <label>
+            <span>Что интересует</span>
+            <textarea name="message" rows="4" placeholder="Модель, направление, сроки…"></textarea>
+          </label>
+          <button class="c-btn c-btn--green" type="submit">Отправить запрос</button>
+          <p class="c-form__note">Форма откроет почтовый клиент.</p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="c-footer">
+    <div class="c-wrap c-footer__grid">
+      <p>{site.years} · {site.legalName}</p>
+      <nav aria-label="Разделы">
+        <a href={url('catalog/')}>Каталог</a>
+        <a href={url('brands/')}>Бренды</a>
+        <a href={url('company/')}>О компании</a>
+        <a href={url('news/')}>Новости</a>
+        <a href={url('contacts/')}>Контакты</a>
+      </nav>
+    </div>
+  </footer>
+
+  <nav class="c-dock" aria-label="Быстрые действия">
+    <a href={url('catalog/')}>Каталог</a>
+    <button type="button" data-open-search>Поиск</button>
+    <a href="#request">Запросить КП</a>
+  </nav>
+
+  <SearchOverlay />
+</ConceptLayout>
+
+<script>
+  document.querySelector('[data-hero-search]')?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const form = event.currentTarget as HTMLFormElement;
+    const query = String(new FormData(form).get('q') || '');
+    document.querySelector<HTMLButtonElement>('[data-open-search]')?.click();
+    const input = document.querySelector<HTMLInputElement>('[data-search-input]');
+    if (!input) return;
+    input.value = query;
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+  });
+
+  document.querySelector<HTMLFormElement>('[data-request-form]')?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const form = event.currentTarget as HTMLFormElement;
+    const email = form.dataset.email || 'sale@zelmedservice.ru';
+    const data = new FormData(form);
+    const body = [
+      `Имя: ${data.get('name') || ''}`,
+      `Организация: ${data.get('org') || ''}`,
+      `Контакт: ${data.get('contact') || ''}`,
+      '',
+      String(data.get('message') || ''),
+    ].join('\n');
+    window.location.href = `mailto:${email}?subject=${encodeURIComponent('Запрос КП — zelmedservice.ru')}&body=${encodeURIComponent(body)}`;
+  });
+</script>
