@@ -2,6 +2,7 @@
 import { site } from '../lib/site';
 import { getDirections, getCategories } from '../lib/catalog';
 import { url } from '../lib/paths';
+import scenarios from '../data/scenarios.json';
 
 const directions = getDirections();
 const categories = getCategories();
@@ -9,9 +10,7 @@ const pdf = url(site.catalogPdf);
 
 const nav = [
   { href: url('catalog/'), label: 'Каталог', mega: true },
-  { href: url('scenarios/'), label: 'Сценарии' },
   { href: url('company/'), label: 'О компании' },
-  { href: url('brands/'), label: 'Бренды' },
   { href: url('news/'), label: 'Новости' },
   { href: url('contacts/'), label: 'Контакты' },
 ];
@@ -61,6 +60,17 @@ const nav = [
                   </div>
                 );
               })}
+              <div class="mega__col mega__col--special">
+                <a class="mega__title" href={url('scenarios/')}>Специалистам</a>
+                <ul>
+                  {scenarios.map((s) => (
+                    <li>
+                      <a href={url(`scenarios/${s.slug}/`)}>{s.menuLabel}</a>
+                    </li>
+                  ))}
+                </ul>
+                <a class="mega__brands" href={url('brands/')}>Бренды</a>
+              </div>
             </div>
             <a class="mega__all" href={url('catalog/')}>Весь каталог →</a>
           </div>
@@ -93,9 +103,13 @@ const nav = [
         <button type="button" data-drawer-close aria-label="Закрыть">×</button>
       </div>
       <a href={url('catalog/')}>Каталог</a>
-      <a href={url('scenarios/')}>Сценарии</a>
-      <a href={url('company/')}>О компании</a>
+      <p class="drawer__group">Специалистам</p>
+      <a href={url('scenarios/')}>Все сценарии</a>
+      {scenarios.map((s) => (
+        <a class="drawer__sub" href={url(`scenarios/${s.slug}/`)}>{s.menuLabel}</a>
+      ))}
       <a href={url('brands/')}>Бренды</a>
+      <a href={url('company/')}>О компании</a>
       <a href={url('news/')}>Новости</a>
       <a href={url('contacts/')}>Контакты</a>
       <a class="btn btn--primary" href={`${url('contacts/')}#request`}>Запросить КП</a>
@@ -248,8 +262,23 @@ const nav = [
 
   .mega__grid {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 1rem;
+  }
+
+  .mega__col--special {
+    border-left: 1px solid var(--color-border);
+    padding-left: 1rem;
+  }
+
+  .mega__brands {
+    display: inline-block;
+    margin-top: 0.85rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--color-border);
+    width: 100%;
+    font-weight: 800;
+    color: var(--color-accent);
   }
 
   .mega__title {
@@ -347,6 +376,21 @@ const nav = [
     border-bottom: 1px solid var(--color-border);
   }
 
+  .drawer__group {
+    margin: 0.55rem 0 0;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+
+  .drawer__sub {
+    padding-left: 0.75rem !important;
+    font-weight: 650 !important;
+    color: var(--color-ink-soft);
+  }
+
   .drawer__head {
     display: flex;
     justify-content: space-between;
@@ -364,6 +408,22 @@ const nav = [
   @media (max-width: 1180px) {
     .header__phone-btn {
       display: none;
+    }
+
+    .mega {
+      width: min(860px, 86vw);
+    }
+
+    .mega__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .mega__col--special {
+      border-left: 0;
+      padding-left: 0;
+      border-top: 1px solid var(--color-border);
+      padding-top: 0.85rem;
+      grid-column: 1 / -1;
     }
   }
 
