@@ -41,15 +41,10 @@ const procurement = product.procurement || [
   { label: 'Комплектация', value: 'Поставка, монтаж, обучение, сервис' },
 ];
 
-const related = getProducts()
-  .filter((p) => p.direction === product.direction && p.id !== product.id)
-  .slice(0, 4);
-
 const sameCategory = getProducts()
   .filter((p) => p.categorySlug === product.categorySlug && p.id !== product.id)
   .slice(0, 4);
 
-const showRelated = related.length >= 2;
 const showSameCategory = sameCategory.length >= 2 && product.categorySlug !== 'mobilnye-moduli';
 
 const absoluteUrl = new URL(path, Astro.site).href;
@@ -246,36 +241,10 @@ const breadcrumbSchema = {
         </section>
       )}
 
-      {showRelated && (
-        <section class="product__related">
-          <div class="product__related-head">
-            <h2>Похожие товары</h2>
-            <p>Другие модели того же направления</p>
-          </div>
-          <div class="product__related-grid">
-            {related.map((p) => (
-              <ProductCard
-                name={p.name}
-                brand={p.brand}
-                description={p.description}
-                categorySlug={p.categorySlug}
-                slug={p.slug}
-                image={p.image}
-                specs={p.specs}
-              />
-            ))}
-          </div>
-        </section>
-      )}
-
       {showSameCategory && (
         <section class="product__related">
           <div class="product__related-head">
             <h2>Другие товары в категории</h2>
-            <p>
-              Ещё в разделе
-              <a href={url(`catalog/${product.categorySlug}/`)}>{product.category}</a>
-            </p>
           </div>
           <div class="product__related-grid">
             {sameCategory.map((p) => (
