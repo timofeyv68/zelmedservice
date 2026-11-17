@@ -18,6 +18,7 @@ const image = product.image
     ? product.image
     : withBase(product.image.replace(/^\//, ''))
   : null;
+const specTable = product.specTable || [];
 ---
 
 <!doctype html>
@@ -58,7 +59,23 @@ const image = product.image
         <div class="qr" set:html={svg}></div>
       </div>
 
-      <p class="desc">{product.description}</p>
+      {specTable.length > 0 ? (
+        <section class="specs">
+          <h2>Технические характеристики</h2>
+          <table>
+            <tbody>
+              {specTable.map((row) => (
+                <tr>
+                  <th scope="row">{row.label}</th>
+                  <td>{row.value}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </section>
+      ) : (
+        <p class="desc">{product.description}</p>
+      )}
 
       <ul class="facts">
         <li>Категория: {product.category}</li>
@@ -117,6 +134,30 @@ const image = product.image
   .qr { background: #fff; border: 1px solid #d7e2ef; border-radius: 12px; padding: 0.6rem; }
   .qr svg { width: 100%; height: auto; display: block; }
   .desc { color: #5a6f86; margin: 1rem 0; }
+  .specs { margin: 1rem 0 1.15rem; }
+  .specs h2 {
+    margin: 0 0 0.55rem;
+    font-size: 1rem;
+    font-weight: 800;
+  }
+  .specs table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.92rem;
+  }
+  .specs th,
+  .specs td {
+    text-align: left;
+    vertical-align: top;
+    padding: 0.45rem 0.35rem;
+    border-bottom: 1px solid #d7e2ef;
+  }
+  .specs th {
+    width: 38%;
+    color: #5a6f86;
+    font-weight: 650;
+  }
+  .specs td { font-weight: 750; }
   .facts { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.4rem; font-weight: 700; }
   footer {
     margin-top: 1.5rem; padding-top: 0.85rem; border-top: 1px solid #d7e2ef;
