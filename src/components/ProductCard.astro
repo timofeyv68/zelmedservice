@@ -1,5 +1,5 @@
 ---
-import { productPath, standPath } from '../lib/catalog';
+import { productPath } from '../lib/catalog';
 import { url } from '../lib/paths';
 
 interface Props {
@@ -14,7 +14,6 @@ interface Props {
 
 const { name, brand, description, categorySlug, slug, image, specs = [] } = Astro.props;
 const href = productPath({ categorySlug, slug });
-const brochure = standPath({ slug });
 const imageSrc = image ? url(String(image).replace(/^\//, '')) : '';
 ---
 
@@ -43,7 +42,6 @@ const imageSrc = image ? url(String(image).replace(/^\//, '')) : '';
     <div class="product-card__footer">
       <span class="product-card__price">Цена по запросу</span>
       <div class="product-card__actions">
-        <a class="btn btn--ghost btn--sm" href={brochure}>Брошюра для стенда</a>
         <a class="btn btn--soft btn--sm" href={`${url('contacts/')}#request`}>Запросить КП</a>
       </div>
     </div>
