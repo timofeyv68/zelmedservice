@@ -2,6 +2,7 @@
   {
     "slug": "kompyuternye-tomografy",
     "name": "Компьютерные томографы",
+    "typeName": "Компьютерный томограф",
     "pdfName": "Компьютерная томография",
     "chip": "КТ",
     "directionSlug": "luchevaya-diagnostika",
@@ -12,6 +13,7 @@
   {
     "slug": "mrt",
     "name": "Магнитно-резонансные томографы",
+    "typeName": "Томограф магнитно-резонансный",
     "pdfName": "Магнитно-резонансная томография",
     "chip": "МРТ",
     "directionSlug": "luchevaya-diagnostika",
@@ -22,6 +24,7 @@
   {
     "slug": "angiografy",
     "name": "Ангиографы",
+    "typeName": "Ангиограф",
     "pdfName": "Ангиография",
     "chip": "Ангиография",
     "directionSlug": "luchevaya-diagnostika",
@@ -32,6 +35,7 @@
   {
     "slug": "mobilnye-moduli",
     "name": "Мобильные модули",
+    "typeName": "",
     "pdfName": "Мобильный модуль для КТ, МРТ и Ангиографа",
     "chip": "Модули",
     "directionSlug": "luchevaya-diagnostika",
@@ -42,6 +46,7 @@
   {
     "slug": "rentgenodiagnostika",
     "name": "Рентгенодиагностика",
+    "typeName": "",
     "pdfName": "Рентгенология",
     "chip": "Рентген",
     "directionSlug": "luchevaya-diagnostika",
@@ -52,6 +57,7 @@
   {
     "slug": "rentgenokhirurgiya",
     "name": "Рентгенохирургия (С-дуга)",
+    "typeName": "",
     "pdfName": "Рентгенохирургия",
     "chip": "С-дуга",
     "directionSlug": "luchevaya-diagnostika",
@@ -62,6 +68,7 @@
   {
     "slug": "mammografy",
     "name": "Маммографы",
+    "typeName": "Цифровой маммограф",
     "pdfName": "Маммография",
     "chip": "Маммография",
     "directionSlug": "luchevaya-diagnostika",
@@ -72,6 +79,7 @@
   {
     "slug": "ultrazvukovye-sistemy",
     "name": "Ультразвуковые системы",
+    "typeName": "Ультразвуковая система",
     "pdfName": "Ультразвуковая диагностика",
     "chip": "УЗИ",
     "directionSlug": "ultrazvukovaya-diagnostika",
@@ -82,6 +90,7 @@
   {
     "slug": "endoskopiya",
     "name": "Эндоскопия",
+    "typeName": "Видеоэндоскопическая система",
     "pdfName": "Эндоскопия",
     "chip": "Эндоскопия",
     "directionSlug": "endoskopiya",
@@ -92,6 +101,7 @@
   {
     "slug": "stomatologicheskie-ustanovki",
     "name": "Стоматологические установки",
+    "typeName": "Стоматологическая установка",
     "pdfName": "Стоматология",
     "chip": "Стоматология",
     "directionSlug": "stomatologiya",

@@ -1,5 +1,5 @@
 ---
-import { getProducts, productPath } from '../../lib/catalog';
+import { getProducts, productPath, productDisplayName } from '../../lib/catalog';
 import { qrSvg, absoluteUrl } from '../../lib/qr';
 import { site } from '../../lib/site';
 import { url as withBase } from '../../lib/paths';
@@ -9,6 +9,7 @@ export function getStaticPaths() {
 }
 
 const { product } = Astro.props;
+const titleName = productDisplayName(product);
 const path = productPath(product);
 const pageUrl = absoluteUrl(path, Astro.site?.toString() || site.url);
 const svg = await qrSvg(pageUrl, 260);
@@ -26,7 +27,7 @@ const specTable = product.specTable || [];
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Брошюра для стенда — {product.name}</title>
+    <title>Брошюра для стенда — {titleName}</title>
     <meta name="robots" content="noindex" />
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
   </head>
@@ -46,12 +47,12 @@ const specTable = product.specTable || [];
       </header>
 
       <p class="brand">{product.brand}</p>
-      <h1>{product.name}</h1>
+      <h1>{titleName}</h1>
 
       <div class="sheet__grid">
         <div class="media">
           {image ? (
-            <img src={image} alt={product.name} />
+            <img src={image} alt={titleName} />
           ) : (
             <div class="ph">{product.brand}</div>
           )}

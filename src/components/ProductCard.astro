@@ -1,5 +1,5 @@
 ---
-import { productPath } from '../lib/catalog';
+import { productPath, productDisplayName } from '../lib/catalog';
 import { url } from '../lib/paths';
 
 interface Props {
@@ -14,13 +14,14 @@ interface Props {
 
 const { name, brand, description, categorySlug, slug, image, specs = [] } = Astro.props;
 const href = productPath({ categorySlug, slug });
+const title = productDisplayName({ name, brand, categorySlug, slug });
 const imageSrc = image ? url(String(image).replace(/^\//, '')) : '';
 ---
 
 <article class="product-card card">
   <a class="product-card__media" href={href}>
     {imageSrc ? (
-      <img src={imageSrc} alt={name} loading="lazy" width="640" height="400" />
+      <img src={imageSrc} alt={title} loading="lazy" width="640" height="400" />
     ) : (
       <div class="product-card__placeholder" aria-hidden="true">
         <span>{brand}</span>
@@ -32,7 +33,7 @@ const imageSrc = image ? url(String(image).replace(/^\//, '')) : '';
       <span class="product-card__brand">{brand}</span>
       <a class="product-card__qr" href={`${href}#share`} title="QR и ссылка">QR</a>
     </div>
-    <h3 class="product-card__title"><a href={href}>{name}</a></h3>
+    <h3 class="product-card__title"><a href={href}>{title}</a></h3>
     <p class="product-card__desc">{description}</p>
     {specs.length > 0 && (
       <ul class="product-card__specs">

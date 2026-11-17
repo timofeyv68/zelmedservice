@@ -44,6 +44,40 @@ export function standPath(p: Pick<Product, 'slug'>) {
   return url(`stand/${p.slug}/`);
 }
 
+/** Full product heading with equipment type, as on the old zelmedservice.ru catalog. */
+export function productDisplayName(p: Pick<Product, 'name' | 'categorySlug' | 'slug' | 'brand'>) {
+  const name = String(p.name || '').replace(/\s+/g, ' ').trim();
+  if (!name) return '';
+
+  const isPetCt =
+    p.categorySlug === 'kompyuternye-tomografy' &&
+    (/пэт\s*\/\s*кт/i.test(name) || /pet[\s-]?ct/i.test(name) || /730t/i.test(p.slug || ''));
+
+  if (isPetCt) {
+    const cleaned = name.replace(/\s*ПЭТ\s*\/\s*КТ\s*/gi, ' ').replace(/\s+/g, ' ').trim();
+    return /^ПЭТ\s*\/\s*КТ\b/i.test(name) ? name : `ПЭТ/КТ ${cleaned}`;
+  }
+
+  const category = getCategories().find((c) => c.slug === p.categorySlug);
+  const typeName = String((category as { typeName?: string } | undefined)?.typeName || '').trim();
+  if (!typeName) return name;
+
+  const lower = name.toLowerCase();
+  if (lower.includes(typeName.toLowerCase())) return name;
+
+  if (p.categorySlug === 'ultrazvukovye-sistemy' && /(серия|series|flex\s*\/|v\s*[–-]\s*серия)/i.test(name)) {
+    const plural = 'Ультразвуковые системы';
+    if (lower.includes(plural.toLowerCase())) return name;
+    return `${plural} ${name}`;
+  }
+
+  if (p.categorySlug === 'endoskopiya' && /эндоскоп/i.test(name)) {
+    return name;
+  }
+
+  return `${typeName} ${name}`;
+}
+
 export function filterProducts(opts: {
   categorySlug?: string;
   brandSlug?: string;
@@ -54,20 +88,23 @@ export function filterProducts(opts: {
   if (opts.brandSlug) list = list.filter((p) => p.brandSlug === opts.brandSlug);
   if (opts.q) {
     const q = opts.q.toLowerCase().trim();
-    list = list.filter(
-      (p) =>
+    list = list.filter((p) => {
+      const title = productDisplayName(p).toLowerCase();
+      return (
+        title.includes(q) ||
         p.name.toLowerCase().includes(q) ||
         p.brand.toLowerCase().includes(q) ||
         p.category.toLowerCase().includes(q) ||
         p.description.toLowerCase().includes(q)
-    );
+      );
+    });
   }
   return list;
 }
 
 export function searchIndex() {
   return getProducts().map((p) => ({
-    name: p.name,
+    name: productDisplayName(p),
     brand: p.brand,
     category: p.category,
     description: p.description,

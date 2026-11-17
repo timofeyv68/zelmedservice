@@ -6,7 +6,7 @@ import QrShare from '../../../components/QrShare.astro';
 import SearchOverlay from '../../../components/SearchOverlay.astro';
 import RequestDrawer from '../../../components/RequestDrawer.astro';
 import includesData from '../../../data/includes.json';
-import { getProducts, productPath, standPath } from '../../../lib/catalog';
+import { getProducts, productPath, standPath, productDisplayName } from '../../../lib/catalog';
 import { site } from '../../../lib/site';
 
 export function getStaticPaths() {
@@ -17,8 +17,11 @@ export function getStaticPaths() {
 }
 
 const { product } = Astro.props;
+const titleName = productDisplayName(product);
 const path = productPath(product);
 const brochure = standPath(product);
+const pageTitle = `${titleName} — купить, характеристики | ЗелМедСервис`;
+const pageDescription = `${titleName}: технические характеристики, поставка для ЛПУ, монтаж, обучение и сервис. Запросите КП у ЗелМедСервис.`;
 const img = (p?: string | null) => (p ? url(p.replace(/^\//, '')) : '');
 const heroRaw = product.image || '';
 const galleryRaw = [
@@ -51,9 +54,9 @@ const absoluteUrl = new URL(path, Astro.site).href;
 const productSchema = {
   '@context': 'https://schema.org',
   '@type': 'Product',
-  name: product.name,
+  name: titleName,
   brand: { '@type': 'Brand', name: product.brand },
-  description: product.seoDescription || product.description,
+  description: pageDescription,
   image: hero ? new URL(hero, Astro.site).href : undefined,
   url: absoluteUrl,
   category: product.category,
@@ -78,14 +81,14 @@ const breadcrumbSchema = {
       name: product.category,
       item: new URL(url(`catalog/${product.categorySlug}/`), Astro.site).href,
     },
-    { '@type': 'ListItem', position: 4, name: product.name, item: absoluteUrl },
+    { '@type': 'ListItem', position: 4, name: titleName, item: absoluteUrl },
   ],
 };
 ---
 
 <BaseLayout
-  title={product.seoTitle}
-  description={product.seoDescription}
+  title={pageTitle}
+  description={pageDescription}
   ogImage={hero || undefined}
   jsonLd={[productSchema, breadcrumbSchema]}
 >
@@ -96,7 +99,7 @@ const breadcrumbSchema = {
         <a href={url('/')}>Главная</a><span>/</span>
         <a href={url('catalog/')}>Каталог</a><span>/</span>
         <a href={url(`catalog/${product.categorySlug}/`)}>{product.category}</a><span>/</span>
-        <span>{product.name}</span>
+        <span>{titleName}</span>
       </nav>
 
       <div class="product__grid">
@@ -105,7 +108,7 @@ const breadcrumbSchema = {
             <figure class="product__hero card">
               <img
                 src={hero}
-                alt={product.name}
+                alt={titleName}
                 width="900"
                 height="700"
                 data-gallery-main
@@ -139,7 +142,7 @@ const breadcrumbSchema = {
 
         <div class="product__info">
           <p class="product__brand">{product.brand}</p>
-          <h1>{product.name}</h1>
+          <h1>{titleName}</h1>
           {tagline && <p class="product__tagline">{tagline}</p>}
 
           {chips.length > 0 && (
@@ -163,7 +166,7 @@ const breadcrumbSchema = {
           <p class="product__price">Цена: по запросу</p>
 
           <div class="product__cta">
-            <RequestDrawer productName={product.name} buttonClass="btn btn--accent" />
+            <RequestDrawer productName={titleName} buttonClass="btn btn--accent" />
             <a class="btn btn--primary" href={brochure}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M6 9V3h12v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
@@ -218,7 +221,7 @@ const breadcrumbSchema = {
           </ul>
           <div class="product__buy-cta">
             <RequestDrawer
-              productName={product.name}
+              productName={titleName}
               buttonLabel="Запросить спецификацию для ТЗ"
               buttonClass="btn btn--accent"
             />
@@ -234,7 +237,7 @@ const breadcrumbSchema = {
           <div class="product__clinical-grid">
             {clinical.map((src) => (
               <figure class="card">
-                <img src={src} alt={`Клинические изображения — ${product.name}`} loading="lazy" width="1200" height="320" />
+                <img src={src} alt={`Клинические изображения — ${titleName}`} loading="lazy" width="1200" height="320" />
               </figure>
             ))}
           </div>

@@ -8,6 +8,7 @@ import {
   getCategories,
   getBrands,
   getDirections,
+  productDisplayName,
 } from '../../lib/catalog';
 
 const products = getProducts();
@@ -122,8 +123,8 @@ const description =
             data-slices={p.filters?.slices ?? ''}
             data-usclass={p.filters?.usClass ?? ''}
             data-xray={p.filters?.xrayType ?? ''}
-            data-name={p.name.toLowerCase()}
-            data-search={`${p.name} ${p.brand} ${p.category} ${p.description} ${(p.specs || []).join(' ')}`.toLowerCase()}
+            data-name={productDisplayName(p).toLowerCase()}
+            data-search={`${productDisplayName(p)} ${p.name} ${p.brand} ${p.category} ${p.description} ${(p.specs || []).join(' ')}`.toLowerCase()}
           >
             <ProductCard
               name={p.name}
