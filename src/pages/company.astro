@@ -47,15 +47,6 @@ const categories = getCategories();
         </ol>
       </div>
 
-      <div class="stats">
-        {company.stats.map((s) => (
-          <article class="stat card">
-            <strong>{s.value}</strong>
-            <span>{s.label}</span>
-          </article>
-        ))}
-      </div>
-
       <div class="about-block">
         <h2 class="block-title">О компании</h2>
         {company.about.map((p) => <p>{p}</p>)}
@@ -79,11 +70,11 @@ const categories = getCategories();
       </div>
 
       <h2 class="block-title">Почему выбирают ЗелМедСервис</h2>
-      <div class="adv">
-        {company.advantages.map((a) => (
-          <article class="card adv__item">
-            <h3>{a.title}</h3>
-            <p>{a.text}</p>
+      <div class="stats">
+        {company.stats.map((s) => (
+          <article class="stat card">
+            <strong>{s.value}</strong>
+            <span>{s.label}</span>
           </article>
         ))}
       </div>
@@ -205,7 +196,7 @@ const categories = getCategories();
   }
 
   .stats {
-    display: grid; grid-template-columns: repeat(4,1fr); gap: .85rem; margin: 0 0 2rem;
+    display: grid; grid-template-columns: repeat(4,1fr); gap: .85rem; margin-top: 1rem;
   }
   .stat { padding: 1.1rem; display:grid; gap:.35rem; }
   .stat strong { font-size: 1.5rem; color: var(--color-accent); }
@@ -251,17 +242,14 @@ const categories = getCategories();
   }
 
   .block-title { margin: 0 0 1rem; font-size: 1.5rem; }
-  .adv { display:grid; grid-template-columns: repeat(4,1fr); gap:.85rem; margin-top: 1rem; }
-  .adv__item { padding: 1.1rem; }
-  .adv__item p { color: var(--color-muted); margin:0; }
 
   @media (max-width: 1000px) {
-    .stats, .adv, .lineup__grid { grid-template-columns: 1fr 1fr; }
+    .stats, .lineup__grid { grid-template-columns: 1fr 1fr; }
     .stages__list { flex-wrap: wrap; }
     .stages__item { flex: 1 1 calc(50% - 0.65rem); }
   }
   @media (max-width: 640px) {
-    .stats, .adv, .lineup__grid { grid-template-columns: 1fr; }
+    .stats, .lineup__grid { grid-template-columns: 1fr; }
     .stages__item { flex: 1 1 100%; }
     .stages__bar { border-radius: 16px; min-height: 0; }
   }
