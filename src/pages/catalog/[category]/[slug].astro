@@ -20,8 +20,14 @@ const { product } = Astro.props;
 const path = productPath(product);
 const brochure = standPath(product);
 const img = (p?: string | null) => (p ? url(p.replace(/^\//, '')) : '');
-const hero = img(product.image);
-const gallery = (product.gallery || []).map(img).filter(Boolean);
+const heroRaw = product.image || '';
+const galleryRaw = [
+  ...(heroRaw ? [heroRaw] : []),
+  ...(product.gallery || []).filter((src) => src && src !== heroRaw),
+];
+const media = [...new Set(galleryRaw)].map(img).filter(Boolean);
+const hero = media[0] || '';
+const thumbs = media;
 const clinical = (product.clinical || []).map(img).filter(Boolean);
 const bullets = (product.bullets || []).slice(0, 8);
 const specTable = product.specTable || [];
@@ -99,10 +105,16 @@ const breadcrumbSchema = {
       </nav>
 
       <div class="product__grid">
-        <div class="product__media">
+        <div class="product__media" data-product-gallery>
           {hero ? (
             <figure class="product__hero card">
-              <img src={hero} alt={product.name} width="900" height="700" />
+              <img
+                src={hero}
+                alt={product.name}
+                width="900"
+                height="700"
+                data-gallery-main
+              />
             </figure>
           ) : (
             <div class="product__ph card">
@@ -111,12 +123,20 @@ const breadcrumbSchema = {
             </div>
           )}
 
-          {gallery.length > 0 && (
-            <div class="product__thumbs" aria-label="Дополнительные изображения">
-              {gallery.slice(0, 6).map((src) => (
-                <a class="product__thumb card" href={src} target="_blank" rel="noopener">
+          {thumbs.length > 1 && (
+            <div class="product__thumbs" role="list" aria-label="Фотографии товара">
+              {thumbs.slice(0, 8).map((src, i) => (
+                <button
+                  class:list={['product__thumb', 'card', i === 0 && 'is-active']}
+                  type="button"
+                  role="listitem"
+                  data-gallery-thumb
+                  data-src={src}
+                  aria-label={`Показать фото ${i + 1}`}
+                  aria-pressed={i === 0 ? 'true' : 'false'}
+                >
                   <img src={src} alt="" loading="lazy" width="160" height="120" />
-                </a>
+                </button>
               ))}
             </div>
           )}
@@ -306,8 +326,19 @@ const breadcrumbSchema = {
     gap: 0.45rem;
     margin-top: 0.65rem;
   }
-  .product__thumb { overflow: hidden; aspect-ratio: 4/3; background: #f3f7fc; }
-  .product__thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .product__thumb {
+    overflow: hidden;
+    aspect-ratio: 4/3;
+    background: #f3f7fc;
+    padding: 0;
+    border: 2px solid transparent;
+    cursor: pointer;
+    display: block;
+  }
+  .product__thumb.is-active {
+    border-color: var(--color-accent);
+  }
+  .product__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .product__brand {
     text-transform: uppercase; letter-spacing: 0.06em; font-weight: 800;
     color: var(--color-accent); font-size: 0.8rem; margin: 0;
@@ -408,3 +439,24 @@ const breadcrumbSchema = {
     .product__related-grid { grid-template-columns: 1fr; }
   }
 </style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-product-gallery]').forEach((root) => {
+    const main = root.querySelector<HTMLImageElement>('[data-gallery-main]');
+    const thumbs = [...root.querySelectorAll<HTMLButtonElement>('[data-gallery-thumb]')];
+    if (!main || thumbs.length === 0) return;
+
+    thumbs.forEach((thumb) => {
+      thumb.addEventListener('click', () => {
+        const src = thumb.dataset.src;
+        if (!src) return;
+        main.src = src;
+        thumbs.forEach((t) => {
+          const active = t === thumb;
+          t.classList.toggle('is-active', active);
+          t.setAttribute('aria-pressed', active ? 'true' : 'false');
+        });
+      });
+    });
+  });
+</script>
