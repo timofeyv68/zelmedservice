@@ -113,10 +113,6 @@ const tagline = (product.tagline || '').replace(/\s+/g, ' ').trim().slice(0, 120
       )}
 
       <div class="product__share card" id="share">
-        <div class="product__share-copy">
-          <h2>Поделиться моделью</h2>
-          <p>QR ведёт на эту страницу — удобно на выставке и при согласовании закупки.</p>
-        </div>
         <QrShare path={path} label="QR страницы товара" size={120} layout="row" />
       </div>
     </div>
@@ -217,26 +213,14 @@ const tagline = (product.tagline || '').replace(/\s+/g, ' ').trim().slice(0, 120
   }
   .product__share {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
-    gap: 1rem 1.5rem;
-    padding: 1rem 1.25rem;
-  }
-  .product__share-copy {
-    flex: 1 1 220px;
-    min-width: 0;
-  }
-  .product__share-copy h2 {
-    margin: 0 0 0.25rem;
-    font-size: 1.15rem;
-  }
-  .product__share-copy p {
-    margin: 0;
-    color: var(--color-muted);
-    font-size: 0.92rem;
+    padding: 0.85rem 1.15rem;
   }
   .product__share :global(.qr) {
-    flex: 1 1 320px;
+    width: 100%;
+  }
+  .product__share :global(.qr__label) {
+    display: none;
   }
   @media (max-width: 900px) {
     .product__grid { grid-template-columns: 1fr; }
